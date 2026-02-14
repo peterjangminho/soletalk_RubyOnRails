@@ -1,4 +1,4 @@
-# Status: In Progress
+# Status: [In Progress]
 
 # Android Local Bootstrap Progress
 
@@ -29,10 +29,18 @@
 - `sessions/show`에서 `setSession(session_id, google_sub, bridge_token)`로 주입 확장
 - Android `VoiceBridge`가 `bridge_token`을 `/api/voice/events` 요청에 포함하도록 확장
 
+7. Build tooling bootstrap
+- Gradle Wrapper 파일(`gradlew`, `gradle-wrapper.jar`, `gradle-wrapper.properties`) 추가
+- `GRADLE_USER_HOME=/Users/peter/Project/Project_A/.gradle-home ./gradlew assembleDebug` 성공
+
+8. Device smoke
+- USB 연결 디바이스(`SM-S936B`)에 `adb install -r app-debug.apk` 성공
+- `adb shell am start -W -n io.soletalk.mobile/.MainActivity` 실행 확인
+
 ## Pending
-- Android Studio sync/build 확인
+- Android bridge 이벤트 4종 전송 후 Rails DB 반영 증적 확보 (`P57-T3`)
 - Google Sign-In SDK 연결 후 `id_token` 발급 및 `POST /api/auth/google/native_sign_in` 연동
-- 실기기 E2E(`start -> transcription -> stop -> location`) 증적 확보
+- STT/TTS 연동
 
 ## Next
 - P57-T3 Android Bridge 계약 E2E 검증

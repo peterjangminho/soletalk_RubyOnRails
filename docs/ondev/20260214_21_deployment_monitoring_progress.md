@@ -1,4 +1,4 @@
-# Status: In Progress
+# Status: [In Progress]
 
 # Deployment & Monitoring Progress
 
@@ -42,6 +42,12 @@
 - 재배포 성공: `88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0` (`SUCCESS`)
 - 운영 URL 확인: `https://soletalk-rails-production.up.railway.app`
 
+8. Railway payload/runtime hardening
+- `railway up -d` 시 `413 Payload Too Large` 재현
+- `.railwayignore`/`.dockerignore`에 로컬 대용량 아티팩트(`.gradle-home`, `mobile`) 제외 반영
+- `storage` 제외 설정으로 발생한 런타임 권한 오류(`Permission denied @ dir_s_mkdir - /rails/storage`) 복구
+- `storage` 제외 항목 제거 후 재배포 성공: `b34ba4fa-9b77-43a3-9a43-69f8c5c3b08a` (`SUCCESS`)
+
 ## Validation
 - Health/Env validator 테스트 통과 (`P45-T1`, `P45-T2`, `P45-T3`)
 - API 예외처리/리포팅 테스트 통과 (`P46-T1`, `P46-T2`, `P46-T3`)
@@ -53,6 +59,7 @@
 - 실배포 루트 응답 성공: `GET /` -> `200`
 - Railway 필수 운영 변수 주입 완료 (`ONTOLOGY_RAG_*`, `GOOGLE_*`)
 - 변수 반영 배포 성공: `d64190f8-e37c-4054-80e3-83f2097954e2` (`SUCCESS`)
+- payload/runtime 복구 반영 배포 성공: `b34ba4fa-9b77-43a3-9a43-69f8c5c3b08a` (`SUCCESS`)
 
 ## Next
 - 운영 runbook 기준으로 배포/복구 절차 반복 검증

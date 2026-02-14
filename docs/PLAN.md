@@ -199,6 +199,8 @@ Phase plan → TDD implementation → Verification → Gap analysis
 
 ### Mobile Scope (external repos / mobile track)
 - [x] Android Hotwire Native local bootstrap (`mobile/android`) (**Priority 1**)
+- [x] Android Gradle Wrapper bootstrap + `assembleDebug` build smoke
+- [x] Android USB install/launch smoke (`adb install -r` + `am start`)
 - [ ] Android AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
 - [ ] Android STT integration (Gemini Live API streaming)
 - [ ] Android TTS integration (text → speech → native playback)
@@ -241,6 +243,8 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Railway required runtime env injection completed (`ONTOLOGY_RAG_*`, `GOOGLE_*`)
 - [x] Railway runtime deployment success (`88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0`)
 - [x] Production live check (`/healthz` OK, `/` 200)
+- [x] Railway packaging hardening (`.railwayignore`, `.dockerignore`) to avoid 413 payload issues
+- [x] Railway runtime storage permission recovery + redeploy success (`b34ba4fa-9b77-43a3-9a43-69f8c5c3b08a`)
 - [x] Ops runbook documented (`docs/ondev/20260214_24_phase16_ops_runbook.md`)
 - [x] App store prep checklist documented (`docs/ondev/20260214_25_app_store_prep_checklist.md`)
 - [x] Error tracking baseline (`Ops::ErrorReporter`, standardized API error payload)
@@ -255,6 +259,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 2. Run phase-level review + E2E gate when additional bridge actions are added.
 3. Track non-Rails remaining items in mobile/app-store external gates.
 4. Execute Android-first track before iOS track.
+5. Complete `P57-T3` on-device bridge contract E2E (`start -> transcription -> stop -> location`) with persisted evidence.
 
 ## Open Decisions
 

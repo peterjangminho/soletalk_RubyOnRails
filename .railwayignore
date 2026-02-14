@@ -1,0 +1,12 @@
+.git
+.github
+.venv
+.gradle-home
+tmp
+log
+node_modules
+mobile
+docs
+test
+CLAUDE.md
+AGENTS.md

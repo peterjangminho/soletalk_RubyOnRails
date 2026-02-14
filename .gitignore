@@ -20,6 +20,7 @@ CLAUDE.md
 
 # Local tools
 .venv/
+.gradle-home/
 .DS_Store
 
 # Editors

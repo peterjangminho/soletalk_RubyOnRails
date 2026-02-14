@@ -46,6 +46,10 @@
 # Ignore development files
 /.devcontainer
 
+# Ignore local Android/mobile workspace
+/mobile
+/.gradle-home
+
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
