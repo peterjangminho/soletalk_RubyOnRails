@@ -221,6 +221,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Health endpoint + env validator baseline (`/healthz`, `Ops::EnvValidator`)
 - [x] Deploy platform (Railway) + Dockerfile
 - [x] Production env vars + secrets management baseline (`ops:preflight`)
+- [x] Railway required runtime env injection completed (`ONTOLOGY_RAG_*`, `GOOGLE_*`)
 - [x] Railway runtime deployment success (`88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0`)
 - [x] Production live check (`/healthz` OK, `/` 200)
 - [x] Ops runbook documented (`docs/ondev/20260214_24_phase16_ops_runbook.md`)

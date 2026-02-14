@@ -51,8 +51,9 @@
 - 배포 수정 테스트 통과 (`test/services/ops/preflight_check_test.rb`, `test/integration/health_flow_test.rb`)
 - 실배포 헬스체크 성공: `GET /healthz` -> `{"ok":true,...,"database":"ok"}`
 - 실배포 루트 응답 성공: `GET /` -> `200`
+- Railway 필수 운영 변수 주입 완료 (`ONTOLOGY_RAG_*`, `GOOGLE_*`)
+- 변수 반영 배포 성공: `d64190f8-e37c-4054-80e3-83f2097954e2` (`SUCCESS`)
 
 ## Next
-- Railway 필수 운영 변수(`ONTOLOGY_RAG_*`, `GOOGLE_*`) 실값 주입
 - 운영 runbook 기준으로 배포/복구 절차 반복 검증
 - App store 준비/운영 절차 정리
