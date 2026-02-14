@@ -168,6 +168,7 @@
 - [x] P59-T1 `POST /api/auth/google/native_sign_in` Android 네이티브 로그인 엔드포인트 추가
 - [x] P59-T2 `Auth::GoogleIdTokenVerifier`로 Google ID Token 검증(aud/iss/sub) 추가
 - [x] P59-T3 native sign-in 성공 시 `google_sub` 사용자 upsert + 세션 로그인 + IdentifyUserJob enqueue
+- [x] P60-T1 Session 화면에서 `SoleTalkBridge.setSession(session_id, google_sub)` 자동 주입
 
 ## Queue Note
 - 현재 저장소의 다음 실행 대상은 Android-first 외부 게이트(모바일 리포).

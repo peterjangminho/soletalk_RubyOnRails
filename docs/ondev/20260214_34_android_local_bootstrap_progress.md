@@ -21,6 +21,10 @@
 4. Developer guide
 - `mobile/android/README.md`에 실행/브리지 호출 방법 명시
 
+5. Rails-WebView bridge bootstrap
+- `sessions/show`에서 Android 브리지 객체 존재 시 `setSession(session_id, google_sub)` 자동 호출
+- 브리지 주입 스크립트 노출 통합 테스트 통과 (`test/integration/sessions_flow_test.rb`)
+
 ## Pending
 - Android Studio sync/build 확인
 - Google Sign-In SDK 연결 후 `id_token` 발급 및 `POST /api/auth/google/native_sign_in` 연동

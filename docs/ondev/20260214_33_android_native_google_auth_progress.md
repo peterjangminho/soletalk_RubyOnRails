@@ -38,3 +38,4 @@
 ## Next
 - Android 리포에서 Google Sign-In ID token을 위 endpoint로 전송하도록 연결
 - 외부 모바일 PoC에서 bridge 이벤트 E2E(`P57-T3`) 수행
+- 세션 화면 브리지 부트스트랩(`setSession`)과 Android bridge를 연결해 이벤트 전송 전제조건 고정

@@ -45,3 +45,11 @@
     </ul>
   </section>
 </section>
+
+<script>
+  document.addEventListener("turbo:load", function() {
+    if (window.SoleTalkBridge && typeof window.SoleTalkBridge.setSession === "function") {
+      window.SoleTalkBridge.setSession("<%= @session.id %>", "<%= current_user.google_sub %>");
+    }
+  });
+</script>
