@@ -54,4 +54,5 @@
 
 ## Next
 - Railway 필수 운영 변수(`ONTOLOGY_RAG_*`, `GOOGLE_*`) 실값 주입
+- 운영 runbook 기준으로 배포/복구 절차 반복 검증
 - App store 준비/운영 절차 정리

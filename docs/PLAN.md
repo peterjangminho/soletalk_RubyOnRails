@@ -223,6 +223,8 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Production env vars + secrets management baseline (`ops:preflight`)
 - [x] Railway runtime deployment success (`88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0`)
 - [x] Production live check (`/healthz` OK, `/` 200)
+- [x] Ops runbook documented (`docs/ondev/20260214_24_phase16_ops_runbook.md`)
+- [x] App store prep checklist documented (`docs/ondev/20260214_25_app_store_prep_checklist.md`)
 - [x] Error tracking baseline (`Ops::ErrorReporter`, standardized API error payload)
 - [x] CI/CD pipeline baseline (security/lint/test + docker build smoke)
 - [ ] App store prep (Google Play, Apple App Store)

@@ -144,6 +144,12 @@
 - [x] P50-T1 Railway `SECRET_KEY_BASE` 주입 후 재배포 성공
 - [x] P50-T2 Railway production `/healthz`가 `ok: true`, `database: ok` 반환
 - [x] P50-T3 Railway production root endpoint (`/`)가 200 응답
+- [ ] P51-T1 Railway에 `ONTOLOGY_RAG_BASE_URL`, `ONTOLOGY_RAG_API_KEY` 실운영 값 주입
+- [ ] P51-T2 Railway에 `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` 실운영 값 주입
+- [ ] P51-T3 `ops:preflight`/`/healthz` 기준으로 운영 ENV 최종 검증 완료
+- [x] P52-T1 Phase16 운영 runbook 문서화 완료
+- [x] P52-T2 App Store 준비 체크리스트 문서화 완료
+- [ ] P52-T3 체크리스트 Remaining 항목 완료 후 상태 `Done` 전환
 
 ## TDD Rule
 - Always execute next unchecked item first.
