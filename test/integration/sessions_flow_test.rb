@@ -82,6 +82,7 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "native-bridge#sendTranscription"
     assert_includes response.body, "native-bridge#sendLocation"
+    assert_includes response.body, "native-bridge#requestCurrentLocation"
     assert_includes response.body, "native-bridge#playAudio"
   end
 

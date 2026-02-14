@@ -56,3 +56,4 @@
 - Android 로컬 PoC 스캐폴드 생성 완료: `mobile/android` (2026-02-14).
 - Android 실기기 앱 설치/실행 smoke 통과 (`SM-S936B`, 2026-02-14).
 - Android AudioBridge baseline(JS↔Native start/stop/transcription/playAudio) 구현 완료 (2026-02-14).
+- Android STT/GPS baseline(`SpeechRecognizer`, `requestCurrentLocation`) 구현 완료 (2026-02-14).

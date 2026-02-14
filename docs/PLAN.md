@@ -202,9 +202,9 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Android Gradle Wrapper bootstrap + `assembleDebug` build smoke
 - [x] Android USB install/launch smoke (`adb install -r` + `am start`)
 - [x] Android AudioBridgeComponent baseline (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
-- [ ] Android STT integration (Gemini Live API streaming)
+- [ ] Android STT integration (Gemini Live API streaming; Android SpeechRecognizer baseline done)
 - [ ] Android TTS integration (text → speech → native playback)
-- [ ] Android LocationBridgeComponent (GPS + weather)
+- [ ] Android LocationBridgeComponent (GPS + weather; GPS request baseline done)
 - [ ] Android Gemini Live API bidirectional audio streaming
 - [ ] iOS track kickoff (**Deferred**: 실기기 확보 또는 외부 테스터/디바이스팜 준비 후 시작)
 

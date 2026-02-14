@@ -45,6 +45,12 @@ export default class extends Controller {
     this.updateStatus("location_update sent")
   }
 
+  requestCurrentLocation() {
+    if (!this.ensureBridge("requestCurrentLocation")) return
+    this.bridge.requestCurrentLocation()
+    this.updateStatus("request_current_location sent")
+  }
+
   playAudio() {
     if (!this.ensureBridge("playAudio")) return
     const text = this.ttsTarget.value.trim()
