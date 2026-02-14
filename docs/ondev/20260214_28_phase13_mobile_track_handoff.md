@@ -53,3 +53,4 @@
 - Rails 저장소 P55(`P55-T1~T3`) 완료됨. 모바일 트랙은 동일 이벤트 계약을 기준으로 구현 진행.
 - Android-first로 우선순위 재조정됨 (2026-02-14).
 - Rails 네이티브 Google 로그인 endpoint 준비 완료: `POST /api/auth/google/native_sign_in` (2026-02-14).
+- Android 로컬 PoC 스캐폴드 생성 완료: `mobile/android` (2026-02-14).

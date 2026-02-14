@@ -197,7 +197,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Android native Google sign-in endpoint (`POST /api/auth/google/native_sign_in`) + ID token verifier baseline
 
 ### Mobile Scope (external repos / mobile track)
-- [ ] Android Hotwire Native project setup (**Priority 1**)
+- [x] Android Hotwire Native local bootstrap (`mobile/android`) (**Priority 1**)
 - [ ] Android AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
 - [ ] Android STT integration (Gemini Live API streaming)
 - [ ] Android TTS integration (text → speech → native playback)
@@ -210,6 +210,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - rails hardening sub-plan: `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md`
 - android-first sub-plan: `docs/ondev/20260214_32_phase13_android_first_execution_plan.md`
 - android native auth progress: `docs/ondev/20260214_33_android_native_google_auth_progress.md`
+- android local bootstrap: `docs/ondev/20260214_34_android_local_bootstrap_progress.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 

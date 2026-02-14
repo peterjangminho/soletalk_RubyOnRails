@@ -67,9 +67,10 @@
   - Android-first / iOS-deferred 전략 문서화
   - Roadmap/plan/handoff 문서 동기화
   - Rails Android 네이티브 인증 준비: `POST /api/auth/google/native_sign_in` + ID token verifier 구현/검증 완료
+  - Android 로컬 PoC 스캐폴드 생성: `mobile/android` (Gradle + WebView + Bridge skeleton)
 - Pending:
-  - Android 모바일 리포 실제 구현 착수 및 PoC 산출물 확보
+  - Android 실기기 E2E 및 STT/TTS 연동
 - Mismatch:
   - 없음
 - Next Test:
-  - P57-T2 Android Hotwire Native PoC 착수
+  - P57-T3 Android Bridge 계약 검증 E2E

@@ -161,7 +161,7 @@
 - [x] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
 - [x] P56-T1 `location_update` 위/경도 범위 검증 추가 (`-90..90`, `-180..180`)
 - [x] P57-T1 Android-first 실행계획 문서화 및 모바일 핸드오프 계획 동기화
-- [ ] P57-T2 Android Hotwire Native PoC 착수 (외부 모바일 리포)
+- [x] P57-T2 Android Hotwire Native PoC 착수 (로컬 `mobile/android` 스캐폴드)
 - [ ] P57-T3 Android Bridge 계약 검증: start/stop/transcription/location 이벤트 E2E 완료
 - [ ] P58-T1 iOS 트랙은 `Deferred`로 유지 (실기기 부재)
 - [ ] P58-T2 iOS 실기기 부재 대체검증(시뮬레이터/API contract/외부테스터) 계획 확정
@@ -171,6 +171,7 @@
 
 ## Queue Note
 - 현재 저장소의 다음 실행 대상은 Android-first 외부 게이트(모바일 리포).
+- Android 로컬 PoC 스캐폴드(`mobile/android`) 생성 완료.
 - iOS는 실기기 부재로 후순위(Deferred)로 관리.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리.
 
