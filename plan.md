@@ -160,11 +160,14 @@
 - [x] P55-T2 `POST /api/voice/events`에 세션 소유권/인증 가드 강화
 - [x] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
 - [x] P56-T1 `location_update` 위/경도 범위 검증 추가 (`-90..90`, `-180..180`)
-- [ ] P57-T1 Android-first 실행계획 문서화 및 모바일 핸드오프 계획 동기화
+- [x] P57-T1 Android-first 실행계획 문서화 및 모바일 핸드오프 계획 동기화
 - [ ] P57-T2 Android Hotwire Native PoC 착수 (외부 모바일 리포)
 - [ ] P57-T3 Android Bridge 계약 검증: start/stop/transcription/location 이벤트 E2E 완료
 - [ ] P58-T1 iOS 트랙은 `Deferred`로 유지 (실기기 부재)
 - [ ] P58-T2 iOS 실기기 부재 대체검증(시뮬레이터/API contract/외부테스터) 계획 확정
+- [x] P59-T1 `POST /api/auth/google/native_sign_in` Android 네이티브 로그인 엔드포인트 추가
+- [x] P59-T2 `Auth::GoogleIdTokenVerifier`로 Google ID Token 검증(aud/iss/sub) 추가
+- [x] P59-T3 native sign-in 성공 시 `google_sub` 사용자 upsert + 세션 로그인 + IdentifyUserJob enqueue
 
 ## Queue Note
 - 현재 저장소의 다음 실행 대상은 Android-first 외부 게이트(모바일 리포).

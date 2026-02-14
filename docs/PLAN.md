@@ -194,6 +194,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Bridge action hardening (`start_recording`, `stop_recording`, `location_update`) with persistence + validation
 - [x] Voice event auth/ownership guard strategy and enforcement
 - [x] Voice event phase-level E2E coverage (success + representative failure)
+- [x] Android native Google sign-in endpoint (`POST /api/auth/google/native_sign_in`) + ID token verifier baseline
 
 ### Mobile Scope (external repos / mobile track)
 - [ ] Android Hotwire Native project setup (**Priority 1**)
@@ -208,6 +209,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - mobile handoff: `docs/ondev/20260214_28_phase13_mobile_track_handoff.md`
 - rails hardening sub-plan: `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md`
 - android-first sub-plan: `docs/ondev/20260214_32_phase13_android_first_execution_plan.md`
+- android native auth progress: `docs/ondev/20260214_33_android_native_google_auth_progress.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 

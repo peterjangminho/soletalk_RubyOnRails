@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     get "protected", to: "protected#show"
+    namespace :auth do
+      post "google/native_sign_in", to: "google#native_sign_in"
+    end
 
     namespace :ontology_rag do
       post "users/sync", to: "users#sync"

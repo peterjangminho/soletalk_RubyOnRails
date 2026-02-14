@@ -66,6 +66,7 @@
 - Completed:
   - Android-first / iOS-deferred 전략 문서화
   - Roadmap/plan/handoff 문서 동기화
+  - Rails Android 네이티브 인증 준비: `POST /api/auth/google/native_sign_in` + ID token verifier 구현/검증 완료
 - Pending:
   - Android 모바일 리포 실제 구현 착수 및 PoC 산출물 확보
 - Mismatch:
