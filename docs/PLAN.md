@@ -217,6 +217,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - android audio bridge baseline: `docs/ondev/20260214_35_android_audio_bridge_component_progress.md`
 - android bridge code review: `docs/ondev/20260214_36_phase13_android_bridge_code_review.md`
 - android bridge gap analysis: `docs/ondev/20260214_37_phase13_android_bridge_gap_analysis.md`
+- android device e2e checklist: `docs/ondev/20260214_38_phase13_p57_t3_device_e2e_checklist.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 

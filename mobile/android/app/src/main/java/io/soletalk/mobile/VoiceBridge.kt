@@ -13,6 +13,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.webkit.JavascriptInterface
 import androidx.core.content.ContextCompat
 import okhttp3.MediaType.Companion.toMediaType
@@ -24,6 +25,7 @@ import java.util.Locale
 
 class VoiceBridge(context: Context) {
   companion object {
+    private const val TAG = "VoiceBridge"
     private val JSON = "application/json; charset=utf-8".toMediaType()
     private const val API_URL = "https://soletalk-rails-production.up.railway.app/api/voice/events"
     private const val WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=weather_code"
@@ -69,9 +71,11 @@ class VoiceBridge(context: Context) {
 
   @JavascriptInterface
   fun startRecording() {
+    Log.i(TAG, "startRecording requested")
     postVoiceEvent("start_recording", JSONObject())
     mainHandler.post {
       if (!hasAudioPermission() || isListening || !SpeechRecognizer.isRecognitionAvailable(appContext)) {
+        Log.w(TAG, "startRecording skipped: audio_permission=${hasAudioPermission()} isListening=$isListening available=${SpeechRecognizer.isRecognitionAvailable(appContext)}")
         return@post
       }
       ensureSpeechRecognizer()
@@ -82,6 +86,7 @@ class VoiceBridge(context: Context) {
 
   @JavascriptInterface
   fun stopRecording() {
+    Log.i(TAG, "stopRecording requested")
     mainHandler.post {
       if (isListening) {
         speechRecognizer?.stopListening()
@@ -93,12 +98,14 @@ class VoiceBridge(context: Context) {
 
   @JavascriptInterface
   fun onTranscription(text: String) {
+    Log.d(TAG, "onTranscription length=${text.length}")
     val payload = JSONObject().put("text", text)
     postVoiceEvent("transcription", payload)
   }
 
   @JavascriptInterface
   fun onLocation(latitude: Double, longitude: Double, weather: String) {
+    Log.d(TAG, "onLocation lat=$latitude lon=$longitude weather=$weather")
     val payload = JSONObject()
       .put("latitude", latitude)
       .put("longitude", longitude)
@@ -126,12 +133,13 @@ class VoiceBridge(context: Context) {
         val weather = fetchWeatherSummary(location.latitude, location.longitude)
         onLocation(location.latitude, location.longitude, weather)
       }.start()
-    }
+    } ?: Log.w(TAG, "requestCurrentLocation: no location available")
   }
 
   @JavascriptInterface
   fun playAudio(text: String) {
     if (text.isBlank() || !ttsReady) return
+    Log.d(TAG, "playAudio length=${text.length}")
     textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "soletalk_tts")
   }
 
@@ -207,6 +215,8 @@ class VoiceBridge(context: Context) {
         val weatherCode = JSONObject(body).optJSONObject("current")?.optInt("weather_code", -1) ?: -1
         mapWeatherCode(weatherCode)
       }
+    }.onFailure {
+      Log.w(TAG, "weather lookup failed: ${it.message}")
     }.getOrDefault("unknown")
   }
 
@@ -224,7 +234,10 @@ class VoiceBridge(context: Context) {
   }
 
   private fun postVoiceEvent(action: String, payload: JSONObject) {
-    if (sessionId.isBlank() || googleSub.isBlank()) return
+    if (sessionId.isBlank() || googleSub.isBlank()) {
+      Log.w(TAG, "postVoiceEvent skipped($action): session/subject missing")
+      return
+    }
 
     val bodyJson = JSONObject()
       .put("event_action", action)
@@ -241,7 +254,14 @@ class VoiceBridge(context: Context) {
       .build()
 
     Thread {
-      client.newCall(request).execute().close()
+      runCatching {
+        client.newCall(request).execute().use { response ->
+          val responseBody = response.body?.string().orEmpty()
+          Log.i(TAG, "postVoiceEvent action=$action code=${response.code} body=$responseBody")
+        }
+      }.onFailure {
+        Log.e(TAG, "postVoiceEvent failed action=$action error=${it.message}")
+      }
     }.start()
   }
 }

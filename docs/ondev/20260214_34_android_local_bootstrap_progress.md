@@ -45,6 +45,7 @@
   - `startRecording`, `stopRecording`, `sendTranscription`, `sendLocation`, `requestCurrentLocation`, `playAudio`
 - Stimulus `native_bridge_controller`로 브리지 호출/상태 표시 연결
 - `requestCurrentLocation`에서 Open-Meteo 조회로 weather code를 요약해 `location_update`에 포함
+- `VoiceBridge` action별 요청/응답 로그(`adb logcat -s VoiceBridge`) 추가
 - 통합 테스트 추가 (`P60-T1`, `P60-T2`)
 
 ## Pending
