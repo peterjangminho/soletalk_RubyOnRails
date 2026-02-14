@@ -20,6 +20,7 @@
 - Android AudioBridge baseline(JS↔Native start/stop/transcription/playAudio) 구현 완료
 - Android LocationBridge baseline(GPS + Open-Meteo weather) 구현 완료
 - 세션 화면 Native Bridge 테스트 패널 + Stimulus controller 구축 완료
+- `VoiceBridge` action별 응답 로깅 + `P57-T3` 체크리스트 문서(`20260214_38`) 추가 완료
 
 ## Next
 1. `P57-T3` 실기기 E2E 증적 수집
