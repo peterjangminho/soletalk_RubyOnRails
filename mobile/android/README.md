@@ -26,6 +26,8 @@ window.SoleTalkBridge.requestCurrentLocation()
 window.SoleTalkBridge.playAudio("안내 음성을 재생합니다.")
 ```
 
+`requestCurrentLocation()`은 GPS 좌표를 읽고 Open-Meteo에서 현재 weather code를 조회해 `location_update` payload의 `weather`에 반영합니다.
+
 ## Next
 - Android Google Sign-In SDK 붙여서 `id_token` 발급
 - Rails `POST /api/auth/google/native_sign_in` 연동

@@ -44,13 +44,13 @@
 - 세션 화면에 Native Bridge 테스트 패널 추가:
   - `startRecording`, `stopRecording`, `sendTranscription`, `sendLocation`, `requestCurrentLocation`, `playAudio`
 - Stimulus `native_bridge_controller`로 브리지 호출/상태 표시 연결
+- `requestCurrentLocation`에서 Open-Meteo 조회로 weather code를 요약해 `location_update`에 포함
 - 통합 테스트 추가 (`P60-T1`, `P60-T2`)
 
 ## Pending
 - Android bridge 이벤트 4종 전송 후 Rails DB 반영 증적 확보 (`P57-T3`)
 - Google Sign-In SDK 연결 후 `id_token` 발급 및 `POST /api/auth/google/native_sign_in` 연동
 - Gemini Live STT 스트리밍 연동
-- Weather enrichment(현재 `requestCurrentLocation`은 weather=`unknown`)
 - Android TTS 고급 옵션(voice/rate/pitch) 튜닝
 
 ## Next

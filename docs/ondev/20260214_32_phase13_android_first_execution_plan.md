@@ -73,11 +73,10 @@
   - Android AudioBridge baseline 구현:
     - `startRecording`, `stopRecording`, `onTranscription`, `playAudio` 브리지 메서드 연결
     - 세션 화면 Native Bridge 테스트 패널(Stimulus) 추가
-    - `SpeechRecognizer` baseline(start/stop 연동) + `requestCurrentLocation` baseline 추가
+    - `SpeechRecognizer` baseline(start/stop 연동) + `requestCurrentLocation`(Open-Meteo weather 포함) baseline 추가
 - Pending:
   - Android 실기기에서 브리지 이벤트 4종(`start_recording`, `transcription`, `stop_recording`, `location_update`) end-to-end 증적 확보
   - Gemini Live STT 연동
-  - Location weather enrichment
   - TTS 품질/언어설정 튜닝(현재 Android TTS baseline)
 - Mismatch:
   - 없음

@@ -26,6 +26,7 @@ class VoiceBridge(context: Context) {
   companion object {
     private val JSON = "application/json; charset=utf-8".toMediaType()
     private const val API_URL = "https://soletalk-rails-production.up.railway.app/api/voice/events"
+    private const val WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=weather_code"
   }
 
   private val client = OkHttpClient()
@@ -120,7 +121,12 @@ class VoiceBridge(context: Context) {
       }
     }
 
-    bestLocation?.let { onLocation(it.latitude, it.longitude, "unknown") }
+    bestLocation?.let { location ->
+      Thread {
+        val weather = fetchWeatherSummary(location.latitude, location.longitude)
+        onLocation(location.latitude, location.longitude, weather)
+      }.start()
+    }
   }
 
   @JavascriptInterface
@@ -189,6 +195,32 @@ class VoiceBridge(context: Context) {
       appContext,
       Manifest.permission.ACCESS_FINE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
+  }
+
+  private fun fetchWeatherSummary(latitude: Double, longitude: Double): String {
+    val url = WEATHER_API_URL.format(Locale.US, latitude, longitude)
+    val request = Request.Builder().url(url).build()
+    return runCatching {
+      client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) return@use "unknown"
+        val body = response.body?.string().orEmpty()
+        val weatherCode = JSONObject(body).optJSONObject("current")?.optInt("weather_code", -1) ?: -1
+        mapWeatherCode(weatherCode)
+      }
+    }.getOrDefault("unknown")
+  }
+
+  private fun mapWeatherCode(code: Int): String {
+    return when (code) {
+      0 -> "clear"
+      1, 2, 3 -> "cloudy"
+      45, 48 -> "fog"
+      51, 53, 55, 56, 57 -> "drizzle"
+      61, 63, 65, 66, 67, 80, 81, 82 -> "rain"
+      71, 73, 75, 77, 85, 86 -> "snow"
+      95, 96, 99 -> "thunder"
+      else -> "unknown"
+    }
   }
 
   private fun postVoiceEvent(action: String, payload: JSONObject) {

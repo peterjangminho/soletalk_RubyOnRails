@@ -15,7 +15,7 @@
 - `native_bridge_controller`로 브리지 메서드 호출/상태 표시 연결
 - Android `VoiceBridge`에 `playAudio`(TTS) 추가, `MainActivity` 권한 요청 추가
 - Android `SpeechRecognizer` baseline 연결(start/stop 시 STT 결과를 `transcription` 이벤트로 전송)
-- `requestCurrentLocation` 추가(GPS 기반 `location_update`, weather는 `unknown`)
+- `requestCurrentLocation` 추가(GPS + Open-Meteo 기반 weather 요약으로 `location_update`)
 
 3. Refactor
 - 브리지 호출 가드(`ensureBridge`)로 메서드 누락 시 실패 메시지 표준화
@@ -33,4 +33,4 @@
 ## Remaining
 - `P57-T3` 실기기 E2E(브리지 이벤트 4종 전송 후 Rails 저장 증적) 완료 필요
 - Gemini Live STT 스트리밍 연동
-- Location weather enrichment(API 연동)
+- Gemini Live 양방향 오디오 스트리밍 연동
