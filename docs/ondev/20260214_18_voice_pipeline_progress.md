@@ -19,6 +19,7 @@
 - `start_recording`, `stop_recording`, `location_update` 액션 처리 추가
 - `VoiceChatData.metadata`에 녹음 상태/위치 정보 저장
 - location payload validation (`invalid_location_payload`) 추가
+- location 좌표 범위 validation 추가 (`latitude: -90..90`, `longitude: -180..180`)
 
 4. Ownership/auth guard
 - `POST /api/voice/events`에 세션 소유권 확인 가드 추가

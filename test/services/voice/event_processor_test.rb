@@ -77,5 +77,22 @@ module Voice
       assert_equal false, result[:success]
       assert_equal "invalid_location_payload", result[:error]
     end
+
+    test "P56-T1 location_update rejects out of range latitude and longitude" do
+      user = User.create!(google_sub: "g-p56-invalid-range")
+      session_record = Session.create!(user: user, status: "active")
+      processor = Voice::EventProcessor.new
+
+      result = processor.call(
+        message: Voice::BridgeMessage.new(
+          action: "location_update",
+          session_id: session_record.id,
+          payload: { "latitude" => 120.0, "longitude" => 200.0 }
+        )
+      )
+
+      assert_equal false, result[:success]
+      assert_equal "invalid_location_payload", result[:error]
+    end
   end
 end

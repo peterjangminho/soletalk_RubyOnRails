@@ -54,6 +54,7 @@
   - P55-T1 action별 persistence/validation 구현 및 테스트 통과
   - P55-T2 세션 소유권/인증 가드(`current_user` 또는 `google_sub` 일치) 적용 및 테스트 통과
   - P55-T3 E2E 성공/실패 경로(start→transcription→stop→location, unauthorized) 테스트 통과
+  - P56-T1 location 좌표 범위 검증(-90..90, -180..180) 추가 및 테스트 통과
 - Pending:
   - Rails 저장소 범위 내 잔여 항목 없음 (모바일 외부 트랙 제외)
 - Mismatch:

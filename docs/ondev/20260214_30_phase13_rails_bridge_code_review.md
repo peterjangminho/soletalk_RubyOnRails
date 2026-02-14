@@ -10,11 +10,10 @@
 - Impact: 모바일 공개 API로 노출 시 세션 ID 추측 + `google_sub` 스푸핑 조합 리스크가 남음.
 - Recommendation: signed token(HMAC/JWT) 또는 app-issued short-lived token으로 대체.
 
-2. Low - `location_update` payload schema가 최소 검증만 수행
+2. Low - (Resolved) `location_update` 좌표 범위 검증 부재
 - Files: `app/services/voice/event_processor.rb`
-- Detail: `latitude`/`longitude` 숫자성만 검증하며, 값 범위(-90~90, -180~180) 검증은 없음.
-- Impact: 비정상 좌표가 metadata에 저장될 수 있음.
-- Recommendation: 범위 검증 추가 및 invalid payload 에러 코드 세분화.
+- Detail: 초기 리뷰 시 제기된 좌표 범위 검증 누락은 후속 수정(`P56-T1`)으로 해소됨.
+- Result: `latitude(-90..90)`, `longitude(-180..180)` 범위 검증 추가 완료.
 
 ## TDD / Principle Check
 - Red -> Green -> Refactor 순서 준수:

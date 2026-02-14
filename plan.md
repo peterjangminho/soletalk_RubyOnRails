@@ -159,6 +159,7 @@
 - [x] P55-T1 Voice::EventProcessor에 `start/stop/location` 액션별 persistence + validation 추가
 - [x] P55-T2 `POST /api/voice/events`에 세션 소유권/인증 가드 강화
 - [x] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
+- [x] P56-T1 `location_update` 위/경도 범위 검증 추가 (`-90..90`, `-180..180`)
 
 ## Queue Note
 - 현재 저장소의 다음 실행 대상은 외부 게이트(App Store checklist/manual mobile track).

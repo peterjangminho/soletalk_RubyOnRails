@@ -1,5 +1,8 @@
 module Voice
   class EventProcessor
+    LATITUDE_RANGE = -90.0..90.0
+    LONGITUDE_RANGE = -180.0..180.0
+
     def call(message:, session_record: nil)
       return { success: false, error: "invalid_message" } unless message.valid?
 
@@ -51,7 +54,7 @@ module Voice
     def process_location_update(message, session_record)
       latitude = float_value(message.payload["latitude"])
       longitude = float_value(message.payload["longitude"])
-      return { success: false, error: "invalid_location_payload" } if latitude.nil? || longitude.nil?
+      return { success: false, error: "invalid_location_payload" } unless valid_coordinates?(latitude, longitude)
 
       voice_chat_data = ensure_voice_chat_data(session_record)
       metadata = voice_chat_data.metadata.to_h
@@ -75,6 +78,12 @@ module Voice
       Float(value)
     rescue ArgumentError, TypeError
       nil
+    end
+
+    def valid_coordinates?(latitude, longitude)
+      return false if latitude.nil? || longitude.nil?
+
+      LATITUDE_RANGE.cover?(latitude) && LONGITUDE_RANGE.cover?(longitude)
     end
   end
 end
