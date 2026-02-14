@@ -1,0 +1,57 @@
+<section class="page-shell">
+  <header class="page-header">
+    <h1>SoleTalk</h1>
+    <p>Drive-safe voice companion for session memory and insight.</p>
+  </header>
+
+  <% if current_user %>
+    <section class="insight-detail-card">
+      <h2>Welcome, <%= current_user.name.presence || current_user.google_sub %></h2>
+      <p>Signed in with Google Sub: <code><%= current_user.google_sub %></code></p>
+      <p>
+        <%= link_to "Start New Session", new_session_path %>
+        |
+        <%= link_to "Open Sessions", sessions_path %>
+        |
+        <%= link_to "Open Insights", insights_path %>
+        |
+        <%= link_to "Settings", setting_path %>
+      </p>
+    </section>
+
+    <section class="insight-detail-card">
+      <h2>Recent Sessions</h2>
+      <% if @recent_sessions.present? %>
+        <ul class="insight-timeline">
+          <% @recent_sessions.each do |session_record| %>
+            <li>
+              <%= link_to "Session ##{session_record.id}", session_path(session_record) %>
+              <small>(<%= session_record.status %>)</small>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No sessions yet. Start your first session.</p>
+      <% end %>
+    </section>
+
+    <section class="insight-detail-card">
+      <h2>Recent Insights</h2>
+      <% if @recent_insights.present? %>
+        <ul class="insight-timeline">
+          <% @recent_insights.each do |insight| %>
+            <li><%= link_to insight.situation, insight_path(insight) %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No insights yet.</p>
+      <% end %>
+    </section>
+  <% else %>
+    <section class="insight-detail-card">
+      <h2>Sign In</h2>
+      <p>Use Google OAuth to start voice sessions and view insights.</p>
+      <p><%= link_to "Continue with Google", "/auth/google_oauth2" %></p>
+    </section>
+  <% end %>
+</section>

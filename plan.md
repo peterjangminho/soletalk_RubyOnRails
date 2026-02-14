@@ -153,6 +153,9 @@
 - [x] P53-T1 Post-ENV workflow gate verification 문서화 완료
 - [ ] P53-T2 App Store checklist Remaining 항목 순차 완료
 - [x] P53-T3 모바일 네이티브 트랙(Phase13 잔여) 별도 실행 계획 확정
+- [x] P54-T1 루트(`/`) 비로그인 화면에 Google OAuth 진입 UI 제공
+- [x] P54-T2 루트(`/`) 로그인 화면에 세션/인사이트 진입 대시보드 제공
+- [x] P54-T3 홈 통합 테스트 추가 및 통과 (`home_flow_test`)
 
 ## TDD Rule
 - Always execute next unchecked item first.

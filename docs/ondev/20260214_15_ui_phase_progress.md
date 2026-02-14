@@ -54,6 +54,11 @@
 - `settings-form` 컨트롤러: preferences JSON normalize
 - layout에 `javascript_importmap_tags` 연결
 
+11. Root home dashboard
+- `HomeController#index`를 plain 응답에서 대시보드 렌더링으로 전환
+- 비로그인 상태: Google OAuth 진입 CTA 표시
+- 로그인 상태: 최근 세션/인사이트와 핵심 이동 링크 표시
+
 ## Validation
 - Sessions 통합 테스트 통과 (`P22-T1`, `P22-T2`, `P22-T3`)
 - Session message 통합 테스트 통과 (`P23-T1`, `P23-T2`, `P23-T3`)
@@ -62,6 +67,7 @@
 - Settings 통합 테스트 통과 (`P26-T1`, `P26-T2`, `P26-T3`)
 - Emotion gauge 통합 테스트 통과 (`P27-T1`, `P27-T2`)
 - Stimulus hook/bootstrapping 통합 테스트 통과 (`P28-T1`, `P28-T2`, `P28-T3`)
+- 홈 화면 통합 테스트 통과 (`P54-T1`, `P54-T2`)
 - 전체 테스트 통과 (81 tests, 350 assertions)
 - 대상 Ruby 파일 RuboCop 통과
 

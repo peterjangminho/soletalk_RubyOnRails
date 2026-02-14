@@ -165,6 +165,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] VoiceChat UI (emotion gauge)
 - [x] Session management UI (list, detail)
 - [x] Session management UI (new session)
+- [x] Root dashboard UI (guest sign-in entry + signed-in navigation)
 - [x] Insight display UI (cards, timeline, Q1-Q4 detail)
 - [x] Settings UI
 - [x] common Stimulus controllers
