@@ -41,7 +41,9 @@
 - Google OAuth 프로덕션 승인 상태
 - OntologyRAG 운영 키/레이트리밋 검증
 - 모바일 스토어 제출용 서명/번들 준비
+- Rails bridge hardening 선행 완료 (`docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md`, P55)
 
 ## Next
+- Rails 저장소 P55 완료 후 모바일 리포에 동일 계약/검증 항목 이관
 - 모바일 담당 리포/보드에 본 문서를 이관
 - 각 플랫폼 PoC 결과를 기준으로 상태를 `Done`으로 전환

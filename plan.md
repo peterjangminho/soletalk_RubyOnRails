@@ -149,13 +149,20 @@
 - [x] P51-T3 `ops:preflight`/`/healthz` 기준으로 운영 ENV 최종 검증 완료
 - [x] P52-T1 Phase16 운영 runbook 문서화 완료
 - [x] P52-T2 App Store 준비 체크리스트 문서화 완료
-- [ ] P52-T3 체크리스트 Remaining 항목 완료 후 상태 `Done` 전환
 - [x] P53-T1 Post-ENV workflow gate verification 문서화 완료
-- [ ] P53-T2 App Store checklist Remaining 항목 순차 완료
 - [x] P53-T3 모바일 네이티브 트랙(Phase13 잔여) 별도 실행 계획 확정
+- External Gate-A (Manual/Out-of-Repo): App Store checklist Remaining 항목은 `docs/ondev/20260214_25_app_store_prep_checklist.md`에서 추적
+- External Gate-B (Manual/Out-of-Repo): 스토어 메타/정책/제출 아티팩트는 모바일 트랙 완료 후 순차 진행
 - [x] P54-T1 루트(`/`) 비로그인 화면에 Google OAuth 진입 UI 제공
 - [x] P54-T2 루트(`/`) 로그인 화면에 세션/인사이트 진입 대시보드 제공
 - [x] P54-T3 홈 통합 테스트 추가 및 통과 (`home_flow_test`)
+- [ ] P55-T1 Voice::EventProcessor에 `start/stop/location` 액션별 persistence + validation 추가
+- [ ] P55-T2 `POST /api/voice/events`에 세션 소유권/인증 가드 강화
+- [ ] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
+
+## Queue Note
+- 현재 저장소의 다음 실행 대상(코드 구현)은 `P55-T1`.
+- App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리.
 
 ## TDD Rule
 - Always execute next unchecked item first.

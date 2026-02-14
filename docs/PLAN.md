@@ -57,15 +57,15 @@ Phase plan → TDD implementation → Verification → Gap analysis
 | 2 | Authentication (OmniAuth Google) | Low | 8-12 | ✅ Done |
 | 3 | Core Data Models | Low | 10-15 | ✅ Done |
 | 4 | OntologyRAG Client (P0 endpoints) | Med | 15-20 | In Progress |
-| 5 | VoiceChat Domain Services | Med | 15-20 | In Progress |
-| 6 | DEPTH Layer (Q1-Q4) | Med-High | 15-20 | In Progress |
+| 5 | VoiceChat Domain Services | Med | 15-20 | ✅ Done |
+| 6 | DEPTH Layer (Q1-Q4) | Med-High | 15-20 | ✅ Done |
 | 7 | Context Orchestrator (5-Layer) | Med | 10-15 | ✅ Done |
 | 8 | Insight Generation | Med | 10-15 | ✅ Done |
 | 9 | Real-time (Action Cable) | High | 8-12 | ✅ Done |
 | 10 | UI (Turbo + Stimulus) | Med-High | 10-15 | ✅ Done |
 | 11 | Background Jobs (Solid Queue) | Low | 8-10 | ✅ Done |
 | 12 | RevenueCat Subscription | Med | 10-15 | ✅ Done |
-| 13 | Voice Pipeline (Native Bridge) | High | 8-12 | In Progress |
+| 13 | Voice Pipeline (Native Bridge) | High | 8-12 | In Progress (Split Track) |
 | 14 | OntologyRAG P1 Endpoints | Med | 10-15 | ✅ Done |
 | 15 | Integration Tests + Optimization | Med | 20-30 | ✅ Done |
 | 16 | Deployment + Monitoring | Med | 5-8 | In Progress |
@@ -189,13 +189,23 @@ Phase plan → TDD implementation → Verification → Gap analysis
 
 ## Phase 13: Voice Pipeline (Hotwire Native Bridge) ⚠️ HIGHEST RISK
 
+### Rails Scope (this repository)
+- [x] Rails-side native bridge contract endpoint (`POST /api/voice/events`) baseline
+- [ ] Bridge action hardening (`start_recording`, `stop_recording`, `location_update`) with persistence + validation
+- [ ] Voice event auth/ownership guard strategy and enforcement
+- [ ] Voice event phase-level E2E coverage (success + representative failure)
+
+### Mobile Scope (external repos / mobile track)
 - [ ] Android Hotwire Native project setup
 - [ ] AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
-- [x] Rails-side native bridge contract endpoint (`POST /api/voice/events`) baseline
 - [ ] STT integration (Gemini Live API streaming)
 - [ ] TTS integration (text → speech → native playback)
 - [ ] LocationBridgeComponent (GPS + weather)
 - [ ] Gemini Live API bidirectional audio streaming
+
+관련 문서:
+- mobile handoff: `docs/ondev/20260214_28_phase13_mobile_track_handoff.md`
+- rails hardening sub-plan: `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 
@@ -230,6 +240,20 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Error tracking baseline (`Ops::ErrorReporter`, standardized API error payload)
 - [x] CI/CD pipeline baseline (security/lint/test + docker build smoke)
 - [ ] App store prep (Google Play, Apple App Store)
+
+---
+
+## Immediate Next Execution (Rails Scope)
+
+1. Execute `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md` (P55-T1~T3).
+2. Run phase-level review + E2E gate after P55 implementation.
+3. Sync status back to `plan.md`, `docs/PLAN.md`, and related `docs/ondev` progress docs.
+
+## Open Decisions
+
+- Native voice event auth model: web session-only vs signed mobile token.
+- STT/TTS provider lock-in: Gemini Live only vs fallback provider strategy.
+- Mobile repo ownership and handoff SLA for Android/iOS tracks.
 
 ---
 
