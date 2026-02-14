@@ -195,6 +195,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Voice event auth/ownership guard strategy and enforcement
 - [x] Voice event phase-level E2E coverage (success + representative failure)
 - [x] Android native Google sign-in endpoint (`POST /api/auth/google/native_sign_in`) + ID token verifier baseline
+- [x] Signed voice bridge token baseline (`Auth::VoiceBridgeToken`) + `/api/voice/events` token auth path
 
 ### Mobile Scope (external repos / mobile track)
 - [x] Android Hotwire Native local bootstrap (`mobile/android`) (**Priority 1**)
@@ -257,7 +258,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 
 ## Open Decisions
 
-- Native voice event auth model: web session-only vs signed mobile token.
+- Native voice event auth hardening: signed bridge token baseline 도입 완료, `google_sub` fallback 제거 시점 결정 필요.
 - STT/TTS provider lock-in: Gemini Live only vs fallback provider strategy.
 - Mobile repo ownership and handoff SLA for Android/iOS tracks.
 

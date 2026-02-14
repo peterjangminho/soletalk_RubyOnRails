@@ -42,7 +42,7 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "turbo-cable-stream-source"
     assert_includes response.body, "data-session-id=\"#{session_record.id}\""
     assert_includes response.body, "data-native-bridge=\"voice\""
-    assert_includes response.body, "SoleTalkBridge.setSession(\"#{session_record.id}\", \"sessions-show-user\")"
+    assert_includes response.body, "SoleTalkBridge.setSession(\"#{session_record.id}\", \"sessions-show-user\", \""
   end
 
   test "P22-T3 session show includes phase badge target for turbo replacement" do

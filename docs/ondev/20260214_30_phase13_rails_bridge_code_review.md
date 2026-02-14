@@ -4,11 +4,10 @@
 
 ## Findings (severity order)
 
-1. Medium - Request-level `google_sub` 인증은 위변조 방어가 약함
-- Files: `app/controllers/api/voice/events_controller.rb`
-- Detail: 비로그인 요청에서도 `google_sub` 문자열 일치만으로 접근이 허용되어, 서명/토큰 기반 검증 대비 보안 강도가 낮음.
-- Impact: 모바일 공개 API로 노출 시 세션 ID 추측 + `google_sub` 스푸핑 조합 리스크가 남음.
-- Recommendation: signed token(HMAC/JWT) 또는 app-issued short-lived token으로 대체.
+1. Medium - (Resolved) Request-level `google_sub` 단독 인증 리스크
+- Files: `app/controllers/api/voice/events_controller.rb`, `app/services/auth/voice_bridge_token.rb`
+- Detail: 이전 리스크였던 `google_sub` 단독 경로는 signed bridge token 경로 추가로 완화됨.
+- Residual: 하위 호환을 위해 `google_sub` fallback이 남아 있어 제거 시점 결정 필요.
 
 2. Low - (Resolved) `location_update` 좌표 범위 검증 부재
 - Files: `app/services/voice/event_processor.rb`

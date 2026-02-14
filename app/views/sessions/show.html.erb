@@ -49,7 +49,7 @@
 <script>
   document.addEventListener("turbo:load", function() {
     if (window.SoleTalkBridge && typeof window.SoleTalkBridge.setSession === "function") {
-      window.SoleTalkBridge.setSession("<%= @session.id %>", "<%= current_user.google_sub %>");
+      window.SoleTalkBridge.setSession("<%= @session.id %>", "<%= current_user.google_sub %>", "<%= @bridge_token %>");
     }
   });
 </script>

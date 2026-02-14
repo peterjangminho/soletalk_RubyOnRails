@@ -169,6 +169,9 @@
 - [x] P59-T2 `Auth::GoogleIdTokenVerifier`로 Google ID Token 검증(aud/iss/sub) 추가
 - [x] P59-T3 native sign-in 성공 시 `google_sub` 사용자 upsert + 세션 로그인 + IdentifyUserJob enqueue
 - [x] P60-T1 Session 화면에서 `SoleTalkBridge.setSession(session_id, google_sub)` 자동 주입
+- [x] P61-T1 `Auth::VoiceBridgeToken` 서명 토큰 발급/검증 추가
+- [x] P61-T2 Session show에서 bridge token 주입 및 Android bridge 3-arg 세션 연결 지원
+- [x] P61-T3 `/api/voice/events` bridge_token 인증 허용(세션/사용자 매칭 검증)
 
 ## Queue Note
 - 현재 저장소의 다음 실행 대상은 Android-first 외부 게이트(모바일 리포).

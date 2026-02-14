@@ -14,17 +14,14 @@
 | feature | start/stop/location 처리 + persistence | Closed | High | 완료 |
 | feature | 세션 소유권/인증 가드 | Closed | High | 완료 |
 | test | Voice 이벤트 E2E 성공/실패 경로 | Closed | High | 완료 |
-| quality | signed token 기반 강한 인증 | Open | Medium | 모바일 트랙 연계 설계 후 보강 |
+| quality | signed token 기반 강한 인증 | Closed | Medium | `Auth::VoiceBridgeToken` 도입 및 `/api/voice/events` 검증 반영 |
 | quality | location 좌표 범위 검증 | Closed | Low | `P56-T1`로 완료 |
 | documentation | Phase 13 Rails/Mobile 경계 명확화 | Closed | Medium | PLAN/ondev 문서 동기화 완료 |
 
 ## Root Cause (Open Gaps)
-1. 강한 인증 미적용
-- 원인: 현재 단계는 모바일 브리지 계약 안정화가 목표였고, 토큰 인프라 결정은 Open Decision으로 남아 있음.
-
 ## Next Actions
-1. 모바일 트랙과 합의된 인증 모델 결정 (JWT/HMAC/short-lived token).
-2. 결정된 인증 모델로 `/api/voice/events` guard 교체.
+1. signed bridge token 우선 사용으로 Android 실기기 E2E(`P57-T3`) 검증.
+2. `google_sub` fallback 제거 시점/호환전략 결정.
 
 ## Sync Update
 - `plan.md`: P55-T1~T3 완료 반영

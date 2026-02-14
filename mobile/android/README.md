@@ -17,6 +17,7 @@
 ## Bridge Contract (JS -> Android)
 ```javascript
 window.SoleTalkBridge.setSession(sessionId, googleSub)
+window.SoleTalkBridge.setSession(sessionId, googleSub, bridgeToken)
 window.SoleTalkBridge.startRecording()
 window.SoleTalkBridge.onTranscription("text from stt")
 window.SoleTalkBridge.stopRecording()

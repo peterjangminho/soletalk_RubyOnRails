@@ -16,11 +16,19 @@ class VoiceBridge {
   private val client = OkHttpClient()
   private var sessionId: String = ""
   private var googleSub: String = ""
+  private var bridgeToken: String = ""
 
   @JavascriptInterface
   fun setSession(sessionId: String, googleSub: String) {
     this.sessionId = sessionId
     this.googleSub = googleSub
+  }
+
+  @JavascriptInterface
+  fun setSession(sessionId: String, googleSub: String, bridgeToken: String) {
+    this.sessionId = sessionId
+    this.googleSub = googleSub
+    this.bridgeToken = bridgeToken
   }
 
   @JavascriptInterface
@@ -56,6 +64,9 @@ class VoiceBridge {
       .put("session_id", sessionId)
       .put("google_sub", googleSub)
       .put("payload", payload)
+    if (bridgeToken.isNotBlank()) {
+      bodyJson.put("bridge_token", bridgeToken)
+    }
 
     val request = Request.Builder()
       .url(API_URL)

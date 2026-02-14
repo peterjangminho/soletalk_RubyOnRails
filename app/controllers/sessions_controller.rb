@@ -19,6 +19,10 @@ class SessionsController < ApplicationController
   def show
     @voice_chat_data = @session.voice_chat_data
     @recent_insights = Insight.order(created_at: :desc).limit(3)
+    @bridge_token = ::Auth::VoiceBridgeToken.generate(
+      session_id: @session.id,
+      google_sub: current_user.google_sub
+    )
   end
 
   private

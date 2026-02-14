@@ -25,6 +25,10 @@
 - `sessions/show`에서 Android 브리지 객체 존재 시 `setSession(session_id, google_sub)` 자동 호출
 - 브리지 주입 스크립트 노출 통합 테스트 통과 (`test/integration/sessions_flow_test.rb`)
 
+6. Signed bridge token wiring
+- `sessions/show`에서 `setSession(session_id, google_sub, bridge_token)`로 주입 확장
+- Android `VoiceBridge`가 `bridge_token`을 `/api/voice/events` 요청에 포함하도록 확장
+
 ## Pending
 - Android Studio sync/build 확인
 - Google Sign-In SDK 연결 후 `id_token` 발급 및 `POST /api/auth/google/native_sign_in` 연동

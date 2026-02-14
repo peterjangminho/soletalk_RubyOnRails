@@ -28,13 +28,29 @@ module Api
       private
 
       def authorized_for_session?(session_record)
+        return true if valid_bridge_token_for_session?(session_record)
         return current_user.id == session_record.user_id if current_user
 
         request_google_sub == session_record.user.google_sub
       end
 
+      def valid_bridge_token_for_session?(session_record)
+        token = request_bridge_token
+        return false if token.blank?
+
+        payload = ::Auth::VoiceBridgeToken.verify(token: token)
+        return false unless payload
+
+        payload[:session_id] == session_record.id.to_s &&
+          payload[:google_sub] == session_record.user.google_sub
+      end
+
       def request_google_sub
         params[:google_sub].presence || params.dig(:payload, :google_sub).presence || params.dig(:payload, "google_sub").presence
+      end
+
+      def request_bridge_token
+        params[:bridge_token].presence || params.dig(:payload, :bridge_token).presence || params.dig(:payload, "bridge_token").presence
       end
 
       def render_forbidden
