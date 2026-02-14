@@ -191,9 +191,9 @@ Phase plan → TDD implementation → Verification → Gap analysis
 
 ### Rails Scope (this repository)
 - [x] Rails-side native bridge contract endpoint (`POST /api/voice/events`) baseline
-- [ ] Bridge action hardening (`start_recording`, `stop_recording`, `location_update`) with persistence + validation
-- [ ] Voice event auth/ownership guard strategy and enforcement
-- [ ] Voice event phase-level E2E coverage (success + representative failure)
+- [x] Bridge action hardening (`start_recording`, `stop_recording`, `location_update`) with persistence + validation
+- [x] Voice event auth/ownership guard strategy and enforcement
+- [x] Voice event phase-level E2E coverage (success + representative failure)
 
 ### Mobile Scope (external repos / mobile track)
 - [ ] Android Hotwire Native project setup
@@ -245,9 +245,9 @@ Phase plan → TDD implementation → Verification → Gap analysis
 
 ## Immediate Next Execution (Rails Scope)
 
-1. Execute `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md` (P55-T1~T3).
-2. Run phase-level review + E2E gate after P55 implementation.
-3. Sync status back to `plan.md`, `docs/PLAN.md`, and related `docs/ondev` progress docs.
+1. Maintain Rails voice-event contract as stable baseline for mobile handoff.
+2. Run phase-level review + E2E gate when additional bridge actions are added.
+3. Track non-Rails remaining items in mobile/app-store external gates.
 
 ## Open Decisions
 

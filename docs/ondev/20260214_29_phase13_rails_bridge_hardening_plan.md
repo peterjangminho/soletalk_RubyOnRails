@@ -1,4 +1,4 @@
-# Status: [In Progress]
+# Status: [Done]
 
 # Phase 13 Rails Bridge Hardening Plan
 
@@ -50,7 +50,13 @@
 - 성공 조건: 신규/기존 테스트 모두 green, 회귀 없음
 
 ## Session-End Update
-- Completed: (fill after execution)
-- Pending: (fill after execution)
-- Mismatch: (fill after execution)
-- Next Test: P55-T1
+- Completed:
+  - P55-T1 action별 persistence/validation 구현 및 테스트 통과
+  - P55-T2 세션 소유권/인증 가드(`current_user` 또는 `google_sub` 일치) 적용 및 테스트 통과
+  - P55-T3 E2E 성공/실패 경로(start→transcription→stop→location, unauthorized) 테스트 통과
+- Pending:
+  - Rails 저장소 범위 내 잔여 항목 없음 (모바일 외부 트랙 제외)
+- Mismatch:
+  - 인증 전략은 임시 가드(`google_sub` 매칭 허용)를 채택. signed token 방식은 `Open Decisions`로 유지
+- Next Test:
+  - External Gate/manual tasks (App Store + mobile repo implementation)

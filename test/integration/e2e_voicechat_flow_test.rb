@@ -110,4 +110,42 @@ class E2eVoicechatFlowTest < ActionDispatch::IntegrationTest
     get "/insights"
     assert_response :ok
   end
+
+  test "P55-T3 E2E voice event flow start transcription stop location succeeds" do
+    user = sign_in(google_sub: "e2e-voice-events-user", premium: true)
+    session_record = Session.create!(user: user, status: "active")
+
+    post "/api/voice/events", params: {
+      event_action: "start_recording",
+      session_id: session_record.id,
+      payload: {}
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "transcription",
+      session_id: session_record.id,
+      payload: { text: "voice from native bridge" }
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "stop_recording",
+      session_id: session_record.id,
+      payload: {}
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "location_update",
+      session_id: session_record.id,
+      payload: { latitude: 37.0, longitude: 127.0, weather: "clear" }
+    }, as: :json
+    assert_response :ok
+
+    session_record.reload
+    assert_equal "voice from native bridge", session_record.messages.order(:created_at).last.content
+    assert_equal false, session_record.voice_chat_data.metadata["recording_active"]
+    assert_equal 37.0, session_record.voice_chat_data.metadata["last_location"]["latitude"]
+  end
 end

@@ -28,6 +28,7 @@ class E2eErrorFlowTest < ActionDispatch::IntegrationTest
     post "/api/voice/events", params: {
       event_action: "transcription",
       session_id: session_record.id,
+      google_sub: user.google_sub,
       payload: { text: "" }
     }, as: :json
 
@@ -35,6 +36,23 @@ class E2eErrorFlowTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert_equal false, body["success"]
     assert_equal "empty_transcription", body["error"]
+  end
+
+  test "P55-T3 E2E voice events reject unauthorized session access" do
+    user = User.create!(google_sub: "g-owner")
+    session_record = Session.create!(user: user, status: "active")
+
+    post "/api/voice/events", params: {
+      event_action: "transcription",
+      session_id: session_record.id,
+      google_sub: "g-not-owner",
+      payload: { text: "unauthorized voice" }
+    }, as: :json
+
+    assert_response :forbidden
+    body = JSON.parse(response.body)
+    assert_equal false, body["success"]
+    assert_equal "forbidden", body["error"]
   end
 
   test "P43-T3 E2E subscription webhook handles unknown user with 404" do

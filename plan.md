@@ -156,12 +156,12 @@
 - [x] P54-T1 루트(`/`) 비로그인 화면에 Google OAuth 진입 UI 제공
 - [x] P54-T2 루트(`/`) 로그인 화면에 세션/인사이트 진입 대시보드 제공
 - [x] P54-T3 홈 통합 테스트 추가 및 통과 (`home_flow_test`)
-- [ ] P55-T1 Voice::EventProcessor에 `start/stop/location` 액션별 persistence + validation 추가
-- [ ] P55-T2 `POST /api/voice/events`에 세션 소유권/인증 가드 강화
-- [ ] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
+- [x] P55-T1 Voice::EventProcessor에 `start/stop/location` 액션별 persistence + validation 추가
+- [x] P55-T2 `POST /api/voice/events`에 세션 소유권/인증 가드 강화
+- [x] P55-T3 Voice 이벤트 E2E(start->transcription->stop + location, failure path) 테스트 보강
 
 ## Queue Note
-- 현재 저장소의 다음 실행 대상(코드 구현)은 `P55-T1`.
+- 현재 저장소의 다음 실행 대상은 외부 게이트(App Store checklist/manual mobile track).
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리.
 
 ## TDD Rule
