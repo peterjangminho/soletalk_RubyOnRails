@@ -150,6 +150,9 @@
 - [x] P52-T1 Phase16 운영 runbook 문서화 완료
 - [x] P52-T2 App Store 준비 체크리스트 문서화 완료
 - [ ] P52-T3 체크리스트 Remaining 항목 완료 후 상태 `Done` 전환
+- [x] P53-T1 Post-ENV workflow gate verification 문서화 완료
+- [ ] P53-T2 App Store checklist Remaining 항목 순차 완료
+- [ ] P53-T3 모바일 네이티브 트랙(Phase13 잔여) 별도 실행 계획 확정
 
 ## TDD Rule
 - Always execute next unchecked item first.
