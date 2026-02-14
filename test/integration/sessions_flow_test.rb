@@ -58,6 +58,33 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "data-phase=\"calm\""
   end
 
+  test "P60-T1 session show renders native bridge control panel" do
+    sign_in(google_sub: "sessions-native-bridge-user")
+    user = User.find_by!(google_sub: "sessions-native-bridge-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "native-bridge-panel"
+    assert_includes response.body, "data-controller=\"native-bridge\""
+    assert_includes response.body, "native-bridge#startRecording"
+    assert_includes response.body, "native-bridge#stopRecording"
+  end
+
+  test "P60-T2 session show exposes transcription/location/tts bridge actions" do
+    sign_in(google_sub: "sessions-native-bridge-controls-user")
+    user = User.find_by!(google_sub: "sessions-native-bridge-controls-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "native-bridge#sendTranscription"
+    assert_includes response.body, "native-bridge#sendLocation"
+    assert_includes response.body, "native-bridge#playAudio"
+  end
+
   test "P25-T3 session show renders DEPTH panel and recent insights panel" do
     sign_in(google_sub: "sessions-depth-user")
     user = User.find_by!(google_sub: "sessions-depth-user")

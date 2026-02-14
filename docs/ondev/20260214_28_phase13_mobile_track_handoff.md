@@ -55,3 +55,4 @@
 - Rails 네이티브 Google 로그인 endpoint 준비 완료: `POST /api/auth/google/native_sign_in` (2026-02-14).
 - Android 로컬 PoC 스캐폴드 생성 완료: `mobile/android` (2026-02-14).
 - Android 실기기 앱 설치/실행 smoke 통과 (`SM-S936B`, 2026-02-14).
+- Android AudioBridge baseline(JS↔Native start/stop/transcription/playAudio) 구현 완료 (2026-02-14).

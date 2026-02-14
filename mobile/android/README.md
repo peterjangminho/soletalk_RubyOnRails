@@ -5,7 +5,7 @@
 ## Included
 - Gradle Kotlin DSL 기본 구조
 - WebView 기반 `MainActivity`
-- JS Bridge `SoleTalkBridge` (`startRecording`, `stopRecording`, `onTranscription`, `onLocation`)
+- JS Bridge `SoleTalkBridge` (`startRecording`, `stopRecording`, `onTranscription`, `onLocation`, `playAudio`)
 - Rails voice event endpoint 연동 스켈레톤 (`/api/voice/events`)
 
 ## Quick Start
@@ -22,6 +22,7 @@ window.SoleTalkBridge.startRecording()
 window.SoleTalkBridge.onTranscription("text from stt")
 window.SoleTalkBridge.stopRecording()
 window.SoleTalkBridge.onLocation(37.5, 127.0, "clear")
+window.SoleTalkBridge.playAudio("안내 음성을 재생합니다.")
 ```
 
 ## Next

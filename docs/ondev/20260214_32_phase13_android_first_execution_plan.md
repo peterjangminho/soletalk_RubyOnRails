@@ -70,9 +70,13 @@
   - Android 로컬 PoC 스캐폴드 생성: `mobile/android` (Gradle + WebView + Bridge skeleton)
   - Android Gradle Wrapper 구성 및 `./gradlew assembleDebug` 빌드 성공
   - USB 디바이스(`SM-S936B`)에 `app-debug.apk` 설치 및 `MainActivity` 실행 smoke 통과
+  - Android AudioBridge baseline 구현:
+    - `startRecording`, `stopRecording`, `onTranscription`, `playAudio` 브리지 메서드 연결
+    - 세션 화면 Native Bridge 테스트 패널(Stimulus) 추가
 - Pending:
   - Android 실기기에서 브리지 이벤트 4종(`start_recording`, `transcription`, `stop_recording`, `location_update`) end-to-end 증적 확보
-  - STT/TTS 연동
+  - Gemini Live STT 연동
+  - TTS 품질/언어설정 튜닝(현재 Android TTS baseline)
 - Mismatch:
   - 없음
 - Next Test:

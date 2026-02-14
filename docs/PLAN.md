@@ -201,7 +201,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Android Hotwire Native local bootstrap (`mobile/android`) (**Priority 1**)
 - [x] Android Gradle Wrapper bootstrap + `assembleDebug` build smoke
 - [x] Android USB install/launch smoke (`adb install -r` + `am start`)
-- [ ] Android AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
+- [x] Android AudioBridgeComponent baseline (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
 - [ ] Android STT integration (Gemini Live API streaming)
 - [ ] Android TTS integration (text → speech → native playback)
 - [ ] Android LocationBridgeComponent (GPS + weather)
@@ -214,6 +214,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - android-first sub-plan: `docs/ondev/20260214_32_phase13_android_first_execution_plan.md`
 - android native auth progress: `docs/ondev/20260214_33_android_native_google_auth_progress.md`
 - android local bootstrap: `docs/ondev/20260214_34_android_local_bootstrap_progress.md`
+- android audio bridge baseline: `docs/ondev/20260214_35_android_audio_bridge_component_progress.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 

@@ -1,13 +1,16 @@
 package io.soletalk.mobile
 
+import android.content.Context
+import android.speech.tts.TextToSpeech
 import android.webkit.JavascriptInterface
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.util.Locale
 
-class VoiceBridge {
+class VoiceBridge(context: Context) {
   companion object {
     private val JSON = "application/json; charset=utf-8".toMediaType()
     private const val API_URL = "https://soletalk-rails-production.up.railway.app/api/voice/events"
@@ -17,6 +20,17 @@ class VoiceBridge {
   private var sessionId: String = ""
   private var googleSub: String = ""
   private var bridgeToken: String = ""
+  private var textToSpeech: TextToSpeech? = null
+  private var ttsReady: Boolean = false
+
+  init {
+    textToSpeech = TextToSpeech(context) { status ->
+      if (status == TextToSpeech.SUCCESS) {
+        ttsReady = true
+        textToSpeech?.language = Locale.KOREAN
+      }
+    }
+  }
 
   @JavascriptInterface
   fun setSession(sessionId: String, googleSub: String) {
@@ -54,6 +68,19 @@ class VoiceBridge {
       .put("longitude", longitude)
       .put("weather", weather)
     postVoiceEvent("location_update", payload)
+  }
+
+  @JavascriptInterface
+  fun playAudio(text: String) {
+    if (text.isBlank() || !ttsReady) return
+    textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "soletalk_tts")
+  }
+
+  fun release() {
+    textToSpeech?.stop()
+    textToSpeech?.shutdown()
+    textToSpeech = null
+    ttsReady = false
   }
 
   private fun postVoiceEvent(action: String, payload: JSONObject) {

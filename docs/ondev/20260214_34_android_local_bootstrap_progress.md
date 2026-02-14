@@ -37,10 +37,19 @@
 - USB 연결 디바이스(`SM-S936B`)에 `adb install -r app-debug.apk` 성공
 - `adb shell am start -W -n io.soletalk.mobile/.MainActivity` 실행 확인
 
+9. Audio bridge baseline
+- `VoiceBridge`에 `playAudio(text)` 추가 (Android `TextToSpeech` 기반)
+- `MainActivity`에 마이크/위치 런타임 권한 요청 추가
+- 세션 화면에 Native Bridge 테스트 패널 추가:
+  - `startRecording`, `stopRecording`, `sendTranscription`, `sendLocation`, `playAudio`
+- Stimulus `native_bridge_controller`로 브리지 호출/상태 표시 연결
+- 통합 테스트 추가 (`P60-T1`, `P60-T2`)
+
 ## Pending
 - Android bridge 이벤트 4종 전송 후 Rails DB 반영 증적 확보 (`P57-T3`)
 - Google Sign-In SDK 연결 후 `id_token` 발급 및 `POST /api/auth/google/native_sign_in` 연동
-- STT/TTS 연동
+- Gemini Live STT 연동
+- Android TTS 고급 옵션(voice/rate/pitch) 튜닝
 
 ## Next
 - P57-T3 Android Bridge 계약 E2E 검증
