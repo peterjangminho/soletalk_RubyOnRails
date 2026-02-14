@@ -1,0 +1,147 @@
+# SoleTalk Rails Build Plan
+
+## Status
+- [x] P1-T1 OntologyRag::Client initializes required headers (`X-API-Key`, `X-Source-App`, `X-Request-ID`)
+- [x] P1-T2 OntologyRag::Client raises configuration error when required env vars are missing
+- [x] P1-T3 OntologyRag::Client identify_user posts to `/engine/users/identify` with `google_sub`
+- [x] P1-T4 OntologyRag::Client query posts to `/engine/query` and normalizes response
+- [x] P1-T5 OntologyRag::Client handles timeout/retry/fallback policy
+- [x] P2-T1 OntologyRag::Client get_prompts requests `/engine/prompts/{google_sub}`
+- [x] P2-T2 OntologyRag::Client record_events posts to `/incar/events/batch`
+- [x] P2-T3 OntologyRag::Client save_conversation posts to `/incar/conversations/{session_id}/save`
+- [x] P3-T1 DepthExploration validates signal range and required Q1~Q4 shape
+- [x] P3-T2 Insight maps Q1~Q4 fields (`situation`, `decision`, `action_guide`, `data_info`)
+- [x] P3-T3 DepthExploration/Insight JSON fields are persisted safely with defaults
+- [x] P4-T1 UserSyncService identifies user and returns standardized success payload
+- [x] P4-T2 UserSyncService returns standardized error payload on failed upstream response
+- [x] P5-T1 POST /api/ontology_rag/users/sync returns success payload
+- [x] P5-T2 POST /api/ontology_rag/users/sync returns 422 when google_sub missing
+- [x] P5-T3 POST /api/ontology_rag/users/sync returns 502 on upstream failure
+- [x] P6-T1 OntologyRag::Constants defines P0 endpoint paths and timeout policy
+- [x] P6-T2 OntologyRag::Models::EngcProfile keeps singular ENGC keys only
+- [x] P6-T3 OntologyRag::Models::QueryResponse normalizes nil sources to empty array
+- [x] P7-T1 User validates google_sub presence/uniqueness
+- [x] P7-T2 Auth::GoogleSubExtractor extracts google_sub from omniauth auth hash
+- [x] P8-T1 Session belongs_to user and validates status
+- [x] P8-T2 Message belongs_to session and validates role enum
+- [x] P8-T3 VoiceChatData/Setting belong_to user or session with JSON defaults
+- [x] P9-T1 authenticate_user! redirects when session is missing
+- [x] P9-T2 OmniAuth callback creates user and signs in session
+- [x] P9-T3 OmniAuth failure redirects safely
+- [x] P10-T1 OmniAuth initializer registers google_oauth2 provider config
+- [x] P10-T2 IdentifyUserJob calls UserSyncService with google_sub
+- [x] P10-T3 OmniAuth callback enqueues IdentifyUserJob
+- [x] P11-T1 OntologyRag::Client default adapter uses Faraday request path
+- [x] P11-T2 OntologyRag::Client fallback handles Faraday timeout errors
+- [x] P12-T1 VoiceChat::Constants defines 5-phase sequence and depth trigger thresholds
+- [x] P12-T2 VoiceChat::DepthSignalDetector detects high emotion/repetition/keywords
+- [x] P12-T3 VoiceChat::PhaseTransitionEngine moves opener->emotion_expansion based on emotion
+- [x] P13-T1 VoiceChat::EmotionTracker updates and clamps emotion/energy levels
+- [x] P13-T2 VoiceChat::NarrowingService generates progressively focused questions
+- [x] P14-T1 VoiceChat::QuestionGenerator provides Q1~Q4 prompts
+- [x] P14-T2 VoiceChat::DepthManager tracks depth progress and completion
+- [x] P15-T1 VoiceChat::DepthExplorationService records q1~q4 answers to DepthExploration
+- [x] P15-T2 VoiceChat::ImpactAnalyzer returns 5-dimension impact summary
+- [x] P15-T3 VoiceChat::InformationNeedManager classifies info needs by type
+- [x] P16-T1 VoiceChat::ContextOrchestrator builds 5-layer context payload
+- [x] P16-T2 VoiceChat::TokenBudgetManager allocates token budget by layer ratio
+- [x] P17-T1 Insight::NaturalSpeech formats situation/decision/action/data into sentence
+- [x] P17-T2 Insight::Generator creates Insight record from depth answers
+- [x] P18-T1 GET /insights returns ordered insight list
+- [x] P18-T2 GET /insights/:id renders selected insight
+- [x] P19-T1 ContextOrchestrator caches profile/past_memory/additional_info/ai_persona with layer-specific TTL
+- [x] P19-T2 ContextOrchestrator does not cache current_session layer
+- [x] P19-T3 ContextOrchestrator reuses cache key scope by google_sub/session_id
+- [x] P20-T1 VoiceChatChannel subscribes only when session_id is present
+- [x] P20-T2 VoiceChatChannel streams/broadcasts messages on per-session stream
+- [x] P20-T3 Mount ActionCable endpoint for real-time transport
+- [x] P21-T1 PhaseTransitionBroadcaster publishes Turbo Stream update for session phase badge
+- [x] P21-T2 VoiceChatChannel replay returns missed messages and current phase snapshot
+- [x] P21-T3 VoiceChatChannel rejects subscription for unknown session
+- [x] P22-T1 GET /sessions renders current user's sessions list
+- [x] P22-T2 GET /sessions/:id renders voice chat page with turbo_stream_from session
+- [x] P22-T3 Session show includes phase badge target for Turbo replacement
+- [x] P23-T1 Session show renders message stream in chronological order
+- [x] P23-T2 POST /sessions/:session_id/messages creates user message
+- [x] P23-T3 POST /sessions/:session_id/messages rejects access to other user's session
+- [x] P24-T1 GET /sessions/new renders new session form
+- [x] P24-T2 POST /sessions creates active session and initializes voice_chat_data
+- [x] P24-T3 Sessions index exposes new session entry point
+- [x] P25-T1 GET /insights renders card-based timeline list
+- [x] P25-T2 GET /insights/:id renders Q1~Q4 detail cards
+- [x] P25-T3 Session show renders DEPTH panel and recent insights panel
+- [x] P26-T1 GET /setting renders current user setting form
+- [x] P26-T2 PATCH /setting updates language/voice_speed/preferences
+- [x] P26-T3 Sessions and setting screens cross-link navigation
+- [x] P27-T1 Session show renders emotion gauge with current emotion value
+- [x] P27-T2 Emotion gauge renders fallback 0.0 when voice_chat_data absent
+- [x] P28-T1 Setting form includes Stimulus controller hook
+- [x] P28-T2 Session message form includes Stimulus controller hook
+- [x] P28-T3 Importmap + Stimulus bootstrap files are wired in layout
+- [x] P29-T1 EngcEventBatchJob sends events to OntologyRag::Client#record_events
+- [x] P29-T2 ConversationSaveJob sends session transcript to OntologyRag::Client#save_conversation
+- [x] P29-T3 Background jobs apply retry policy (3 attempts)
+- [x] P30-T1 ExternalInfoJob skips collection for free tier users
+- [x] P30-T2 ExternalInfoJob queries OntologyRag for premium users with Type A-D requests
+- [x] P30-T3 ExternalInfoJob applies retry policy (3 attempts)
+- [x] P31-T1 DeadLetterNotifier records discarded job payloads
+- [x] P31-T2 Background jobs register after_discard dead-letter callback
+- [x] P31-T3 Admin job dashboard exposes failed/dead-letter summary
+- [x] P32-T1 User subscription fields/status support premium predicate
+- [x] P32-T2 Subscription::EntitlementChecker gates premium-only features
+- [x] P32-T3 RevenueCat webhook updates user subscription state
+- [x] P33-T1 Subscription::FeatureGate computes daily session quota by tier
+- [x] P33-T2 Subscription::FeatureGate enforces 7-day history for free tier
+- [x] P33-T3 InsightsController blocks free users and allows premium users
+- [x] P34-T1 RevenueCatClient validates required env configuration
+- [x] P34-T2 RevenueCatClient normalizes subscriber entitlement payload
+- [x] P34-T3 Subscription sync service updates user status from RevenueCat payload
+- [x] P35-T1 GET /subscription renders paywall UI
+- [x] P35-T2 POST /subscription/validate performs server-side sync and updates user
+- [x] P35-T3 Premium users see manage-subscription state on paywall page
+- [x] P36-T1 Voice::BridgeMessage validates allowed native bridge actions
+- [x] P36-T2 POST /api/voice/events processes transcription into session messages
+- [x] P36-T3 Session page exposes native bridge hook attributes
+- [x] P37-T1 OntologyRag::Constants defines get_cached_profile endpoint
+- [x] P37-T2 OntologyRag::Client#get_cached_profile requests /incar/profile/{google_sub}
+- [x] P37-T3 get_cached_profile returns normalized hash payload
+- [x] P38-T1 POST /api/voice_chat/surface returns next phase payload
+- [x] P38-T2 POST /api/voice_chat/depth persists depth exploration answers
+- [x] P38-T3 POST /api/voice_chat/insight creates insight from depth answers
+- [x] P39-T1 OntologyRag::Client#query caches identical requests
+- [x] P39-T2 cached query entry expires after configured TTL
+- [x] P39-T3 query caching key includes google_sub and question
+- [x] P40-T1 POST /api/ontology_rag/query validates required question param
+- [x] P40-T2 POST /api/ontology_rag/query returns normalized query response
+- [x] P40-T3 POST /api/ontology_rag/query propagates upstream error as 502
+- [x] P41-T1 ContextOrchestrator builds L2 past_memory via OntologyRag query
+- [x] P41-T2 ContextOrchestrator builds L4 additional_info via OntologyRag query
+- [x] P41-T3 ContextOrchestrator builds profile layer from cached profile endpoint
+- [x] P42-T1 E2E SURFACE->DEPTH->INSIGHT flow succeeds via API endpoints
+- [x] P42-T2 E2E Auth->Chat->Insight->Save flow persists conversation and insight
+- [x] P42-T3 E2E free-tier gating blocks insight access while premium allows
+- [x] P43-T1 E2E ontology query upstream timeout returns 502 with error payload
+- [x] P43-T2 E2E voice transcription validation rejects empty payload
+- [x] P43-T3 E2E subscription webhook handles unknown user with 404
+- [x] P44-T1 Security gate: Brakeman report reviewed with no new high-risk findings
+- [x] P44-T2 Quality gate: full test suite and RuboCop clean
+- [x] P44-T3 Performance smoke: key API endpoint p95 baseline captured
+- [x] P45-T1 GET /healthz returns app/db status payload
+- [x] P45-T2 EnvValidator reports missing required production env vars
+- [x] P45-T3 Health payload includes timestamp and version marker
+- [x] P46-T1 API unexpected exception returns standardized 500 payload with request_id
+- [x] P46-T2 ActiveRecord::RecordNotFound returns standardized 404 payload
+- [x] P46-T3 ErrorReporter receives exception/context for API failures
+- [x] P47-T1 CI workflow includes Docker image build smoke step
+- [x] P47-T2 CI pipeline keeps test/security/lint gates before build
+- [x] P47-T3 CI baseline documented in deployment progress doc
+- [x] P48-T1 Ops::PreflightCheck validates required env and deployment artifacts
+- [x] P48-T2 rake ops:preflight exposes machine-readable preflight summary
+- [x] P48-T3 Preflight check returns non-ok when critical files are missing
+- [x] P49-T1 Railway platform selected and deployment config file added
+- [x] P49-T2 Preflight validates Railway artifact presence
+- [x] P49-T3 Railway deployment baseline documented in ondev docs
+
+## TDD Rule
+- Always execute next unchecked item first.
+- Red -> Green -> Refactor.

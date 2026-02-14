@@ -1,0 +1,30 @@
+<main class="page-shell">
+  <h1>Settings</h1>
+
+  <p><%= link_to "Back to Sessions", sessions_path %></p>
+
+  <%= form_with model: @setting,
+    url: setting_path,
+    method: :patch,
+    local: true,
+    data: { controller: "settings-form" } do |form| %>
+    <p>
+      <%= form.label :language, "Language" %>
+      <%= form.select :language, options_for_select([["Korean", "ko"], ["English", "en"]], @setting.language) %>
+    </p>
+
+    <p>
+      <%= form.label :voice_speed, "Voice speed" %>
+      <%= form.number_field :voice_speed, step: 0.1 %>
+    </p>
+
+    <p>
+      <%= form.label :preferences_json, "Preferences (JSON)" %>
+      <%= text_area_tag "setting[preferences_json]",
+        @setting.preferences.to_json,
+        data: { settings_form_target: "preferences", action: "blur->settings-form#normalizeJson" } %>
+    </p>
+
+    <%= form.submit "Save Settings" %>
+  <% end %>
+</main>

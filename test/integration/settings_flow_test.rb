@@ -1,0 +1,76 @@
+require "test_helper"
+
+class SettingsFlowTest < ActionDispatch::IntegrationTest
+  def sign_in(google_sub:)
+    OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+      provider: "google_oauth2",
+      uid: google_sub,
+      info: {
+        email: "#{google_sub}@example.com",
+        name: "Settings User"
+      }
+    )
+
+    get "/auth/google_oauth2/callback"
+    follow_redirect!
+  end
+
+  test "P26-T1 GET /setting renders current user setting form" do
+    sign_in(google_sub: "setting-form-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "Settings"
+    assert_includes response.body, "voice_speed"
+  end
+
+  test "P28-T1 setting form includes Stimulus controller hook" do
+    sign_in(google_sub: "setting-stimulus-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "data-controller=\"settings-form\""
+  end
+
+  test "P26-T2 PATCH /setting updates language/voice_speed/preferences" do
+    sign_in(google_sub: "setting-update-user")
+
+    patch "/setting", params: {
+      setting: {
+        language: "en",
+        voice_speed: 1.2,
+        preferences_json: "{\"theme\":\"focus\"}"
+      }
+    }
+
+    assert_redirected_to "/setting"
+    setting = User.find_by!(google_sub: "setting-update-user").settings.order(:id).last
+    assert_equal "en", setting.language
+    assert_in_delta 1.2, setting.voice_speed, 0.001
+    assert_equal({ "theme" => "focus" }, setting.preferences)
+  end
+
+  test "P26-T3 sessions and setting screens cross-link navigation" do
+    sign_in(google_sub: "setting-nav-user")
+
+    get "/sessions"
+    assert_response :ok
+    assert_includes response.body, "/setting"
+
+    get "/setting"
+    assert_response :ok
+    assert_includes response.body, "/sessions"
+  end
+
+  test "P28-T3 importmap and stimulus bootstrap are wired in layout" do
+    sign_in(google_sub: "setting-importmap-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "type=\"importmap\""
+    assert_includes response.body, "module"
+  end
+end

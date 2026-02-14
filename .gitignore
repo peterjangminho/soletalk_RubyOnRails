@@ -1,0 +1,27 @@
+# Ruby / Bundler
+/.bundle
+/vendor/bundle
+
+# Rails runtime
+/log/*
+/tmp/*
+/storage/*
+/public/assets
+/public/packs
+/node_modules
+
+# Local secrets
+.env
+.env.*
+config/master.key
+config/credentials/*.key
+.kamal/secrets
+CLAUDE.md
+
+# Local tools
+.venv/
+.DS_Store
+
+# Editors
+.idea/
+.vscode/

@@ -1,0 +1,23 @@
+<main class="page-shell">
+  <h1>Subscription</h1>
+  <p><%= link_to "Back to Sessions", sessions_path %></p>
+
+  <% if @user.premium? %>
+    <section class="insight-detail-card">
+      <h2>Manage Subscription</h2>
+      <p>Premium access is active.</p>
+    </section>
+  <% else %>
+    <section class="insight-detail-card">
+      <h2>Upgrade to Premium</h2>
+      <p>Unlock DEPTH/INSIGHT and external info features.</p>
+      <%= form_with url: validate_subscription_path, method: :post, local: true do |form| %>
+        <p>
+          <%= form.label :revenue_cat_id, "RevenueCat Customer ID" %>
+          <%= form.text_field :revenue_cat_id %>
+        </p>
+        <%= form.submit "Validate Subscription" %>
+      <% end %>
+    </section>
+  <% end %>
+</main>

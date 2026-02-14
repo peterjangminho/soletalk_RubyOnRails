@@ -1,0 +1,12 @@
+<h1>Sessions</h1>
+
+<p><%= link_to "New Session", new_session_path %></p>
+<p><%= link_to "Settings", setting_path %></p>
+
+<ul>
+  <% @sessions.each do |session_record| %>
+    <li>
+      <%= link_to "Session ##{session_record.id}", session_path(session_record) %>
+    </li>
+  <% end %>
+</ul>

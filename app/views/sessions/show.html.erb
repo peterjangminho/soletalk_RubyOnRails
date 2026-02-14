@@ -1,0 +1,47 @@
+<%= turbo_stream_from @session %>
+
+<section class="page-shell" data-session-id="<%= @session.id %>" data-native-bridge="voice">
+  <h1>Voice Chat Session #<%= @session.id %></h1>
+  <p><%= link_to "Settings", setting_path %></p>
+
+  <%= render "voice_chat/phase_badge",
+    phase: (@voice_chat_data&.current_phase || "opener"),
+    emotion_level: (@voice_chat_data&.emotion_level || 0.0) %>
+
+  <section class="depth-panel">
+    <h2>DEPTH Snapshot</h2>
+    <p>Current Phase: <%= @voice_chat_data&.current_phase || "opener" %></p>
+    <p>Emotion Level: <%= @voice_chat_data&.emotion_level || 0.0 %></p>
+    <meter
+      class="emotion-gauge"
+      min="0.0"
+      max="1.0"
+      value="<%= @voice_chat_data&.emotion_level || 0.0 %>">
+    </meter>
+  </section>
+
+  <section id="messages">
+    <% @session.messages.order(:created_at).each do |message| %>
+      <article data-role="<%= message.role %>">
+        <p><%= message.content %></p>
+      </article>
+    <% end %>
+  </section>
+
+  <%= form_with model: [@session, Message.new],
+    local: true,
+    data: { controller: "message-form", action: "turbo:submit-end->message-form#clearAfterSubmit" } do |form| %>
+    <%= form.label :content, "Message" %>
+    <%= form.text_area :content, data: { message_form_target: "content" } %>
+    <%= form.submit "Send" %>
+  <% end %>
+
+  <section class="recent-insights-panel">
+    <h2>Recent Insights</h2>
+    <ul>
+      <% @recent_insights.each do |insight| %>
+        <li><%= link_to insight.situation, insight_path(insight) %></li>
+      <% end %>
+    </ul>
+  </section>
+</section>

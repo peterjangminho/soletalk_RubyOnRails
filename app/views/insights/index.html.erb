@@ -1,0 +1,15 @@
+<main class="page-shell">
+  <header class="page-header">
+    <h1>Insights Timeline</h1>
+  </header>
+
+  <ol class="insight-timeline">
+    <% @insights.each do |insight| %>
+      <li class="insight-card">
+        <p class="insight-time"><%= insight.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+        <h2><%= link_to insight.situation, insight_path(insight) %></h2>
+        <p><%= insight.decision %></p>
+      </li>
+    <% end %>
+  </ol>
+</main>

@@ -1,0 +1,22 @@
+<main class="page-shell">
+  <h1>Job Dashboard</h1>
+  <p><%= link_to "Back to Sessions", sessions_path %></p>
+
+  <section class="insight-detail-card">
+    <h2>Failed Executions</h2>
+    <p><%= @failed_executions_count %></p>
+  </section>
+
+  <section class="insight-detail-card">
+    <h2>Dead Letters</h2>
+    <ul>
+      <% @dead_letters.each do |item| %>
+        <li>
+          <strong><%= item[:job_class] %></strong>
+          <span><%= item[:error_class] %></span>
+          <span><%= item[:error_message] %></span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>
