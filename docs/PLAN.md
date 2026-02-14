@@ -196,16 +196,18 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Voice event phase-level E2E coverage (success + representative failure)
 
 ### Mobile Scope (external repos / mobile track)
-- [ ] Android Hotwire Native project setup
-- [ ] AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
-- [ ] STT integration (Gemini Live API streaming)
-- [ ] TTS integration (text → speech → native playback)
-- [ ] LocationBridgeComponent (GPS + weather)
-- [ ] Gemini Live API bidirectional audio streaming
+- [ ] Android Hotwire Native project setup (**Priority 1**)
+- [ ] Android AudioBridgeComponent (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
+- [ ] Android STT integration (Gemini Live API streaming)
+- [ ] Android TTS integration (text → speech → native playback)
+- [ ] Android LocationBridgeComponent (GPS + weather)
+- [ ] Android Gemini Live API bidirectional audio streaming
+- [ ] iOS track kickoff (**Deferred**: 실기기 확보 또는 외부 테스터/디바이스팜 준비 후 시작)
 
 관련 문서:
 - mobile handoff: `docs/ondev/20260214_28_phase13_mobile_track_handoff.md`
 - rails hardening sub-plan: `docs/ondev/20260214_29_phase13_rails_bridge_hardening_plan.md`
+- android-first sub-plan: `docs/ondev/20260214_32_phase13_android_first_execution_plan.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 
@@ -248,12 +250,24 @@ Phase plan → TDD implementation → Verification → Gap analysis
 1. Maintain Rails voice-event contract as stable baseline for mobile handoff.
 2. Run phase-level review + E2E gate when additional bridge actions are added.
 3. Track non-Rails remaining items in mobile/app-store external gates.
+4. Execute Android-first track before iOS track.
 
 ## Open Decisions
 
 - Native voice event auth model: web session-only vs signed mobile token.
 - STT/TTS provider lock-in: Gemini Live only vs fallback provider strategy.
 - Mobile repo ownership and handoff SLA for Android/iOS tracks.
+
+## iOS Without Device Strategy
+
+1. iOS 실기기가 없으면 iOS 구현은 `Deferred`로 유지하고 Android를 선행한다.
+2. iOS 코드 검증은 우선순위를 다음으로 둔다:
+   - iOS Simulator 기반 smoke test
+   - API contract test(rails endpoint compatibility)
+   - 외부 테스터(TestFlight internal) 또는 device farm 실기기 검증
+3. iOS track을 `In Progress`로 전환하는 조건:
+   - 최소 1대 실기기 확보 또는 device farm 예산/계정 준비
+   - 음성 권한/오디오 라우팅 시나리오를 실기기에서 재현 가능한 상태
 
 ---
 
