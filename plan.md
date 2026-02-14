@@ -141,6 +141,9 @@
 - [x] P49-T1 Railway platform selected and deployment config file added
 - [x] P49-T2 Preflight validates Railway artifact presence
 - [x] P49-T3 Railway deployment baseline documented in ondev docs
+- [x] P50-T1 Railway `SECRET_KEY_BASE` 주입 후 재배포 성공
+- [x] P50-T2 Railway production `/healthz`가 `ok: true`, `database: ok` 반환
+- [x] P50-T3 Railway production root endpoint (`/`)가 200 응답
 
 ## TDD Rule
 - Always execute next unchecked item first.

@@ -221,6 +221,8 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Health endpoint + env validator baseline (`/healthz`, `Ops::EnvValidator`)
 - [x] Deploy platform (Railway) + Dockerfile
 - [x] Production env vars + secrets management baseline (`ops:preflight`)
+- [x] Railway runtime deployment success (`88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0`)
+- [x] Production live check (`/healthz` OK, `/` 200)
 - [x] Error tracking baseline (`Ops::ErrorReporter`, standardized API error payload)
 - [x] CI/CD pipeline baseline (security/lint/test + docker build smoke)
 - [ ] App store prep (Google Play, Apple App Store)
@@ -284,4 +286,4 @@ Phase 0 ✅
 
 *Each Phase's detailed plan is written as a separate doc when starting: `docs/ondev/YYYYMMDD_NN_phase_X_plan.md`*
 *All Phases follow TDD (Red→Green→Refactor) cycle.*
-*Last Updated: 2026-02-12*
+*Last Updated: 2026-02-14*

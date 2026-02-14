@@ -34,13 +34,24 @@
 - Railway healthcheck를 `/healthz`로 연결
 - preflight 아티팩트 점검 목록에 `railway.json` 포함
 
+7. Railway runtime deployment recovery
+- Railway 서비스 변수에 `SECRET_KEY_BASE` 주입
+- 컨테이너 시작 커맨드를 Railway 포트/헬스체크 호환 형태로 조정
+  - `Dockerfile`: `./bin/rails server -b 0.0.0.0`
+  - `bin/docker-entrypoint`: server 옵션 포함 실행에서도 `db:prepare` 동작
+- 재배포 성공: `88ef8d09-2fc2-41ce-8eaf-3e406e9c1ab0` (`SUCCESS`)
+- 운영 URL 확인: `https://soletalk-rails-production.up.railway.app`
+
 ## Validation
 - Health/Env validator 테스트 통과 (`P45-T1`, `P45-T2`, `P45-T3`)
 - API 예외처리/리포팅 테스트 통과 (`P46-T1`, `P46-T2`, `P46-T3`)
 - Preflight 테스트 통과 (`P48-T1`, `P48-T2`, `P48-T3`)
 - Railway baseline 반영 후 테스트 통과 (129 tests, 562 assertions)
 - 대상 파일 RuboCop 통과
+- 배포 수정 테스트 통과 (`test/services/ops/preflight_check_test.rb`, `test/integration/health_flow_test.rb`)
+- 실배포 헬스체크 성공: `GET /healthz` -> `{"ok":true,...,"database":"ok"}`
+- 실배포 루트 응답 성공: `GET /` -> `200`
 
 ## Next
-- Railway 실제 배포 실행 및 런타임 환경변수 연결
+- Railway 필수 운영 변수(`ONTOLOGY_RAG_*`, `GOOGLE_*`) 실값 주입
 - App store 준비/운영 절차 정리

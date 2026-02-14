@@ -20,5 +20,5 @@
 - `ops:preflight`에 Railway 아티팩트 검증 항목 반영
 
 ## Next
-- Railway 프로젝트/서비스 연결 및 실제 배포
-- Railway 환경변수 주입(필수 키) 및 롤백 절차 점검
+- Railway 환경변수 실값(`ONTOLOGY_RAG_*`, `GOOGLE_*`) 주입
+- 롤백 절차(runbook) 문서화
