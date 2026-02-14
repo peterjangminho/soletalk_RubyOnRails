@@ -215,6 +215,8 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - android native auth progress: `docs/ondev/20260214_33_android_native_google_auth_progress.md`
 - android local bootstrap: `docs/ondev/20260214_34_android_local_bootstrap_progress.md`
 - android audio bridge baseline: `docs/ondev/20260214_35_android_audio_bridge_component_progress.md`
+- android bridge code review: `docs/ondev/20260214_36_phase13_android_bridge_code_review.md`
+- android bridge gap analysis: `docs/ondev/20260214_37_phase13_android_bridge_gap_analysis.md`
 
 > **Risk Note**: PoC first recommended. Plan may adjust based on PoC results.
 
