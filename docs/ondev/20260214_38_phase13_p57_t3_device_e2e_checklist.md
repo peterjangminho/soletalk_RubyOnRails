@@ -46,3 +46,12 @@ adb logcat -s VoiceBridge
   - `MainActivity: webview page finished` 확인
   - `AndroidRuntime: VM exiting with result code 0`는 APK 재설치(`adb install -r`)로 기존 프로세스가 종료된 정상 로그
 - 즉시 크래시/예외는 재현되지 않았음
+
+## OAuth Debug Snapshot (2026-02-15)
+- 재현 로그:
+  - `webview page finished: https://accounts.google.com/signin/oauth/error?...authError=...disallowed_useragent...`
+- 원인:
+  - Google OAuth는 Android WebView user-agent를 보안 정책으로 차단
+- 조치:
+  - `MainActivity`에서 `/auth/google_oauth2` 및 `accounts.google.com` 요청을 감지해 Custom Tab(외부 브라우저)로 전환
+  - 검증 로그: `open external browser for oauth url=https://soletalk-rails-production.up.railway.app/auth/google_oauth2`

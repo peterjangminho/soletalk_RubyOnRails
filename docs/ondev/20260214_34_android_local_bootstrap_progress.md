@@ -47,6 +47,8 @@
 - `requestCurrentLocation`에서 Open-Meteo 조회로 weather code를 요약해 `location_update`에 포함
 - `VoiceBridge` action별 요청/응답 로그(`adb logcat -s VoiceBridge`) 추가
 - `MainActivity` WebView 디버그 로그(`page finished`, HTTP/WebResource error, JS console) 추가
+- Google OAuth WebView 차단(`disallowed_useragent`) 대응:
+  - `/auth/google_oauth2` 및 `accounts.google.com` 요청을 Custom Tab(외부 브라우저)로 전환
 - 통합 테스트 추가 (`P60-T1`, `P60-T2`)
 
 ## Pending

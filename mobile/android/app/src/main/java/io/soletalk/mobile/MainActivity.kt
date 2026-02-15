@@ -3,19 +3,21 @@ package io.soletalk.mobile
 import android.annotation.SuppressLint
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.webkit.ConsoleMessage
+import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.webkit.CookieManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
   companion object {
@@ -46,6 +48,11 @@ class MainActivity : AppCompatActivity() {
       }
 
       override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+        if (shouldOpenInExternalBrowser(request.url)) {
+          Log.i(TAG, "open external browser for oauth url=${request.url}")
+          openInExternalBrowser(request.url)
+          return true
+        }
         Log.d(TAG, "webview navigate: ${request.method} ${request.url}")
         return super.shouldOverrideUrlLoading(view, request)
       }
@@ -132,5 +139,17 @@ class MainActivity : AppCompatActivity() {
     CookieManager.getInstance().removeAllCookies(null)
     CookieManager.getInstance().flush()
     Log.i(TAG, "webview cache/cookies cleared")
+  }
+
+  private fun shouldOpenInExternalBrowser(uri: Uri): Boolean {
+    val host = uri.host.orEmpty()
+    val path = uri.path.orEmpty()
+    if (host == "accounts.google.com") return true
+    return host == "soletalk-rails-production.up.railway.app" && path.startsWith("/auth/google_oauth2")
+  }
+
+  private fun openInExternalBrowser(uri: Uri) {
+    val customTabsIntent = CustomTabsIntent.Builder().build()
+    customTabsIntent.launchUrl(this, uri)
   }
 }

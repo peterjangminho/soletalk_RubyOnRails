@@ -202,6 +202,7 @@ Phase plan → TDD implementation → Verification → Gap analysis
 - [x] Android Gradle Wrapper bootstrap + `assembleDebug` build smoke
 - [x] Android USB install/launch smoke (`adb install -r` + `am start`)
 - [x] Android AudioBridgeComponent baseline (JS ↔ Native: startRecording, stopRecording, playAudio, onTranscription)
+- [x] Android OAuth entrypoint hardening (WebView -> Custom Tab handoff for Google policy compliance)
 - [ ] Android STT integration (Gemini Live API streaming; Android SpeechRecognizer baseline done)
 - [ ] Android TTS integration (text → speech → native playback)
 - [x] Android LocationBridgeComponent baseline (GPS + weather via Open-Meteo)
