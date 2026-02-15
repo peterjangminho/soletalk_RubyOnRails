@@ -4,6 +4,12 @@ import android.annotation.SuppressLint
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.webkit.ConsoleMessage
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.app.ActivityCompat
@@ -12,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
   companion object {
+    private const val TAG = "MainActivity"
     private const val BASE_URL = "https://soletalk-rails-production.up.railway.app/"
     private const val RUNTIME_PERMISSION_REQUEST_CODE = 2001
   }
@@ -29,7 +36,36 @@ class MainActivity : AppCompatActivity() {
     webView = findViewById(R.id.webview)
     webView.settings.javaScriptEnabled = true
     webView.settings.domStorageEnabled = true
-    webView.webViewClient = WebViewClient()
+    webView.webViewClient = object : WebViewClient() {
+      override fun onPageFinished(view: WebView, url: String) {
+        super.onPageFinished(view, url)
+        Log.i(TAG, "webview page finished: $url")
+      }
+
+      override fun onReceivedError(
+        view: WebView,
+        request: WebResourceRequest,
+        error: WebResourceError
+      ) {
+        super.onReceivedError(view, request, error)
+        Log.e(TAG, "webview received error: code=${error.errorCode} desc=${error.description} url=${request.url}")
+      }
+
+      override fun onReceivedHttpError(
+        view: WebView,
+        request: WebResourceRequest,
+        errorResponse: WebResourceResponse
+      ) {
+        super.onReceivedHttpError(view, request, errorResponse)
+        Log.w(TAG, "webview received http error: status=${errorResponse.statusCode} url=${request.url}")
+      }
+    }
+    webView.webChromeClient = object : WebChromeClient() {
+      override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+        Log.d(TAG, "webview console: ${consoleMessage.messageLevel()} ${consoleMessage.message()} @${consoleMessage.sourceId()}:${consoleMessage.lineNumber()}")
+        return super.onConsoleMessage(consoleMessage)
+      }
+    }
     voiceBridge = VoiceBridge(this)
     webView.addJavascriptInterface(voiceBridge, "SoleTalkBridge")
     webView.loadUrl(BASE_URL)
@@ -42,6 +78,21 @@ class MainActivity : AppCompatActivity() {
     super.onDestroy()
   }
 
+  @Deprecated("Deprecated in Java")
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode != RUNTIME_PERMISSION_REQUEST_CODE) return
+
+    permissions.forEachIndexed { index, permission ->
+      val granted = grantResults.getOrNull(index) == PackageManager.PERMISSION_GRANTED
+      Log.i(TAG, "permission result: $permission granted=$granted")
+    }
+  }
+
   private fun requestRuntimePermissionsIfNeeded() {
     val requiredPermissions = listOf(
       Manifest.permission.RECORD_AUDIO,
@@ -51,11 +102,14 @@ class MainActivity : AppCompatActivity() {
       ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
     }
     if (missingPermissions.isNotEmpty()) {
+      Log.i(TAG, "requesting runtime permissions: ${missingPermissions.joinToString()}")
       ActivityCompat.requestPermissions(
         this,
         missingPermissions.toTypedArray(),
         RUNTIME_PERMISSION_REQUEST_CODE
       )
+    } else {
+      Log.i(TAG, "runtime permissions already granted")
     }
   }
 }

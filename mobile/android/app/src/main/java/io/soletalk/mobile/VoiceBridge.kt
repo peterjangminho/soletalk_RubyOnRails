@@ -48,10 +48,14 @@ class VoiceBridge(context: Context) {
   private var isListening: Boolean = false
 
   init {
+    Log.i(TAG, "initializing VoiceBridge")
     textToSpeech = TextToSpeech(context) { status ->
       if (status == TextToSpeech.SUCCESS) {
         ttsReady = true
         textToSpeech?.language = Locale.KOREAN
+        Log.i(TAG, "TTS initialized successfully")
+      } else {
+        Log.e(TAG, "TTS initialization failed: status=$status")
       }
     }
   }
@@ -155,6 +159,7 @@ class VoiceBridge(context: Context) {
 
   private fun ensureSpeechRecognizer() {
     if (speechRecognizer != null) return
+    Log.i(TAG, "creating SpeechRecognizer")
     speechRecognizer = SpeechRecognizer.createSpeechRecognizer(appContext).apply {
       setRecognitionListener(object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {}
@@ -166,6 +171,7 @@ class VoiceBridge(context: Context) {
         }
 
         override fun onError(error: Int) {
+          Log.e(TAG, "SpeechRecognizer error=$error")
           isListening = false
         }
 

@@ -38,3 +38,11 @@ adb logcat -s VoiceBridge
 - `postVoiceEvent skipped`: session_id/google_sub 주입 확인
 - `code=403`: bridge_token 만료/세션 소유권 불일치 확인
 - `requestCurrentLocation: no location available`: 위치 권한/실내 GPS 수신 상태 확인
+
+## Current Debug Snapshot (2026-02-15)
+- `adb logcat -d -s MainActivity VoiceBridge AndroidRuntime` 기준:
+  - `runtime permissions already granted`
+  - `VoiceBridge: TTS initialized successfully`
+  - `MainActivity: webview page finished` 확인
+  - `AndroidRuntime: VM exiting with result code 0`는 APK 재설치(`adb install -r`)로 기존 프로세스가 종료된 정상 로그
+- 즉시 크래시/예외는 재현되지 않았음
