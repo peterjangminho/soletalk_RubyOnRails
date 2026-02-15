@@ -51,7 +51,12 @@
     <section class="insight-detail-card">
       <h2>Sign In</h2>
       <p>Use Google OAuth to start voice sessions and view insights.</p>
-      <p><%= link_to "Continue with Google", "/auth/google_oauth2" %></p>
+      <p>
+        <%= button_to "Continue with Google",
+          "/auth/google_oauth2",
+          method: :post,
+          form: { data: { turbo: false } } %>
+      </p>
     </section>
   <% end %>
 </section>
