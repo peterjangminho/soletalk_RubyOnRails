@@ -28,7 +28,7 @@
 | test | Stimulus 컨트롤러 단위 테스트 부재 | Closed | Low | `P66-T1~T3` 완료: Node test runner + loader/mock + 3개 컨트롤러 단위 테스트(10 assertions) |
 | quality/reliability | 전역 `rescue_from StandardError`가 CSRF 예외를 500으로 처리하여 `/subscription/validate` 외부 POST가 500으로 노출 | Closed | High | `P74-T3` 완료: CSRF 예외 전용 422 처리 + 회귀 테스트 추가 |
 | ops | Railway 운영에서 `/subscription/validate` 직접 POST smoke가 500 응답 | Closed | High | `P74-T4` 완료: 배포 후 direct POST `422` + 로그에서 CSRF 전용 처리 확인 |
-| ops | RevenueCat 운영 ENV(`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY`) 미주입으로 실사용 구독 validate/restore E2E 검증 미완 | Open | High | `P76-T1` 점검 완료(미설정 확인), `P76-T2~T3`로 ENV 주입 및 로그인 사용자 smoke 증적 확보 |
+| ops | RevenueCat 운영 ENV(`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY`) 미주입으로 실사용 구독 validate/restore E2E 검증 미완 | Open | High | `P76-T1` 점검 완료, `P76-T2a` base URL 주입 완료, `P76-T2b~T3`(API key 주입/로그인 smoke) 진행 필요 |
 
 ## Major Root Causes
 1. 초기 구현이 기능 연결 중심으로 빠르게 진행되며 error-path 데이터 보존 규칙이 일부 누락됨
@@ -85,10 +85,11 @@
 
 8. `ops` - RevenueCat 운영 ENV 및 로그인 사용자 restore/validate E2E
 - Owner: Ops/Backend
-- Status: Open (`P76-T2~T3`)
+- Status: Open (`P76-T2b~T3`)
 - Verify:
   - `P76-T1` 완료: Railway variables에서 `REVENUECAT_*` 미설정 확인
-  - `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 변수 주입
+  - `P76-T2a` 완료: `REVENUECAT_BASE_URL=https://api.revenuecat.com` 주입
+  - `P76-T2b` 진행: `REVENUECAT_API_KEY` 변수 주입
   - 로그인 사용자 기준 `/subscription/validate` restore/validate 흐름 증적 확보
 
 9. `workflow` - 로컬-우선 모바일 개발 루프
