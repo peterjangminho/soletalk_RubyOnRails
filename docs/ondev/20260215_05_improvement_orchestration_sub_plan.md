@@ -17,7 +17,7 @@
 - Phase I (Completed): InCar frontend design overhaul (`P72-T1~T3`)
 - Phase J (Completed): Local-first Hotwire Native workflow enablement (`P73-T1~T3`)
 - Phase K (Completed): Production hardening follow-up (`P74-T3~T4`)
-- Phase L (In Progress): RevenueCat production validation follow-up (`P76-T1~T2`)
+- Phase L (In Progress): RevenueCat production validation follow-up (`P76-T1~T3`)
 
 ## Active Phase Pointer
 - Current In Progress phase: `Phase L`
