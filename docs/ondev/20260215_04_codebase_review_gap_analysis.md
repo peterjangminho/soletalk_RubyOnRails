@@ -27,7 +27,8 @@
 | feature | UI 문자열 i18n 키 기반 전면 치환 미완 | Closed | Medium | `P65-T1~T3` 완료: locale 선택 로직 + 핵심 화면/flash 문구 `en/ko` 치환 + i18n 회귀 테스트 통과 |
 | test | Stimulus 컨트롤러 단위 테스트 부재 | Closed | Low | `P66-T1~T3` 완료: Node test runner + loader/mock + 3개 컨트롤러 단위 테스트(10 assertions) |
 | quality/reliability | 전역 `rescue_from StandardError`가 CSRF 예외를 500으로 처리하여 `/subscription/validate` 외부 POST가 500으로 노출 | Closed | High | `P74-T3` 완료: CSRF 예외 전용 422 처리 + 회귀 테스트 추가 |
-| ops | Railway 운영에서 `/subscription/validate` 직접 POST smoke가 500 응답 | Open | High | `P74-T4` 운영 smoke 재검증 및 로그 증적 문서화 |
+| ops | Railway 운영에서 `/subscription/validate` 직접 POST smoke가 500 응답 | Closed | High | `P74-T4` 완료: 배포 후 direct POST `422` + 로그에서 CSRF 전용 처리 확인 |
+| ops | RevenueCat 운영 ENV(`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY`) 미주입으로 실사용 구독 validate/restore E2E 검증 미완 | Open | High | `P76-T1~T2`로 ENV 확인 및 로그인 사용자 smoke 증적 확보 |
 
 ## Major Root Causes
 1. 초기 구현이 기능 연결 중심으로 빠르게 진행되며 error-path 데이터 보존 규칙이 일부 누락됨
@@ -77,12 +78,19 @@
 
 7. `ops` - Subscription validate 운영 smoke 및 ENV 정합성 검증
 - Owner: Ops/Backend
-- Status: Open (`P74-T4`)
+- Status: Closed (`P74-T4`)
 - Verify:
-  - 운영 `/subscription/validate` 직접 POST smoke가 non-500
-  - `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 설정 여부를 Railway에서 확인
+  - 운영 `/subscription/validate` 직접 POST smoke가 `422` (non-500)
+  - Railway 로그에서 `InvalidAuthenticityToken` 전용 처리 확인
 
-8. `workflow` - 로컬-우선 모바일 개발 루프
+8. `ops` - RevenueCat 운영 ENV 및 로그인 사용자 restore/validate E2E
+- Owner: Ops/Backend
+- Status: Open (`P76-T1~T2`)
+- Verify:
+  - `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 변수 존재 확인
+  - 로그인 사용자 기준 `/subscription/validate` restore/validate 흐름 증적 확보
+
+9. `workflow` - 로컬-우선 모바일 개발 루프
 - Owner: Mobile/Frontend
 - Status: Closed (`P73-T1~T3`)
 - Verify:

@@ -1,4 +1,4 @@
-# Status: [In Progress]
+# Status: [Done]
 
 # Subscription Validate 500 Debug Master Note (2026-02-15)
 
@@ -30,10 +30,13 @@ curl -sS -m 15 -o /dev/null -w "%{http_code}\n" -X POST https://soletalk-rails-p
 1. Red: CSRF invalid 경로를 non-500으로 고정하는 테스트 추가 (`P74-T3`). ✅
 2. Green: `InvalidAuthenticityToken` 전용 rescue 추가(422 응답) + 최소 수정. ✅
 3. Refactor: 전역 예외 처리 경계 정리 및 테스트 회귀. ✅
-4. Production verify (`P74-T4`): Railway smoke + 로그 증적 기록. ⏳
+4. Production verify (`P74-T4`): Railway smoke + 로그 증적 기록. ✅
 
 ## Evidence Log
 - 2026-02-15: local regressions green (`rails test`, `npm run test:js`).
 - 2026-02-15: Railway deployment `986b8c1d-7152-407a-b83e-19f0ec8a70d9` 확인.
 - 2026-02-15: `/subscription/validate` direct POST returns `500`.
 - 2026-02-15: `P74-T3` 구현 완료 (`ApplicationController` CSRF 예외 전용 처리 + integration tests green).
+- 2026-02-15: Railway deployment `7bf4d706-ac1a-483a-824e-46b4f68e8fae` SUCCESS.
+- 2026-02-15: production smoke 재확인 결과 `/subscription/validate` direct POST `422` (`invalid authenticity token`).
+- 2026-02-15: Railway runtime log에서 `rescue_from handled ActionController::InvalidAuthenticityToken` 확인.

@@ -209,15 +209,17 @@
 - [x] P74-T1 Subscription validate 설정 누락 경로에서 500 대신 사용자 alert 경로로 처리 (`SubscriptionController` rescue + integration test)
 - [x] P74-T2 Action Cable production adapter를 `solid_cable`로 정합화 (`config/cable.yml`)
 - [x] P74-T3 `/subscription/validate` CSRF invalid 경로가 500이 아닌 제어된 응답(422 또는 redirect)으로 처리되도록 수정/검증
-- [ ] P74-T4 Railway production smoke에서 `/subscription/validate` non-500 및 로그 증적 확인
+- [x] P74-T4 Railway production smoke에서 `/subscription/validate` non-500 및 로그 증적 확인
 - [x] P75-T1 Roadmap sync baseline: 현재 실행 작업을 `plan.md`/sub-plan/gap 문서에 동기화
+- [ ] P76-T1 Railway에 `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 운영값 주입 확인
+- [ ] P76-T2 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
-- 현재 실행 대상은 `P74-T4` (`/subscription/validate` Railway production non-500 smoke 증적)다.
-- 운영 ENV 작업은 `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 주입 여부를 확인한 뒤 별도 Ops 트랙으로 진행한다.
+- 현재 실행 대상은 `P76-T1` (RevenueCat 운영 ENV 주입 확인)이다.
+- 이후 실행 대상은 `P76-T2` (로그인 사용자 기준 validate/restore 운영 smoke)다.
 
 ## TDD Rule
 - Always execute next unchecked item first.

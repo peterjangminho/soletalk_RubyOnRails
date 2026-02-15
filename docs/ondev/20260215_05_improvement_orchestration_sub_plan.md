@@ -16,11 +16,12 @@
 - Phase H (Completed): Subscription consumer UX + validate error-path hardening (`P71-T1~T3`)
 - Phase I (Completed): InCar frontend design overhaul (`P72-T1~T3`)
 - Phase J (Completed): Local-first Hotwire Native workflow enablement (`P73-T1~T3`)
-- Phase K (In Progress): Production hardening follow-up (`P74-T3~T4`)
+- Phase K (Completed): Production hardening follow-up (`P74-T3~T4`)
+- Phase L (In Progress): RevenueCat production validation follow-up (`P76-T1~T2`)
 
 ## Active Phase Pointer
-- Current In Progress phase: `Phase K`
-- Current next unchecked test item: `P74-T4`
+- Current In Progress phase: `Phase L`
+- Current next unchecked test item: `P76-T1`
 
 ## TDD Checkpoints
 - Red
@@ -148,7 +149,7 @@
   - `npm run test:js`
   - `cd mobile/android && ./gradlew -PSOLETALK_DEBUG_BASE_URL=http://127.0.0.1:3000/ assembleDebug`
 
-11. Phase K - Production hardening follow-up (In Progress)
+11. Phase K - Production hardening follow-up (Done)
 - Red:
   - `test/integration/subscription_flow_test.rb`
     - `P74-T3` CSRF invalid 경로가 500으로 귀결되지 않도록 실패 테스트 추가
@@ -160,6 +161,10 @@
   - 전역 예외 처리 경계(`StandardError` vs CSRF/권한/레코드 예외) 책임 분리
 - Production validation:
   - `P74-T4` Railway smoke로 `/subscription/validate` non-500 확인 + 로그 증적 기록
+
+12. Phase L - RevenueCat production validation follow-up (In Progress)
+- `P76-T1` Railway 변수에 `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 운영값 존재 여부 확인
+- `P76-T2` 로그인 사용자 기준 validate/restore 플로우 운영 smoke 증적 확보
 
 ## Sequential vs Parallel Matrix
 | Phase | Depends On | Parallel Feasibility | Decision |
@@ -174,7 +179,8 @@
 | H (Subscription UX hardening) | G 후속 UX 연계 | High | 순차 실행 완료 |
 | I (InCar frontend overhaul) | H 후속 UI 리뉴얼 | High | 순차 실행 완료 |
 | J (Local-first mobile workflow) | I 후속 개발 생산성 | High | 순차 실행 완료 |
-| K (Production hardening follow-up) | J 이후 운영 안정화 | Medium (코드 수정은 순차, smoke 검증은 병렬 가능) | **진행 중** |
+| K (Production hardening follow-up) | J 이후 운영 안정화 | Medium (코드 수정은 순차, smoke 검증은 병렬 가능) | 순차 실행 완료 |
+| L (RevenueCat production validation) | K 완료 후 운영 구독 검증 | Medium (ENV 확인/사용자 E2E는 부분 병렬 가능) | **진행 중** |
 | External Gates (Android evidence/App Store) | Rails 코드와 독립 | High | 병렬 추적 가능 |
 
 ## Validation
@@ -203,15 +209,16 @@ bundle exec brakeman -q -w2
   - `P71-T1`, `P71-T2`, `P71-T3` Subscription 소비자 UX + validate 에러/재사용 경로 하드닝 완료
   - `P72-T1`, `P72-T2`, `P72-T3` InCar 레퍼런스 기반 전역 UI 리뉴얼 + 모션 팔레트 정렬 완료
   - `P73-T1`, `P73-T2`, `P73-T3` 로컬-우선 Android/Hotwire Native 워크플로우 완성
-  - `P74-T1`, `P74-T2`, `P74-T3` 구독 설정 누락/ActionCable adapter/CSRF 500 방어 반영
+  - `P74-T1`, `P74-T2`, `P74-T3`, `P74-T4` 구독 설정 누락/ActionCable adapter/CSRF 500 방어/운영 smoke 반영
   - `plan.md`에 신규 항목/큐 반영
   - GAP 분석 문서 신규 작성 (`20260215_04`)
 - Pending:
-  - `P74-T4` Railway production non-500 smoke + 로그 증적
+  - `P76-T1` RevenueCat 운영 ENV 주입 확인
+  - `P76-T2` 로그인 사용자 기준 validate/restore 운영 smoke 증적
   - App Store/운영 외부 게이트(수동)
   - RevenueCat 운영 ENV 미설정으로 인한 subscription validate 500
   - RevenueCat 운영 ENV(`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY`) 주입
 - Mismatch:
   - Sub-plan 상태가 `Done`으로 남아있어 현재 운영 하드닝 작업을 반영하지 못했던 문제를 `In Progress`로 교정
 - Next Test:
-  - `P74-T4` Railway production smoke + 로그 증적 캡처
+  - `P76-T1` Railway variables에서 RevenueCat 운영 ENV 확인
