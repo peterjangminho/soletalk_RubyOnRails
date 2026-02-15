@@ -18,6 +18,14 @@ class ApiErrorHandlingFlowTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def with_forgery_protection
+    original = ActionController::Base.allow_forgery_protection
+    ActionController::Base.allow_forgery_protection = true
+    yield
+  ensure
+    ActionController::Base.allow_forgery_protection = original
+  end
+
   test "P46-T1/P46-T3 API unexpected exception returns standardized 500 and reports error" do
     original_client = Api::OntologyRag::QueryController.client_class
     original_reporter = ApplicationController.error_reporter_class
@@ -48,5 +56,16 @@ class ApiErrorHandlingFlowTest < ActionDispatch::IntegrationTest
     body = JSON.parse(response.body)
     assert_equal false, body["success"]
     assert_equal "not_found", body["error"]
+  end
+
+  test "P74-T3 API invalid authenticity token returns 422 payload" do
+    with_forgery_protection do
+      post "/api/ontology_rag/query", params: { question: "hello" }, as: :json
+
+      assert_response :unprocessable_entity
+      body = JSON.parse(response.body)
+      assert_equal false, body["success"]
+      assert_equal "invalid_authenticity_token", body["error"]
+    end
   end
 end
