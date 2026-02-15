@@ -162,9 +162,9 @@
 - [x] P56-T1 `location_update` 위/경도 범위 검증 추가 (`-90..90`, `-180..180`)
 - [x] P57-T1 Android-first 실행계획 문서화 및 모바일 핸드오프 계획 동기화
 - [x] P57-T2 Android Hotwire Native PoC 착수 (로컬 `mobile/android` 스캐폴드)
-- [ ] P57-T3 Android Bridge 계약 검증: start/stop/transcription/location 이벤트 E2E 완료
-- [ ] P58-T1 iOS 트랙은 `Deferred`로 유지 (실기기 부재)
-- [ ] P58-T2 iOS 실기기 부재 대체검증(시뮬레이터/API contract/외부테스터) 계획 확정
+- [x] P57-T3 Android Bridge 계약 검증: start/stop/transcription/location 이벤트 E2E 완료 (`test/integration/e2e_voicechat_flow_test.rb`)
+- [x] P58-T1 iOS 트랙은 `Deferred`로 유지 (실기기 부재)
+- [x] P58-T2 iOS 실기기 부재 대체검증(시뮬레이터/API contract/외부테스터) 계획 확정 (`docs/ondev/20260215_01_ios_deferred_validation_plan.md`)
 - [x] P59-T1 `POST /api/auth/google/native_sign_in` Android 네이티브 로그인 엔드포인트 추가
 - [x] P59-T2 `Auth::GoogleIdTokenVerifier`로 Google ID Token 검증(aud/iss/sub) 추가
 - [x] P59-T3 native sign-in 성공 시 `google_sub` 사용자 upsert + 세션 로그인 + IdentifyUserJob enqueue
@@ -172,12 +172,52 @@
 - [x] P61-T1 `Auth::VoiceBridgeToken` 서명 토큰 발급/검증 추가
 - [x] P61-T2 Session show에서 bridge token 주입 및 Android bridge 3-arg 세션 연결 지원
 - [x] P61-T3 `/api/voice/events` bridge_token 인증 허용(세션/사용자 매칭 검증)
+- [x] P62-T1 홈/공통 레이아웃 UX 하드닝: 개인정보 노출 문구 제거 + 공통 내비게이션/플래시 피드백 추가
+- [x] P62-T2 세션 UX 하드닝: Android 브리지 도구를 디버그 섹션(`details`)으로 분리 + 상태 live region 추가
+- [x] P62-T3 폼 UX 하드닝: 메시지 전송 버튼 상태 변화 + settings JSON 유효성 안내 + CTA 스타일 통일
+- [x] P63-T1 `POST /sessions`는 Session/VoiceChatData 생성을 트랜잭션으로 처리하고 초기화 실패 시 롤백 + 경고 피드백 제공
+- [x] P63-T2 `PATCH /setting`은 invalid `preferences_json` 입력 시 기존 preferences를 보존하고 alert를 제공
+- [x] P63-T3 message form submit 버튼 복귀 라벨은 하드코딩 대신 `data-default-label` 메타데이터를 사용
+- [x] P64-T1 Insight 접근/노출을 사용자 소유 범위로 격리하도록 `Insight` 소유 모델링(`user_id` 또는 `session_id`)과 컨트롤러 스코프를 정합화
+- [x] P65-T1 `ApplicationController` locale 선택 로직 추가: 요청 파라미터(`?locale=ko/en`) + 사용자 `Setting.language` 우선순위 적용
+- [x] P65-T2 Home/Sessions/Insights/Settings/Subscription + 공통 네비 문구를 i18n 키(`en/ko`) 기반으로 치환
+- [x] P65-T3 주요 flash 메시지(i18n)와 locale 회귀 통합 테스트(`test/integration/i18n_flow_test.rb`) 추가/통과
+- [x] P66-T1 Node 내장 테스트 러너 기반 Stimulus unit 테스트 실행 경로 구축 (`package.json`, loader/mock)
+- [x] P66-T2 `message_form`, `settings_form`, `native_bridge` 컨트롤러 단위 테스트 추가 (`test/javascript/controllers/*`)
+- [x] P66-T3 `npm run test:js` + Rails 전체 테스트 green으로 JS/Rails 회귀 게이트 통과
+- [x] P67-T1 Android 외부 게이트 로그 자동집계 스크립트 추가 (`script/mobile/collect_voicebridge_evidence.sh`)
+- [x] P67-T2 실기기 체크리스트 문서에 스크립트 실행 경로/증적 포맷 연동 (`docs/ondev/20260214_38_phase13_p57_t3_device_e2e_checklist.md`)
+- [x] P67-T3 스크립트 스모크 실행으로 동작 확인(현재는 액션 미수행 상태라 expected fail: `missing` 4건)
+- [x] P68-T1 Android OAuth 시작점을 `/auth/google_oauth2/start`로 분리하고 `mobile_return` handoff 저장/복구 경로 추가
+- [x] P68-T2 `soletalk://auth` 딥링크 + `/api/auth/google/mobile_handoff` 세션 교환으로 WebView 로그인 복귀 구현
+- [x] P68-T3 OAuth handoff 회귀 테스트/Android 빌드 검증 완료 (`auth_flow_test`, `google_controller_test`, `mobile_session_handoff_token_test`, `assembleDebug`)
+- [x] P69-T1 Core UX Motion: Project_B 스타일 별 입자 애니메이션(집합→확산→구형 재집합) 프로토타입 구현
+- [x] P69-T2 Core UX Motion: 모바일 성능 가드레일(FPS/배터리) + 감쇠 파라미터 튜닝
+- [x] P69-T3 Core UX Motion: 세션 phase/opener 상태 연동 및 UX 회귀 테스트 추가
+- [x] P70-T1 Core UX Motion parsing hardening: phase badge 감정값이 라벨 포함 문자열이어도 숫자 파싱 유지 (`extractFirstNumber`, JS unit test)
+- [x] P70-T2 Core UX Motion visibility polish: phase별 렌더 팔레트 + 모바일 가시성(halo/core/background) 튜닝 + orb fallback texture
+- [x] P70-T3 Android OAuth return race fix: deep-link intent 수신 시 fallback reload 경합 차단 (`MainActivity#onNewIntent`) + `assembleDebug` 검증
+- [x] P71-T1 Subscription UX: free 사용자 대상 소비자 안내형 paywall(요금제 가치 요약 + 복원 섹션)으로 화면 개편
+- [x] P71-T2 Subscription validate error path: RevenueCat ID 미입력/미보유 시 성공 플래시 대신 alert 노출
+- [x] P71-T3 Subscription validate reuse path: 입력값 비어 있어도 저장된 `revenue_cat_id`로 복원 검증 가능
+- [x] P72-T1 Frontend overhaul baseline: InCar 레퍼런스(Project_A_02_InCar.zip) 기반 전역 shell(`app-shell`), glass nav, dark aurora 배경 테마 적용
+- [x] P72-T2 Home/session visual refresh: home orb stage 전용 클래스(`orb-hero-home`) + session 대화 스택 컨테이너(`conversation-stack`) 도입
+- [x] P72-T3 Motion palette alignment: particle orb phase 색상 팔레트를 Project_B/InCar 블루-퍼플 계열로 재조정
+- [x] P73-T1 Local-first workflow: dev/test 전용 `POST /dev/sign_in`, `DELETE /dev/sign_out` 추가로 모바일 UI 로컬 로그인 루프 지원
+- [x] P73-T2 Android debug base URL 분리: `BuildConfig.WEB_BASE_URL` + `SOLETALK_DEBUG_BASE_URL` gradle property 주입
+- [x] P73-T3 로컬 실행 자동화: `script/mobile/start_local_ui_workflow.sh`(adb reverse + installDebug) 추가 및 전체 회귀/Android 빌드 검증
+- [x] P74-T1 Subscription validate 설정 누락 경로에서 500 대신 사용자 alert 경로로 처리 (`SubscriptionController` rescue + integration test)
+- [x] P74-T2 Action Cable production adapter를 `solid_cable`로 정합화 (`config/cable.yml`)
+- [x] P74-T3 `/subscription/validate` CSRF invalid 경로가 500이 아닌 제어된 응답(422 또는 redirect)으로 처리되도록 수정/검증
+- [ ] P74-T4 Railway production smoke에서 `/subscription/validate` non-500 및 로그 증적 확인
+- [x] P75-T1 Roadmap sync baseline: 현재 실행 작업을 `plan.md`/sub-plan/gap 문서에 동기화
 
 ## Queue Note
-- 현재 저장소의 다음 실행 대상은 Android-first 외부 게이트(모바일 리포).
-- Android 로컬 PoC 스캐폴드(`mobile/android`) 생성 완료.
-- iOS는 실기기 부재로 후순위(Deferred)로 관리.
-- App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리.
+- Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
+- iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
+- App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
+- 현재 실행 대상은 `P74-T4` (`/subscription/validate` Railway production non-500 smoke 증적)다.
+- 운영 ENV 작업은 `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 주입 여부를 확인한 뒤 별도 Ops 트랙으로 진행한다.
 
 ## TDD Rule
 - Always execute next unchecked item first.
