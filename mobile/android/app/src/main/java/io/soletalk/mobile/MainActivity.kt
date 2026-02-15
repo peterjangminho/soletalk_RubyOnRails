@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.CookieManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +37,19 @@ class MainActivity : AppCompatActivity() {
     webView = findViewById(R.id.webview)
     webView.settings.javaScriptEnabled = true
     webView.settings.domStorageEnabled = true
+    webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
+    clearWebViewState()
     webView.webViewClient = object : WebViewClient() {
+      override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+        Log.d(TAG, "webview request: ${request.method} ${request.url}")
+        return super.shouldInterceptRequest(view, request)
+      }
+
+      override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+        Log.d(TAG, "webview navigate: ${request.method} ${request.url}")
+        return super.shouldOverrideUrlLoading(view, request)
+      }
+
       override fun onPageFinished(view: WebView, url: String) {
         super.onPageFinished(view, url)
         Log.i(TAG, "webview page finished: $url")
@@ -111,5 +124,13 @@ class MainActivity : AppCompatActivity() {
     } else {
       Log.i(TAG, "runtime permissions already granted")
     }
+  }
+
+  private fun clearWebViewState() {
+    webView.clearCache(true)
+    webView.clearHistory()
+    CookieManager.getInstance().removeAllCookies(null)
+    CookieManager.getInstance().flush()
+    Log.i(TAG, "webview cache/cookies cleared")
   }
 }

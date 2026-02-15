@@ -22,7 +22,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "SoleTalk"
     assert_includes response.body, "Continue with Google"
     assert_includes response.body, "/auth/google_oauth2"
-    assert_includes response.body, "method=\"post\""
+    assert_includes response.body, "href=\"/auth/google_oauth2\""
   end
 
   test "P54-T2 signed-in root page shows navigation and recent lists" do
