@@ -222,6 +222,7 @@
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P76-T2b` (RevenueCat API Key 운영값 주입)다.
 - 이후 실행 대상은 `P76-T3` (로그인 사용자 기준 validate/restore 운영 smoke)다.
+- 현재 블로커: 로컬/저장소/CI 어디에도 `REVENUECAT_API_KEY` 값이 없어 주입 대기 상태다.
 
 ## TDD Rule
 - Always execute next unchecked item first.
