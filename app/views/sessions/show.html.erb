@@ -3,11 +3,9 @@
 <section class="page-shell session-stage" data-session-id="<%= @session.id %>" data-native-bridge="voice">
   <section
     class="orb-hero orb-hero-session"
-    data-controller="particle-orb"
-    data-particle-orb-density-value="1.0"
-    data-particle-orb-phase-value="<%= @voice_chat_data&.current_phase || "opener" %>"
-    data-particle-orb-emotion-value="<%= @voice_chat_data&.emotion_level || 0.0 %>">
-    <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+    data-controller="particle-sphere"
+    data-particle-sphere-status-value="idle">
+    <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
   </section>
 
   <header class="session-overlay-top">

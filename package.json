@@ -1,0 +1,8 @@
+{
+  "name": "project_a-stimulus-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:js": "node --test --import ./test/javascript/loaders/register-stimulus-loader.mjs test/javascript/controllers/**/*_test.mjs test/javascript/lib/**/*_test.mjs"
+  }
+}

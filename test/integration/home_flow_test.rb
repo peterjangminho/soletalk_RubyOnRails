@@ -81,7 +81,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "orb-hero orb-hero-home"
     assert_includes response.body, "home-hero-stage"
-    assert_includes response.body, "data-particle-orb-mode-value=\"hero\""
+    assert_includes response.body, "data-controller=\"particle-sphere\""
   end
 
   test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do

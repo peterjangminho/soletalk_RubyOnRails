@@ -1,7 +1,7 @@
 <section class="page-shell home-main-shell">
   <section class="home-opening-overlay" aria-hidden="true">
-    <section class="home-opening-canvas" data-controller="particle-orb" data-particle-orb-mode-value="hero" data-particle-orb-density-value="1.45">
-      <canvas data-particle-orb-target="canvas"></canvas>
+    <section class="home-opening-canvas" data-controller="particle-sphere">
+      <canvas data-particle-sphere-target="canvas"></canvas>
     </section>
     <div class="home-opening-logo">SoleTalk</div>
   </section>
@@ -9,10 +9,8 @@
   <section class="home-hero-stage">
     <section
       class="orb-hero orb-hero-home"
-      data-controller="particle-orb"
-      data-particle-orb-mode-value="hero"
-      data-particle-orb-density-value="1.25">
-      <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+      data-controller="particle-sphere">
+      <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
     </section>
 
     <header class="page-header home-hero-copy">
@@ -43,10 +41,8 @@
 
       <section
         class="orb-hero orb-hero-home"
-        data-controller="particle-orb"
-        data-particle-orb-density-value="1.1"
-        data-particle-orb-phase-value="calm">
-        <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+        data-controller="particle-sphere">
+        <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
       </section>
 
       <%= form_with url: sessions_path, method: :post, local: true, class: "home-main-mic-form" do |form| %>

@@ -165,7 +165,7 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "value=\"0.0\""
   end
 
-  test "P69-T3 session show exposes particle orb motion phase and emotion metadata" do
+  test "P69-T3 session show exposes particle sphere controller" do
     sign_in(google_sub: "sessions-orb-phase-user")
     user = User.find_by!(google_sub: "sessions-orb-phase-user")
     session_record = Session.create!(user: user, status: "active")
@@ -174,9 +174,7 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     get "/sessions/#{session_record.id}"
 
     assert_response :ok
-    assert_includes response.body, "data-controller=\"particle-orb\""
-    assert_includes response.body, "data-particle-orb-phase-value=\"free_speech\""
-    assert_includes response.body, "data-particle-orb-emotion-value=\"0.8\""
+    assert_includes response.body, "data-controller=\"particle-sphere\""
   end
 
   test "P72-T3 session show renders cinematic conversation stack container" do

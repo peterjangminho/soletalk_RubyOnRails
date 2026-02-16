@@ -135,7 +135,6 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_includes response.body, "settings-hero-stage"
-    assert_includes response.body, "data-controller=\"particle-orb\""
-    assert_includes response.body, "data-particle-orb-mode-value=\"hero\""
+    assert_includes response.body, "data-controller=\"particle-sphere\""
   end
 end
