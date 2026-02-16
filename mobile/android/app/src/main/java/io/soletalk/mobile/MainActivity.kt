@@ -11,23 +11,26 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.webkit.ConsoleMessage
-import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
 
 class MainActivity : AppCompatActivity() {
   companion object {
     private const val TAG = "MainActivity"
-    private const val BASE_URL = "https://soletalk-rails-production.up.railway.app/"
+    private const val MOBILE_RETURN_URI = "soletalk://auth"
     private const val RUNTIME_PERMISSION_REQUEST_CODE = 2001
   }
 
   private lateinit var webView: WebView
   private lateinit var voiceBridge: VoiceBridge
+  private var shouldReloadAfterOauth: Boolean = false
+  private val baseUrl: String by lazy { normalizeBaseUrl(BuildConfig.WEB_BASE_URL) }
+  private val baseUri: Uri by lazy { Uri.parse(baseUrl) }
 
   @SuppressLint("SetJavaScriptEnabled")
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     webView.settings.javaScriptEnabled = true
     webView.settings.domStorageEnabled = true
     webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
-    clearWebViewState()
     webView.webViewClient = object : WebViewClient() {
       override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
         Log.d(TAG, "webview request: ${request.method} ${request.url}")
@@ -49,8 +51,10 @@ class MainActivity : AppCompatActivity() {
 
       override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         if (shouldOpenInExternalBrowser(request.url)) {
-          Log.i(TAG, "open external browser for oauth url=${request.url}")
-          openInExternalBrowser(request.url)
+          val externalUri = resolveExternalBrowserUri(request.url)
+          Log.i(TAG, "open external browser for oauth url=$externalUri")
+          shouldReloadAfterOauth = true
+          openInExternalBrowser(externalUri)
           return true
         }
         Log.d(TAG, "webview navigate: ${request.method} ${request.url}")
@@ -88,7 +92,43 @@ class MainActivity : AppCompatActivity() {
     }
     voiceBridge = VoiceBridge(this)
     webView.addJavascriptInterface(voiceBridge, "SoleTalkBridge")
-    webView.loadUrl(BASE_URL)
+
+    onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+      override fun handleOnBackPressed() {
+        if (webView.canGoBack()) {
+          webView.goBack()
+        } else {
+          isEnabled = false
+          onBackPressedDispatcher.onBackPressed()
+        }
+      }
+    })
+
+    webView.loadUrl(resolveInitialUrl(intent))
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (shouldReloadAfterOauth) {
+      shouldReloadAfterOauth = false
+      Log.i(TAG, "resume after oauth - reload base url")
+      webView.loadUrl(baseUrl)
+    }
+  }
+
+  override fun onNewIntent(intent: android.content.Intent) {
+    super.onNewIntent(intent)
+    setIntent(intent)
+    if (intent.data != null) {
+      // Deep-link return means OAuth completion path should drive WebView navigation.
+      // Prevent onResume fallback reload from racing and dropping the handoff exchange.
+      shouldReloadAfterOauth = false
+    }
+    val targetUrl = resolveInitialUrl(intent)
+    if (targetUrl != baseUrl) {
+      Log.i(TAG, "onNewIntent load url: $targetUrl")
+      webView.loadUrl(targetUrl)
+    }
   }
 
   override fun onDestroy() {
@@ -133,23 +173,50 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  private fun clearWebViewState() {
-    webView.clearCache(true)
-    webView.clearHistory()
-    CookieManager.getInstance().removeAllCookies(null)
-    CookieManager.getInstance().flush()
-    Log.i(TAG, "webview cache/cookies cleared")
-  }
-
   private fun shouldOpenInExternalBrowser(uri: Uri): Boolean {
+    if (baseUri.scheme != "https") return false
+
     val host = uri.host.orEmpty()
     val path = uri.path.orEmpty()
     if (host == "accounts.google.com") return true
-    return host == "soletalk-rails-production.up.railway.app" && path.startsWith("/auth/google_oauth2")
+    return host == baseUri.host.orEmpty() && path.startsWith("/auth/google_oauth2")
+  }
+
+  private fun resolveExternalBrowserUri(uri: Uri): Uri {
+    val host = uri.host.orEmpty()
+    val path = uri.path.orEmpty()
+    if (host != baseUri.host.orEmpty() || !path.startsWith("/auth/google_oauth2")) {
+      return uri
+    }
+    val builder = uri.buildUpon()
+    if (path == "/auth/google_oauth2") {
+      builder.path("/auth/google_oauth2/start")
+    }
+    if (uri.getQueryParameter("mobile_return").isNullOrBlank()) {
+      builder.appendQueryParameter("mobile_return", MOBILE_RETURN_URI)
+    }
+    return builder.build()
   }
 
   private fun openInExternalBrowser(uri: Uri) {
     val customTabsIntent = CustomTabsIntent.Builder().build()
     customTabsIntent.launchUrl(this, uri)
+  }
+
+  private fun resolveInitialUrl(intent: android.content.Intent?): String {
+    val dataUri = intent?.data ?: return baseUrl
+    if (dataUri.scheme == "soletalk" && dataUri.host == "auth") {
+      val handoff = dataUri.getQueryParameter("handoff")
+      if (!handoff.isNullOrBlank()) {
+        return "${baseUrl}api/auth/google/mobile_handoff?handoff=${Uri.encode(handoff)}"
+      }
+      return baseUrl
+    }
+    val data = dataUri.toString()
+    return if (data.startsWith(baseUrl.removeSuffix("/"))) data else baseUrl
+  }
+
+  private fun normalizeBaseUrl(rawBaseUrl: String): String {
+    return if (rawBaseUrl.endsWith("/")) rawBaseUrl else "$rawBaseUrl/"
   }
 }

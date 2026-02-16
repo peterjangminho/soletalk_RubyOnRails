@@ -13,7 +13,7 @@
 | 1 | 스플래시 로고 흰테두리 | Medium | Android native | Pending |
 | 2 | 로그인 페이지 상단 네비 (로고+Sign In) 제거 | High | Guest pages | Done |
 | 3 | 동의 페이지 상단 네비 (로고+Sign In) 제거 | High | Consent page | Done |
-| 4 | 뒤로가기 버튼 앱 종료 → 이전 페이지 이동 | High | Android WebView | Pending |
+| 4 | 뒤로가기 버튼 앱 종료 → 이전 페이지 이동 | High | Android WebView | Done |
 | 5 | 동의 체크박스 클릭 안됨 | Critical | Consent flow | Done |
 | 6 | 체크박스 → 버튼 활성화 연동 | High | Consent flow | Done |
 | 7 | 메인화면: 텍스트→아이콘, 파티클 음성 반응 | Medium | Main screen | Pending |
