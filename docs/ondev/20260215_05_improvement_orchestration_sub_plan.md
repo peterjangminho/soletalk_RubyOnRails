@@ -1,5 +1,7 @@
 # Status: [Done]
 
+> Superseded for current UI orchestration by: `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`
+
 # Improvement Orchestration Sub-Plan (2026-02-15)
 
 ## Objective
