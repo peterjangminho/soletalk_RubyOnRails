@@ -236,6 +236,9 @@
 - [x] P83-T3 Opening sequence: 홈 진입 시 고밀도 파티클 + `SoleTalk` 로고 오프닝 오버레이 구현
 - [x] P84-T1 Main surface parity: 로그인 후 메인 화면에 3D orb + 하단 마이크 버튼 + 좌상단 파일업로드/우상단 설정 액션 구현
 - [x] P84-T2 Main/Auth parity 회귀: `home_flow_test`, `settings_flow_test`, `onboarding_flow_test` green 검증
+- [x] P85-T1 Consent gate hardening: `/auth/google_oauth2/start`에서 웹 로그인은 동의 전 `/consent`로 강제 리다이렉트
+- [x] P85-T2 Consent-accepted OAuth start regression: 동의 후에는 `/auth/google_oauth2/start -> /auth/google_oauth2` 유지
+- [x] P85-T3 Guest entry parity: `POST /guest_sign_in` 경로 추가 및 guest session 진입 구현/검증
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
@@ -244,6 +247,7 @@
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
 - 현재 실행 대상 외 병행 완료: `P83`(로그인/가입/동의/오프닝 UI) + `P84`(메인 orb + 업로드/설정/마이크).
+- 현재 실행 대상 외 병행 완료: `P85`(동의 게이트 서버 강제 + 게스트 로그인 동작).
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`

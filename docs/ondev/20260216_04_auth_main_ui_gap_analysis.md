@@ -24,6 +24,8 @@
 - Routes / controller
   - `config/routes.rb`: `/sign_up`, `/consent`, `/consent/accept` 추가
   - `app/controllers/onboarding_controller.rb` 추가
+  - `POST /guest_sign_in` + `app/controllers/auth/guest_sessions_controller.rb` 추가
+  - `app/controllers/auth/oauth_starts_controller.rb`에서 policy 미동의 웹 로그인 차단(`-> /consent`)
 - Views
   - `app/views/home/index.html.erb`: guest login parity + opening overlay + signed-in main orb/mic/top actions 반영
   - `app/views/onboarding/signup.html.erb` 추가
@@ -36,6 +38,7 @@
   - `app/assets/stylesheets/application.css`: auth shell, consent card, opening overlay, main orb/mic, disabled CTA 스타일 추가
 
 ## Validation
+- `bin/rails test test/integration/auth/auth_flow_test.rb` pass
 - `bin/rails test test/integration/onboarding_flow_test.rb` pass
 - `bin/rails test test/integration/home_flow_test.rb` pass
 - `bin/rails test test/integration/settings_flow_test.rb` pass

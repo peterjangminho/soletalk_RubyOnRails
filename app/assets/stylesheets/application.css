@@ -251,6 +251,10 @@ h1 {
   gap: 0.45rem;
 }
 
+.inline-auth-action {
+  display: inline-flex;
+}
+
 .auth-secondary {
   margin: 0.8rem 0 0;
   color: var(--muted);

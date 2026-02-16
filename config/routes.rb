@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   get "/auth/google_oauth2/start", to: "auth/oauth_starts#google_oauth2"
+  post "/guest_sign_in", to: "auth/guest_sessions#create", as: :guest_sign_in
   get "/auth/google_oauth2/callback", to: "auth/omniauth_callbacks#google_oauth2"
   get "/auth/failure", to: "auth/omniauth_callbacks#failure"
 

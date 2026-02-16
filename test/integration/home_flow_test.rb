@@ -22,7 +22,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "SoleTalk"
     assert_includes response.body, "Continue with Google"
     assert_includes response.body, "/auth/google_oauth2"
-    assert_includes response.body, "href=\"/auth/google_oauth2\""
+    assert_includes response.body, "href=\"/auth/google_oauth2/start\""
   end
 
   test "P54-T2 signed-in root page shows navigation and recent lists" do
@@ -99,5 +99,15 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "/brand/soletalk-logo-v2.png"
     assert_includes response.body, "/brand/projectb-feature-graphic.png"
+  end
+
+  test "P85-T3 guest home shows actionable guest entry after policy consent" do
+    post "/consent/accept", params: { agree: "1" }
+    follow_redirect!
+
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "/guest_sign_in"
   end
 end
