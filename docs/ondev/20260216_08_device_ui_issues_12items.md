@@ -1,6 +1,6 @@
 # Device UI Issues - 12 Items (Android Real Device Test)
 
-**Status**: [In Progress]
+**Status**: [Done]
 **Created**: 2026-02-16
 **Related**: `20260216_01_particle_sphere_ui_parity_master_plan.md`
 
@@ -19,8 +19,8 @@
 | 7 | 메인화면: 텍스트→아이콘, 파티클 음성 반응 | Medium | Main screen | Done |
 | 8 | 마이크 아이콘 파티클 아래 배치 + 빨간 피드백 | Medium | Main screen | Done |
 | 9 | 마이크 원터치 토글 (녹음↔중지) | Medium | Main screen | Done |
-| 10 | 설정 페이지만 스크롤 허용 | Low | Settings page | Pending |
-| 11 | 설정 페이지 프리미엄 스타일링 | Low | Settings page | Pending |
+| 10 | 설정 페이지만 스크롤 허용 | Low | Settings page | Done |
+| 11 | 설정 페이지 프리미엄 스타일링 | Low | Settings page | Done |
 | 12 | 영어 언어 설정 변경 안됨 | High | i18n | Done |
 
 ---
@@ -132,21 +132,24 @@
 
 **현상**: 모든 페이지가 `overflow: hidden`으로 고정됨 (Issue 이전 구현)
 **요구사항**: 설정 페이지만 스크롤 가능하도록 예외 처리
-**해결 방향**: `.settings-shell`에 `overflow-y: auto; height: 100%;` 추가
+**해결**: `.settings-scroll` 클래스 추가하여 `overflow-y: auto; -webkit-overflow-scrolling: touch; max-height: 100vh;` 설정. `settings-shell`에 `.settings-scroll` 클래스 병합. UI-T6 테스트 추가.
+**상태**: Done
 
 **파일**:
-- `app/assets/stylesheets/application.css` (.settings-shell)
+- `app/assets/stylesheets/application.css` (.settings-scroll)
+- `app/views/settings/show.html.erb` (settings-scroll 클래스 추가)
 
 ---
 
 ### Issue 11: 설정 페이지 프리미엄 스타일링
 
 **요구사항**: 반투명 버튼/박스로 고급스럽게
-**해결 방향**: `.settings-card`에 glassmorphism 강화 (backdrop-filter, 반투명 배경)
+**해결**: `.settings-card-glass` 클래스 추가. 강화된 glassmorphism 적용: `backdrop-filter: blur(16px)`, `rgba(24, 28, 52, 0.6)` 그라디언트, `inset box-shadow`로 상단 하이라이트. 모든 settings-card에 적용. UI-T7 테스트 추가.
+**상태**: Done
 
 **파일**:
-- `app/assets/stylesheets/application.css`
-- `app/views/settings/show.html.erb`
+- `app/assets/stylesheets/application.css` (.settings-card-glass)
+- `app/views/settings/show.html.erb` (glass 클래스 추가)
 
 ---
 

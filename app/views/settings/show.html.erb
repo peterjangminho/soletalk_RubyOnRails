@@ -1,4 +1,4 @@
-<main class="page-shell settings-shell">
+<main class="page-shell settings-shell settings-scroll">
   <section class="settings-hero-stage">
     <section
       class="orb-hero orb-hero-home"
@@ -19,7 +19,7 @@
   </section>
 
   <section class="settings-grid">
-    <section class="settings-card settings-card-primary">
+    <section class="settings-card settings-card-glass settings-card-primary">
       <h2><%= t("settings.show.form.language") %></h2>
       <%= form_with model: @setting,
         url: setting_path,
@@ -57,7 +57,7 @@
       <% end %>
     </section>
 
-    <section class="settings-card" id="uploads">
+    <section class="settings-card settings-card-glass" id="uploads">
       <h2><%= t("settings.show.uploaded_files.title") %></h2>
       <% if current_user.uploaded_files.attached? %>
         <ul class="insight-timeline">
@@ -70,7 +70,7 @@
       <% end %>
     </section>
 
-    <section class="settings-card" id="subscription">
+    <section class="settings-card settings-card-glass" id="subscription">
       <h2><%= t("subscription.show.title") %></h2>
 
       <% if current_user.premium? %>

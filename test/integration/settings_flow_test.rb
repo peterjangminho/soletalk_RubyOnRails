@@ -161,4 +161,23 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "settings-hero-stage"
     assert_includes response.body, "data-controller=\"particle-sphere\""
   end
+
+  test "UI-T6 GET /setting page has scrollable settings shell" do
+    sign_in(google_sub: "settings-scroll-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "settings-shell"
+    assert_includes response.body, "settings-scroll"
+  end
+
+  test "UI-T7 GET /setting cards use premium glassmorphism styling" do
+    sign_in(google_sub: "settings-glass-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "settings-card-glass"
+  end
 end
