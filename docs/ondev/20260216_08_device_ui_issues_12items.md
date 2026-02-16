@@ -10,7 +10,7 @@
 
 | # | 항목 | 심각도 | 영향 범위 | 상태 |
 |---|------|--------|-----------|------|
-| 1 | 스플래시 로고 흰테두리 | Medium | Android native | Pending |
+| 1 | 스플래시 로고 흰테두리 | Medium | Android native | Done |
 | 2 | 로그인 페이지 상단 네비 (로고+Sign In) 제거 | High | Guest pages | Done |
 | 3 | 동의 페이지 상단 네비 (로고+Sign In) 제거 | High | Consent page | Done |
 | 4 | 뒤로가기 버튼 앱 종료 → 이전 페이지 이동 | High | Android WebView | Done |
@@ -32,15 +32,11 @@
 **스크린샷**: `Screenshot_20260216_215406_SoleTalk.jpg`
 **현상**: 앱 시작 시 Android 스플래시 화면에서 로고 이미지 주변에 흰색 둥근 사각형 테두리가 보임
 **원인**: Android 12+ 스플래시 API가 `ic_launcher` mipmap PNG를 사용하며, 사각형 배경(흰색)이 자동 적용됨
-**해결 방향**:
-- Option A: 스플래시 화면에서 로고 이미지 제거하고 텍스트만 표시
-- Option B: `ic_launcher_foreground.xml` 벡터 드로어블의 배경을 투명하게 수정
-- Option C: `themes.xml`에서 `windowSplashScreenBackground`를 앱 배경색(#21203A)으로 설정
+**해결**: Option C 적용 - `values-v31/themes.xml` 생성하여 Android 12+ 스플래시 화면 속성 오버라이드. `windowSplashScreenBackground`를 `splash_background(#1A1A2E)`, `windowSplashScreenAnimatedIcon`을 `ic_launcher_foreground` 벡터(흰색 아이콘, 투명 배경), `windowSplashScreenIconBackgroundColor`를 `splash_background`로 설정. 빌드 성공 확인.
+**상태**: Done
 
 **파일**:
-- `mobile/android/app/src/main/res/values/themes.xml`
-- `mobile/android/app/src/main/res/drawable/ic_launcher_foreground.xml`
-- `mobile/android/app/src/main/res/mipmap-*/ic_launcher*.png`
+- `mobile/android/app/src/main/res/values-v31/themes.xml` (신규)
 
 ---
 
