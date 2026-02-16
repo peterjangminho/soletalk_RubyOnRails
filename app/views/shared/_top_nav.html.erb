@@ -6,13 +6,25 @@
 
     <% if current_user %>
       <div class="top-nav-links">
-        <%= link_to t("navigation.sessions"), sessions_path %>
-        <%= link_to t("navigation.insights"), insights_path %>
-        <%= link_to t("navigation.settings"), setting_path %>
+        <%= link_to sessions_path, class: "nav-icon-link" do %>
+          <%= render "shared/icon", name: "file-text", size: 18 %>
+          <span><%= t("navigation.sessions") %></span>
+        <% end %>
+        <%= link_to insights_path, class: "nav-icon-link" do %>
+          <%= render "shared/icon", name: "link", size: 18 %>
+          <span><%= t("navigation.insights") %></span>
+        <% end %>
+        <%= link_to setting_path, class: "nav-icon-link" do %>
+          <%= render "shared/icon", name: "cog", size: 18 %>
+          <span><%= t("navigation.settings") %></span>
+        <% end %>
       </div>
     <% else %>
       <div class="top-nav-links">
-        <%= link_to t("navigation.sign_in"), root_path(anchor: "sign-in") %>
+        <%= link_to root_path(anchor: "sign-in"), class: "nav-icon-link" do %>
+          <%= render "shared/icon", name: "log-out", size: 18 %>
+          <span><%= t("navigation.sign_in") %></span>
+        <% end %>
       </div>
     <% end %>
   </nav>

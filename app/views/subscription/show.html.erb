@@ -1,22 +1,37 @@
 <main class="page-shell">
-  <h1>Subscription</h1>
-  <p><%= link_to "Back to Sessions", sessions_path %></p>
+  <h1><%= t("subscription.show.title") %></h1>
+  <p>
+    <%= link_to sessions_path, class: "btn-link btn-link-secondary btn-icon" do %>
+      <%= render "shared/icon", name: "arrow-left", size: 16 %>
+      <%= t("subscription.show.back") %>
+    <% end %>
+  </p>
 
   <% if @user.premium? %>
     <section class="insight-detail-card">
-      <h2>Manage Subscription</h2>
-      <p>Premium access is active.</p>
+      <h2><%= t("subscription.show.manage.title") %></h2>
+      <p><%= t("subscription.show.manage.description") %></p>
     </section>
   <% else %>
     <section class="insight-detail-card">
-      <h2>Upgrade to Premium</h2>
-      <p>Unlock DEPTH/INSIGHT and external info features.</p>
+      <h2><%= t("subscription.show.upgrade.plans_title") %></h2>
+      <p><%= t("subscription.show.upgrade.description") %></p>
+      <ul class="subscription-plan-list">
+        <li><%= t("subscription.show.upgrade.plan_depth") %></li>
+        <li><%= t("subscription.show.upgrade.plan_insight") %></li>
+        <li><%= t("subscription.show.upgrade.plan_memory") %></li>
+      </ul>
+    </section>
+
+    <section class="insight-detail-card" id="subscription-restore">
+      <h2><%= t("subscription.show.upgrade.restore_title") %></h2>
+      <p class="insight-time"><%= t("subscription.show.upgrade.helper") %></p>
       <%= form_with url: validate_subscription_path, method: :post, local: true do |form| %>
         <p>
-          <%= form.label :revenue_cat_id, "RevenueCat Customer ID" %>
-          <%= form.text_field :revenue_cat_id %>
+          <%= form.label :revenue_cat_id, t("subscription.show.upgrade.revenue_cat_id") %>
+          <%= form.text_field :revenue_cat_id, placeholder: "rc_..." %>
         </p>
-        <%= form.submit "Validate Subscription" %>
+        <%= form.submit t("subscription.show.upgrade.restore_submit") %>
       <% end %>
     </section>
   <% end %>

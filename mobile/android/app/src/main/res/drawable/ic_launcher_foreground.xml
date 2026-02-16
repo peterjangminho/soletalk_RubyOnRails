@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- SoleTalk logo foreground (matching Project_B) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,34c-8,0 -16,4 -20,10l-4,8h-6c-2,0 -4,2 -4,4v4c0,2 2,4 4,4h2c0,4 4,8 8,8s8,-4 8,-8h16c0,4 4,8 8,8s8,-4 8,-8h2c2,0 4,-2 4,-4v-4c0,-2 -2,-4 -4,-4h-6l-4,-8c-4,-6 -12,-10 -20,-10zM54,38c6,0 12,3 15,8h-30c3,-5 9,-8 15,-8zM36,60c-2,0 -4,-2 -4,-4s2,-4 4,-4s4,2 4,4s-2,4 -4,4zM72,60c-2,0 -4,-2 -4,-4s2,-4 4,-4s4,2 4,4s-2,4 -4,4z"/>
+</vector>

@@ -1,3 +1,20 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#21203A"/>
+      <stop offset="100%" stop-color="#1A1A2E"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DD3E8"/>
+      <stop offset="100%" stop-color="#5EECC7"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Microphone body -->
+  <rect x="224" y="128" width="64" height="128" rx="32" fill="url(#accent)"/>
+  <!-- Microphone arc -->
+  <path d="M176 256 a80 80 0 0 0 160 0" fill="none" stroke="url(#accent)" stroke-width="16" stroke-linecap="round"/>
+  <!-- Microphone stand -->
+  <line x1="256" y1="336" x2="256" y2="384" stroke="url(#accent)" stroke-width="16" stroke-linecap="round"/>
+  <line x1="216" y1="384" x2="296" y2="384" stroke="url(#accent)" stroke-width="16" stroke-linecap="round"/>
 </svg>

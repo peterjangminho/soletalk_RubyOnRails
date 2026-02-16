@@ -9,7 +9,12 @@
     <header class="page-header settings-hero-copy">
       <h1><%= t("settings.show.title") %></h1>
       <p><%= t("settings.show.subtitle") %></p>
-      <p><%= link_to t("settings.show.back"), sessions_path, class: "btn-link btn-link-secondary" %></p>
+      <p>
+        <%= link_to sessions_path, class: "btn-link btn-link-secondary btn-icon" do %>
+          <%= render "shared/icon", name: "arrow-left", size: 16 %>
+          <%= t("settings.show.back") %>
+        <% end %>
+      </p>
     </header>
   </section>
 

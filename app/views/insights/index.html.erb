@@ -1,15 +1,27 @@
 <main class="page-shell">
   <header class="page-header">
-    <h1>Insights Timeline</h1>
+    <h1><%= t("insights.index.title") %></h1>
+    <p>
+      <%= link_to sessions_path, class: "btn-link btn-link-secondary btn-icon" do %>
+        <%= render "shared/icon", name: "arrow-left", size: 16 %>
+        <%= t("insights.index.back") %>
+      <% end %>
+    </p>
   </header>
 
-  <ol class="insight-timeline">
-    <% @insights.each do |insight| %>
-      <li class="insight-card">
-        <p class="insight-time"><%= insight.created_at.strftime("%Y-%m-%d %H:%M") %></p>
-        <h2><%= link_to insight.situation, insight_path(insight) %></h2>
-        <p><%= insight.decision %></p>
-      </li>
-    <% end %>
-  </ol>
+  <% if @insights.present? %>
+    <ol class="insight-timeline">
+      <% @insights.each do |insight| %>
+        <li class="insight-card">
+          <p class="insight-time"><%= insight.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+          <h2><%= link_to insight.situation, insight_path(insight) %></h2>
+          <p><%= insight.decision %></p>
+        </li>
+      <% end %>
+    </ol>
+  <% else %>
+    <section class="insight-detail-card">
+      <p><%= t("insights.index.empty") %></p>
+    </section>
+  <% end %>
 </main>

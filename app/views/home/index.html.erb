@@ -132,12 +132,18 @@
       <p class="action-row">
         <% google_cta_classes = policy_agreed ? "btn-link" : "btn-link btn-link-disabled" %>
         <% if policy_agreed %>
-          <%= link_to "Continue with Google", "/auth/google_oauth2/start", class: google_cta_classes, data: { turbo: false } %>
+          <%= link_to "/auth/google_oauth2/start", class: "#{google_cta_classes} btn-google", data: { turbo: false } do %>
+            <%= render "shared/google_icon" %>
+            <%= t("home.sign_in.cta") %>
+          <% end %>
           <%= form_with url: guest_sign_in_path, method: :post, local: true, class: "inline-auth-action" do |form| %>
             <%= form.submit "Continue as Guest", class: "btn-link btn-link-secondary" %>
           <% end %>
         <% else %>
-          <%= link_to "Continue with Google", "/auth/google_oauth2/start", class: google_cta_classes, data: { turbo: false, policy_required: true }, aria: { disabled: true } %>
+          <%= link_to "/auth/google_oauth2/start", class: "#{google_cta_classes} btn-google", data: { turbo: false, policy_required: true }, aria: { disabled: true } do %>
+            <%= render "shared/google_icon" %>
+            <%= t("home.sign_in.cta") %>
+          <% end %>
           <button type="button" class="btn-link btn-link-secondary btn-link-disabled" disabled>Continue as Guest</button>
         <% end %>
       </p>

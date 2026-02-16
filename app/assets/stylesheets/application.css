@@ -7,7 +7,7 @@
  * depending on specificity.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
 
 :root {
   --bg: #21203a;
@@ -909,4 +909,56 @@ textarea::placeholder {
     padding: 0.85rem;
     max-width: 100%;
   }
+}
+
+/* ── Icon System (Lucide parity with Project_B) ── */
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Spinner animation */
+.icon-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Navigation icon links */
+.nav-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+.nav-icon-link .icon {
+  opacity: 0.72;
+  transition: opacity 140ms ease;
+}
+
+.nav-icon-link:hover .icon {
+  opacity: 1;
+}
+
+/* Button with icon */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36rem;
+}
+
+/* Google OAuth button */
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-google .icon-google {
+  flex-shrink: 0;
 }

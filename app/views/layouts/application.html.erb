@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Project A" %></title>
+    <title><%= content_for(:title) || "SoleTalk" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Project A">
+    <meta name="application-name" content="SoleTalk">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#21203A">
+    <meta name="msapplication-navbutton-color" content="#21203A">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -23,7 +26,15 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="incar-body">
+    <div class="incar-aurora" aria-hidden="true"></div>
+    <div class="incar-noise" aria-hidden="true"></div>
+    <div class="app-shell">
+      <%= render "shared/top_nav" %>
+      <%= render "shared/flash" %>
+      <div class="app-content">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>
