@@ -200,8 +200,29 @@ h1 {
   box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48);
 }
 
+.home-main-mic-form {
+  margin: 0;
+}
+
 .login-panel {
   max-width: 560px;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #98a4c8;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .consent-inline {

@@ -55,6 +55,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "href=\"/setting#uploads\""
     assert_includes response.body, "main-orb-stage"
     assert_includes response.body, "home-main-mic"
+    assert_includes response.body, "action=\"/sessions\""
   end
 
   test "UX-T1 signed-in root page does not expose raw google_sub identifier text" do
