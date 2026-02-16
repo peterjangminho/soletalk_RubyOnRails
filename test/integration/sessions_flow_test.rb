@@ -86,16 +86,49 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "native-bridge#playAudio"
   end
 
+  test "UX-T2 session show wraps native bridge controls in debug details with live status" do
+    sign_in(google_sub: "sessions-native-bridge-debug-user")
+    user = User.find_by!(google_sub: "sessions-native-bridge-debug-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "native-bridge-debug"
+    assert_includes response.body, "Debug Tools (Android Bridge)"
+    assert_includes response.body, "aria-live=\"polite\""
+  end
+
+  test "P63-T3 session show exposes default submit label metadata for message form controller" do
+    sign_in(google_sub: "sessions-submit-label-user")
+    user = User.find_by!(google_sub: "sessions-submit-label-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "data-message-form-target=\"submit\""
+    assert_includes response.body, "data-default-label=\"Send\""
+  end
+
   test "P25-T3 session show renders DEPTH panel and recent insights panel" do
     sign_in(google_sub: "sessions-depth-user")
     user = User.find_by!(google_sub: "sessions-depth-user")
     session_record = Session.create!(user: user, status: "active")
     VoiceChatData.create!(session: session_record, current_phase: "free_speech", emotion_level: 0.7)
     Insight.create!(
+      user: user,
       situation: "insight panel situation",
       decision: "insight panel decision",
       action_guide: "insight panel action",
       data_info: "insight panel data"
+    )
+    Insight.create!(
+      user: User.create!(google_sub: "sessions-depth-other-user"),
+      situation: "other user insight",
+      decision: "other user decision",
+      action_guide: "other user action",
+      data_info: "other user data"
     )
 
     get "/sessions/#{session_record.id}"
@@ -104,6 +137,7 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "depth-panel"
     assert_includes response.body, "recent-insights-panel"
     assert_includes response.body, "insight panel situation"
+    assert_not_includes response.body, "other user insight"
   end
 
   test "P27-T1 session show renders emotion gauge with current emotion value" do
@@ -129,5 +163,44 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "emotion-gauge"
     assert_includes response.body, "value=\"0.0\""
+  end
+
+  test "P69-T3 session show exposes particle orb motion phase and emotion metadata" do
+    sign_in(google_sub: "sessions-orb-phase-user")
+    user = User.find_by!(google_sub: "sessions-orb-phase-user")
+    session_record = Session.create!(user: user, status: "active")
+    VoiceChatData.create!(session: session_record, current_phase: "free_speech", emotion_level: 0.8)
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "data-controller=\"particle-orb\""
+    assert_includes response.body, "data-particle-orb-phase-value=\"free_speech\""
+    assert_includes response.body, "data-particle-orb-emotion-value=\"0.8\""
+  end
+
+  test "P72-T3 session show renders cinematic conversation stack container" do
+    sign_in(google_sub: "sessions-conversation-shell-user")
+    user = User.find_by!(google_sub: "sessions-conversation-shell-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "id=\"messages\""
+    assert_includes response.body, "conversation-stack"
+  end
+
+  test "P80-T3 session show uses Project_B-style overlay layout shells" do
+    sign_in(google_sub: "sessions-overlay-layout-user")
+    user = User.find_by!(google_sub: "sessions-overlay-layout-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}"
+
+    assert_response :ok
+    assert_includes response.body, "session-stage"
+    assert_includes response.body, "session-overlay-top"
+    assert_includes response.body, "session-overlay-bottom"
   end
 end

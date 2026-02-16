@@ -150,6 +150,11 @@ const collectProjectAFlow = async (browser) => {
     const hasDepth = (await page.locator('text=/DEPTH Snapshot|Depth Snapshot|DEPTH 스냅샷/').count()) > 0;
     data.checks.sessionHasDepth = hasDepth;
     if (!hasDepth) data.gaps.push('Session page missing DEPTH Snapshot section.');
+
+    const hasOverlayLayout = (await page.locator('.session-stage .session-overlay-top').count()) > 0
+      && (await page.locator('.session-stage .session-overlay-bottom').count()) > 0;
+    data.checks.sessionUsesOverlayLayout = hasOverlayLayout;
+    if (!hasOverlayLayout) data.gaps.push('Session page does not use Project_B-style overlay layout.');
   });
 
   await step('A5_debug_tools_actions', async () => {

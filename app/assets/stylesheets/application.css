@@ -361,6 +361,59 @@ textarea::placeholder {
   height: 162px;
 }
 
+.session-stage {
+  position: relative;
+  min-height: calc(100vh - 6.4rem);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.session-stage .orb-hero-session {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  min-height: calc(100vh - 7.8rem);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+.session-stage .orb-hero-session canvas {
+  height: 100%;
+  min-height: 330px;
+}
+
+.session-overlay-top {
+  position: relative;
+  z-index: 3;
+  padding: 0.3rem 0.25rem 0;
+}
+
+.session-overlay-bottom {
+  position: relative;
+  z-index: 3;
+  margin-top: auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 0.9rem;
+  background: linear-gradient(180deg, rgba(18, 23, 43, 0.62), rgba(18, 23, 43, 0.86));
+  backdrop-filter: blur(8px);
+  box-shadow: 0 14px 36px rgba(4, 8, 20, 0.36);
+}
+
+.session-overlay-bottom #messages {
+  max-height: 32vh;
+  overflow: auto;
+  padding-right: 0.15rem;
+  mask-image: linear-gradient(transparent 0%, black 18%, black 100%);
+}
+
+.session-secondary-panels {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 0.7rem;
+}
+
 .conversation-stack {
   display: grid;
   gap: 0.66rem;
@@ -496,5 +549,21 @@ textarea::placeholder {
 
   .orb-hero-session canvas {
     height: 152px;
+  }
+
+  .session-stage {
+    min-height: calc(100vh - 5.9rem);
+  }
+
+  .session-stage .orb-hero-session {
+    min-height: calc(100vh - 7.2rem);
+  }
+
+  .session-overlay-bottom {
+    padding: 0.72rem;
+  }
+
+  .session-overlay-bottom #messages {
+    max-height: 28vh;
   }
 }
