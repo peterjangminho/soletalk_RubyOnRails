@@ -19,17 +19,14 @@
       <p>
         Full documents:
         <a
-          id="consent_policy_review"
           href="/legal/en/privacy-policy.html"
           target="_blank"
-          rel="noopener noreferrer"
-          data-action="click->consent-gate#markPolicyReviewed">Privacy Policy</a>
+          rel="noopener noreferrer">Privacy Policy</a>
         ·
         <a
           href="/legal/en/terms-of-service.html"
           target="_blank"
-          rel="noopener noreferrer"
-          data-action="click->consent-gate#markPolicyReviewed">Terms of Service</a>
+          rel="noopener noreferrer">Terms of Service</a>
       </p>
     </section>
 
@@ -37,9 +34,8 @@
       method: :post,
       local: true,
       class: "consent-form" do |form| %>
-      <p class="consent-note" data-consent-gate-target="status">Read policy to enable agreement.</p>
       <label class="consent-checkbox">
-        <%= form.check_box :agree, { checked: false, disabled: true, data: { consent_gate_target: "agree", action: "change->consent-gate#toggleAgree" } }, "1", "0" %>
+        <%= form.check_box :agree, { checked: false, data: { consent_gate_target: "agree", action: "change->consent-gate#toggleAgree" } }, "1", "0" %>
         I have read and agree to the policy and terms.
       </label>
       <%= form.submit "Agree and continue", class: "btn-link btn-link-disabled", disabled: true, data: { consent_gate_target: "submit" } %>

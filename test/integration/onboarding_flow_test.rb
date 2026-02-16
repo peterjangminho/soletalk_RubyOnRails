@@ -28,15 +28,24 @@ class OnboardingFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/consent/accept"
   end
 
-  test "P88-T1 GET /consent keeps agreement controls disabled before policy review action" do
+  test "P88-T1 GET /consent checkbox is enabled and submit is disabled by default" do
     get "/consent"
 
     assert_response :ok
     assert_includes response.body, "data-controller=\"consent-gate\""
-    assert_includes response.body, "id=\"consent_policy_review\""
     assert_includes response.body, "name=\"agree\""
-    assert_includes response.body, "disabled=\"disabled\""
     assert_includes response.body, "value=\"Agree and continue\""
+
+    # Checkbox should be enabled (not disabled) so users can click it
+    doc = response.body
+    checkbox_match = doc[/(<input[^>]*name="agree"[^>]*>)/]
+    assert checkbox_match, "Expected agree checkbox in the form"
+    assert_not_includes checkbox_match, "disabled", "Checkbox should not be disabled"
+
+    # Submit button should be disabled until checkbox is checked
+    submit_match = doc[/(<input[^>]*value="Agree and continue"[^>]*>)/]
+    assert submit_match, "Expected submit button in the form"
+    assert_includes submit_match, "disabled", "Submit button should be disabled by default"
   end
 
   test "P88-T2 sign-up and consent cards expose auth visual parity hooks" do
@@ -48,6 +57,6 @@ class OnboardingFlowTest < ActionDispatch::IntegrationTest
     get "/consent"
     assert_response :ok
     assert_includes response.body, "auth-card auth-card-consent"
-    assert_includes response.body, "consent-note"
+    assert_includes response.body, "consent-checkbox"
   end
 end
