@@ -5,6 +5,10 @@ const LOW_POWER_PARTICLE_COUNT = 780
 const REDUCED_MOTION_PARTICLE_COUNT = 220
 const MIN_PARTICLE_COUNT = 120
 const MAX_PARTICLE_COUNT = 3200
+const MIN_DENSITY = 0.35
+const MAX_DENSITY = 2.2
+const DENSITY_TUNE_COOLDOWN_MS = 1800
+const DENSITY_TUNE_WINDOW = 18
 const PHASES = [ "gather", "spread", "orb" ]
 const PHASE_DURATIONS = {
   gather: 2400,
@@ -21,6 +25,12 @@ export function nextPhase(currentPhase) {
 
 export function phaseDuration(phase) {
   return PHASE_DURATIONS[phase] || PHASE_DURATIONS.gather
+}
+
+export function shouldAdvancePhase(mode, phase) {
+  if (mode === "hero" && phase === "orb") return false
+
+  return true
 }
 
 export function voicePhaseToMotionPhase(voicePhase) {
@@ -102,7 +112,7 @@ export function phaseVisualStyle(phase) {
 }
 
 export function motionProfile({ reducedMotion, saveData, hardwareConcurrency, density = 1 }) {
-  const clampedDensity = Math.max(0.35, Math.min(density, 2.2))
+  const clampedDensity = clampDensity(density)
 
   if (reducedMotion) {
     return {
@@ -133,19 +143,63 @@ function clampParticleCount(count) {
   return Math.max(MIN_PARTICLE_COUNT, Math.min(MAX_PARTICLE_COUNT, Math.round(count)))
 }
 
+function clampDensity(value) {
+  return Math.max(MIN_DENSITY, Math.min(MAX_DENSITY, value))
+}
+
+export function adaptDensity({
+  currentDensity,
+  desiredDensity,
+  measuredFps,
+  targetFps,
+  saveData,
+  reducedMotion
+}) {
+  const current = clampDensity(currentDensity)
+  const desired = clampDensity(desiredDensity)
+  if (reducedMotion) return MIN_DENSITY
+
+  if (saveData) {
+    return Math.min(current, Math.min(desired, 0.72))
+  }
+
+  if (!Number.isFinite(measuredFps) || measuredFps <= 0 || !Number.isFinite(targetFps) || targetFps <= 0) {
+    return current
+  }
+
+  const weakThreshold = targetFps * 0.72
+  const cautionThreshold = targetFps * 0.84
+  const recoverThreshold = targetFps * 0.97
+
+  if (measuredFps < weakThreshold) {
+    return clampDensity(current * 0.82)
+  }
+
+  if (measuredFps < cautionThreshold) {
+    return clampDensity(current * 0.9)
+  }
+
+  if (measuredFps > recoverThreshold && current < desired) {
+    return clampDensity(Math.min(desired, current * 1.06))
+  }
+
+  return current
+}
+
 export default class extends Controller {
   static targets = [ "canvas" ]
   static values = {
     phase: String,
     emotion: Number,
-    density: Number
+    density: Number,
+    mode: String
   }
 
   connect() {
     if (!this.hasCanvasTarget) return
 
-    this.context = this.canvasTarget.getContext("2d")
-    if (!this.context) return
+    this.canvasContext = this.canvasTarget.getContext("2d")
+    if (!this.canvasContext) return
 
     this.profile = motionProfile({
       reducedMotion: this.prefersReducedMotion(),
@@ -153,9 +207,14 @@ export default class extends Controller {
       hardwareConcurrency: this.hardwareConcurrency(),
       density: this.currentDensityValue()
     })
+    this.desiredDensity = this.currentDensityValue()
+    this.dynamicDensity = this.desiredDensity
+    this.frameDeltas = []
+    const now = this.now()
+    this.lastDensityTuneAt = now
     const sessionMotionPhase = this.hasPhaseValue ? voicePhaseToMotionPhase(this.phaseValue) : "gather"
-    this.phase = sessionMotionPhase
-    this.phaseStartedAt = this.now()
+    this.phase = this.currentMode() === "hero" ? "gather" : sessionMotionPhase
+    this.phaseStartedAt = now
     this.lastFrameAt = 0
     const intensityMultiplier = phaseMultiplier(this.hasPhaseValue ? this.phaseValue : "opener", this.currentEmotionValue())
     this.sparkSprite = this.buildSparkSprite()
@@ -172,6 +231,7 @@ export default class extends Controller {
       const now = this.now()
       this.updateParticles(now)
       this.draw(now)
+      this.markRender(now)
     }
   }
 
@@ -188,24 +248,27 @@ export default class extends Controller {
     this.height = Math.max(bounds.height, 1)
     this.canvasTarget.width = Math.round(this.width * ratio)
     this.canvasTarget.height = Math.round(this.height * ratio)
-    this.context.setTransform(ratio, 0, 0, ratio, 0, 0)
+    this.canvasContext.setTransform(ratio, 0, 0, ratio, 0, 0)
   }
 
   render(timestamp) {
-    if (!this.context) return
-    if (timestamp - this.lastFrameAt < this.profile.frameInterval) {
+    if (!this.canvasContext) return
+    const frameDelta = timestamp - this.lastFrameAt
+    if (frameDelta < this.profile.frameInterval) {
       this.frameRequest = requestAnimationFrame(this.render.bind(this))
       return
     }
     this.lastFrameAt = timestamp
 
-    if (timestamp - this.phaseStartedAt >= phaseDuration(this.phase)) {
+    if (timestamp - this.phaseStartedAt >= phaseDuration(this.phase) && shouldAdvancePhase(this.currentMode(), this.phase)) {
       this.phase = nextPhase(this.phase)
       this.phaseStartedAt = timestamp
     }
 
     this.updateParticles(timestamp)
     this.draw(timestamp)
+    this.markRender(timestamp)
+    this.tuneDensityByFps(frameDelta, timestamp)
     this.frameRequest = requestAnimationFrame(this.render.bind(this))
   }
 
@@ -262,12 +325,12 @@ export default class extends Controller {
   draw(timestamp = 0) {
     const visual = phaseVisualStyle(this.phase)
 
-    this.context.clearRect(0, 0, this.width, this.height)
-    this.context.fillStyle = `rgba(${visual.bgColor}, ${visual.bgAlpha})`
-    this.context.fillRect(0, 0, this.width, this.height)
+    this.canvasContext.clearRect(0, 0, this.width, this.height)
+    this.canvasContext.fillStyle = `rgba(${visual.bgColor}, ${visual.bgAlpha})`
+    this.canvasContext.fillRect(0, 0, this.width, this.height)
 
-    const hasSparkSprite = this.sparkSprite && typeof this.context.drawImage === "function"
-    if (hasSparkSprite) this.context.globalCompositeOperation = "lighter"
+    const hasSparkSprite = this.sparkSprite && typeof this.canvasContext.drawImage === "function"
+    if (hasSparkSprite) this.canvasContext.globalCompositeOperation = "lighter"
 
     this.particles.forEach((particle, index) => {
       const pulse = 0.62 + 0.38 * Math.sin(timestamp * particle.twinkleSpeed + particle.twinkleOffset + index * 0.003)
@@ -275,8 +338,8 @@ export default class extends Controller {
 
       if (hasSparkSprite) {
         const size = 2.2 + coreRadius * 9
-        this.context.globalAlpha = Math.min(1, (visual.coreAlpha * 0.4 + pulse * 0.36) * particle.haloBoost)
-        this.context.drawImage(
+        this.canvasContext.globalAlpha = Math.min(1, (visual.coreAlpha * 0.4 + pulse * 0.36) * particle.haloBoost)
+        this.canvasContext.drawImage(
           this.sparkSprite,
           particle.x - size / 2,
           particle.y - size / 2,
@@ -286,19 +349,19 @@ export default class extends Controller {
         return
       }
 
-      this.context.beginPath()
-      this.context.arc(particle.x, particle.y, coreRadius * 2.4, 0, Math.PI * 2)
-      this.context.fillStyle = `rgba(${visual.haloColor}, ${visual.haloAlpha})`
-      this.context.fill()
+      this.canvasContext.beginPath()
+      this.canvasContext.arc(particle.x, particle.y, coreRadius * 2.4, 0, Math.PI * 2)
+      this.canvasContext.fillStyle = `rgba(${visual.haloColor}, ${visual.haloAlpha})`
+      this.canvasContext.fill()
 
-      this.context.beginPath()
-      this.context.arc(particle.x, particle.y, coreRadius, 0, Math.PI * 2)
-      this.context.fillStyle = `rgba(${visual.coreColor}, ${visual.coreAlpha})`
-      this.context.fill()
+      this.canvasContext.beginPath()
+      this.canvasContext.arc(particle.x, particle.y, coreRadius, 0, Math.PI * 2)
+      this.canvasContext.fillStyle = `rgba(${visual.coreColor}, ${visual.coreAlpha})`
+      this.canvasContext.fill()
     })
 
-    this.context.globalCompositeOperation = "source-over"
-    this.context.globalAlpha = 1
+    this.canvasContext.globalCompositeOperation = "source-over"
+    this.canvasContext.globalAlpha = 1
   }
 
   now() {
@@ -337,8 +400,69 @@ export default class extends Controller {
     return Number.isFinite(this.densityValue) ? this.densityValue : 1
   }
 
+  currentMode() {
+    if (!this.hasModeValue) return "loop"
+
+    return this.modeValue === "hero" ? "hero" : "loop"
+  }
+
   targetParticleCount(intensity = 1) {
     return clampParticleCount(this.profile.particleCount * intensity)
+  }
+
+  tuneDensityByFps(frameDelta, timestamp) {
+    if (!this.profile.animate || frameDelta <= 0) return
+
+    this.frameDeltas.push(frameDelta)
+    if (this.frameDeltas.length > DENSITY_TUNE_WINDOW) this.frameDeltas.shift()
+    if (timestamp - this.lastDensityTuneAt < DENSITY_TUNE_COOLDOWN_MS) return
+    if (this.frameDeltas.length < 6) return
+
+    const averageFrameDelta = this.frameDeltas.reduce((sum, delta) => sum + delta, 0) / this.frameDeltas.length
+    const measuredFps = 1000 / averageFrameDelta
+    const targetFps = 1000 / this.profile.frameInterval
+    const nextDensity = adaptDensity({
+      currentDensity: this.dynamicDensity,
+      desiredDensity: this.desiredDensity,
+      measuredFps,
+      targetFps,
+      saveData: this.saveDataEnabled(),
+      reducedMotion: this.prefersReducedMotion()
+    })
+    this.lastDensityTuneAt = timestamp
+
+    if (Math.abs(nextDensity - this.dynamicDensity) < 0.04) return
+
+    this.dynamicDensity = nextDensity
+    this.profile = motionProfile({
+      reducedMotion: this.prefersReducedMotion(),
+      saveData: this.saveDataEnabled(),
+      hardwareConcurrency: this.hardwareConcurrency(),
+      density: this.dynamicDensity
+    })
+
+    const intensity = this.currentIntensityFromState()
+    const targetCount = this.targetParticleCount(intensity)
+    if (this.particles.length !== targetCount) {
+      this.particles = this.buildParticles(targetCount)
+    }
+  }
+
+  currentIntensityFromState() {
+    if (this.phaseBadgeElement) {
+      const { voicePhase, emotionLevel } = readPhaseBadge(this.phaseBadgeElement)
+      return phaseMultiplier(voicePhase, emotionLevel)
+    }
+
+    return phaseMultiplier(this.hasPhaseValue ? this.phaseValue : "opener", this.currentEmotionValue())
+  }
+
+  markRender(timestamp) {
+    if (!this.element || !this.element.dataset) return
+
+    this.element.dataset.orbLastRenderAt = String(Math.round(timestamp))
+    this.element.dataset.orbParticleCount = String(this.particles.length)
+    this.element.dataset.orbDensity = Number(this.dynamicDensity || this.desiredDensity || 1).toFixed(2)
   }
 
   buildSparkSprite() {

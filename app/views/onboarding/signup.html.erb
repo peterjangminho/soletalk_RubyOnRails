@@ -1,0 +1,30 @@
+<main class="page-shell auth-shell">
+  <section class="auth-card">
+    <header class="auth-brand">
+      <h1>Sole<span>Talk</span></h1>
+      <p>Create account</p>
+    </header>
+
+    <%= form_with url: sign_up_path, method: :post, local: true, class: "auth-form" do |form| %>
+      <p>
+        <%= form.label :name, "Name" %>
+        <%= form.text_field :name, value: @pending_name, required: true, autocomplete: "name" %>
+      </p>
+      <p>
+        <%= form.label :email, "Email" %>
+        <%= form.email_field :email, value: @pending_email, required: true, autocomplete: "email" %>
+      </p>
+      <p>
+        <%= form.label :password, "Password" %>
+        <%= form.password_field :password, required: true, autocomplete: "new-password" %>
+      </p>
+      <%= form.submit "Continue to consent", class: "btn-link" %>
+    <% end %>
+
+    <p class="auth-secondary">
+      <%= link_to "Preview consent", consent_path %><br>
+      Already have an account?
+      <%= link_to "Back to sign in", root_path %>
+    </p>
+  </section>
+</main>

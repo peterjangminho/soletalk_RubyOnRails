@@ -1,82 +1,96 @@
 <main class="page-shell settings-shell">
-  <header class="page-header">
-    <h1><%= t("settings.show.title") %></h1>
-    <p><%= t("settings.show.subtitle") %></p>
-    <p><%= link_to t("settings.show.back"), sessions_path, class: "btn-link btn-link-secondary" %></p>
-  </header>
+  <section class="settings-hero-stage">
+    <section
+      class="orb-hero orb-hero-home"
+      data-controller="particle-orb"
+      data-particle-orb-mode-value="hero"
+      data-particle-orb-density-value="0.95">
+      <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+    </section>
 
-  <section class="settings-card">
-    <h2><%= t("settings.show.form.language") %></h2>
-    <%= form_with model: @setting,
-      url: setting_path,
-      method: :patch,
-      local: true,
-      data: { controller: "settings-form" } do |form| %>
-      <p>
-        <%= form.label :language, t("settings.show.form.language") %>
-        <%= form.select :language, options_for_select([[t("settings.show.form.languages.korean"), "ko"], [t("settings.show.form.languages.english"), "en"]], @setting.language) %>
-      </p>
-
-      <p>
-        <%= form.label :voice_speed, t("settings.show.form.voice_speed") %>
-        <%= form.number_field :voice_speed, step: 0.1 %>
-      </p>
-
-      <p>
-        <%= form.label :preferences_json, t("settings.show.form.preferences_json") %>
-        <%= text_area_tag "setting[preferences_json]",
-          @setting.preferences.to_json,
-          placeholder: t("settings.show.form.preferences_placeholder"),
-          data: { settings_form_target: "preferences", action: "blur->settings-form#normalizeJson" } %>
-      </p>
-
-      <p>
-        <%= form.label :uploaded_file, t("settings.show.form.uploaded_file") %>
-        <%= form.file_field :uploaded_file %>
-        <small><%= t("settings.show.form.uploaded_file_help") %></small>
-      </p>
-
-      <p class="form-status" data-settings-form-target="status" aria-live="polite"></p>
-      <%= form.submit t("settings.show.form.submit") %>
-    <% end %>
+    <header class="page-header settings-hero-copy">
+      <h1><%= t("settings.show.title") %></h1>
+      <p><%= t("settings.show.subtitle") %></p>
+      <p><%= link_to t("settings.show.back"), sessions_path, class: "btn-link btn-link-secondary" %></p>
+    </header>
   </section>
 
-  <section class="settings-card">
-    <h2><%= t("settings.show.uploaded_files.title") %></h2>
-    <% if current_user.uploaded_files.attached? %>
-      <ul class="insight-timeline">
-        <% current_user.uploaded_files.each do |file| %>
-          <li><%= link_to file.filename.to_s, url_for(file) %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p><%= t("settings.show.uploaded_files.empty") %></p>
-    <% end %>
-  </section>
+  <section class="settings-grid">
+    <section class="settings-card settings-card-primary">
+      <h2><%= t("settings.show.form.language") %></h2>
+      <%= form_with model: @setting,
+        url: setting_path,
+        method: :patch,
+        local: true,
+        data: { controller: "settings-form" } do |form| %>
+        <div class="settings-form-grid">
+          <p>
+            <%= form.label :language, t("settings.show.form.language") %>
+            <%= form.select :language, options_for_select([[t("settings.show.form.languages.korean"), "ko"], [t("settings.show.form.languages.english"), "en"]], @setting.language) %>
+          </p>
 
-  <section class="settings-card" id="subscription">
-    <h2><%= t("subscription.show.title") %></h2>
+          <p>
+            <%= form.label :voice_speed, t("settings.show.form.voice_speed") %>
+            <%= form.number_field :voice_speed, step: 0.1 %>
+          </p>
+        </div>
 
-    <% if current_user.premium? %>
-      <p class="settings-note"><%= t("subscription.show.manage.description") %></p>
-    <% else %>
-      <p class="settings-note"><%= t("subscription.show.upgrade.description") %></p>
-      <h3><%= t("subscription.show.upgrade.plans_title") %></h3>
-      <ul class="subscription-plan-list">
-        <li><%= t("subscription.show.upgrade.plan_depth") %></li>
-        <li><%= t("subscription.show.upgrade.plan_insight") %></li>
-        <li><%= t("subscription.show.upgrade.plan_memory") %></li>
-      </ul>
-
-      <h3><%= t("subscription.show.upgrade.restore_title") %></h3>
-      <p class="insight-time"><%= t("subscription.show.upgrade.helper") %></p>
-      <%= form_with url: validate_subscription_path, method: :post, local: true do |form| %>
         <p>
-          <%= form.label :revenue_cat_id, t("subscription.show.upgrade.revenue_cat_id") %>
-          <%= form.text_field :revenue_cat_id, value: current_user.revenue_cat_id, placeholder: "rc_..." %>
+          <%= form.label :preferences_json, t("settings.show.form.preferences_json") %>
+          <%= text_area_tag "setting[preferences_json]",
+            @setting.preferences.to_json,
+            placeholder: t("settings.show.form.preferences_placeholder"),
+            data: { settings_form_target: "preferences", action: "blur->settings-form#normalizeJson" } %>
         </p>
-        <%= form.submit t("subscription.show.upgrade.restore_submit") %>
+
+        <p>
+          <%= form.label :uploaded_file, t("settings.show.form.uploaded_file") %>
+          <%= form.file_field :uploaded_file %>
+          <small><%= t("settings.show.form.uploaded_file_help") %></small>
+        </p>
+
+        <p class="form-status" data-settings-form-target="status" aria-live="polite"></p>
+        <%= form.submit t("settings.show.form.submit") %>
       <% end %>
-    <% end %>
+    </section>
+
+    <section class="settings-card" id="uploads">
+      <h2><%= t("settings.show.uploaded_files.title") %></h2>
+      <% if current_user.uploaded_files.attached? %>
+        <ul class="insight-timeline">
+          <% current_user.uploaded_files.each do |file| %>
+            <li><%= link_to file.filename.to_s, url_for(file) %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p><%= t("settings.show.uploaded_files.empty") %></p>
+      <% end %>
+    </section>
+
+    <section class="settings-card" id="subscription">
+      <h2><%= t("subscription.show.title") %></h2>
+
+      <% if current_user.premium? %>
+        <p class="settings-note"><%= t("subscription.show.manage.description") %></p>
+      <% else %>
+        <p class="settings-note"><%= t("subscription.show.upgrade.description") %></p>
+        <h3><%= t("subscription.show.upgrade.plans_title") %></h3>
+        <ul class="subscription-plan-list">
+          <li><%= t("subscription.show.upgrade.plan_depth") %></li>
+          <li><%= t("subscription.show.upgrade.plan_insight") %></li>
+          <li><%= t("subscription.show.upgrade.plan_memory") %></li>
+        </ul>
+
+        <h3><%= t("subscription.show.upgrade.restore_title") %></h3>
+        <p class="insight-time"><%= t("subscription.show.upgrade.helper") %></p>
+        <%= form_with url: validate_subscription_path, method: :post, local: true do |form| %>
+          <p>
+            <%= form.label :revenue_cat_id, t("subscription.show.upgrade.revenue_cat_id") %>
+            <%= form.text_field :revenue_cat_id, value: current_user.revenue_cat_id, placeholder: "rc_..." %>
+          </p>
+          <%= form.submit t("subscription.show.upgrade.restore_submit") %>
+        <% end %>
+      <% end %>
+    </section>
   </section>
 </main>

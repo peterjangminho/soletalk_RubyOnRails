@@ -127,4 +127,15 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/subscription/validate"
     assert_includes response.body, "Restore Subscription"
   end
+
+  test "P82-T1 GET /setting renders particle hero stage for unified UI language" do
+    sign_in(google_sub: "setting-particle-hero-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "settings-hero-stage"
+    assert_includes response.body, "data-controller=\"particle-orb\""
+    assert_includes response.body, "data-particle-orb-mode-value=\"hero\""
+  end
 end

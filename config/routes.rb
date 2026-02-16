@@ -3,6 +3,16 @@ Rails.application.routes.draw do
   get "/healthz", to: "ops/health#show"
 
   root "home#index"
+  get "/sign_up", to: "onboarding#signup"
+  post "/sign_up", to: "onboarding#create_signup"
+  get "/consent", to: "onboarding#consent"
+  post "/consent/accept", to: "onboarding#accept_consent", as: :accept_consent
+
+  if Rails.env.development? || Rails.env.test?
+    post "/dev/sign_in", to: "dev/sessions#create", as: :dev_sign_in
+    delete "/dev/sign_out", to: "dev/sessions#destroy", as: :dev_sign_out
+  end
+
   resources :insights, only: [ :index, :show ]
   resources :sessions, only: [ :index, :show, :new, :create ] do
     resources :messages, only: :create
@@ -18,6 +28,7 @@ Rails.application.routes.draw do
     post "revenue_cat", to: "revenue_cat#create"
   end
 
+  get "/auth/google_oauth2/start", to: "auth/oauth_starts#google_oauth2"
   get "/auth/google_oauth2/callback", to: "auth/omniauth_callbacks#google_oauth2"
   get "/auth/failure", to: "auth/omniauth_callbacks#failure"
 
@@ -25,6 +36,7 @@ Rails.application.routes.draw do
     get "protected", to: "protected#show"
     namespace :auth do
       post "google/native_sign_in", to: "google#native_sign_in"
+      get "google/mobile_handoff", to: "google#mobile_handoff"
     end
 
     namespace :ontology_rag do

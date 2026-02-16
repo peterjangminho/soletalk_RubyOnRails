@@ -1,0 +1,38 @@
+<main class="page-shell auth-shell">
+  <section class="auth-card consent-card">
+    <header class="auth-brand">
+      <h1>Consent & Terms</h1>
+      <p>Review policy before continuing.</p>
+      <% if @pending_email.present? %>
+        <p class="consent-account"><strong><%= @pending_email %></strong></p>
+      <% end %>
+    </header>
+
+    <section class="consent-content">
+      <h2>Privacy summary</h2>
+      <ul>
+        <li>Voice transcripts may be processed to generate session insights.</li>
+        <li>Location and weather can be attached only when you explicitly send them.</li>
+        <li>You can request account/data deletion from the support channel.</li>
+      </ul>
+      <p>
+        Full documents:
+        <a href="/legal/en/privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        ·
+        <a href="/legal/en/terms-of-service.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+      </p>
+    </section>
+
+    <%= form_with url: accept_consent_path, method: :post, local: true, class: "consent-form" do |form| %>
+      <label class="consent-checkbox">
+        <%= form.check_box :agree, { checked: false }, "1", "0" %>
+        I have read and agree to the policy and terms.
+      </label>
+      <%= form.submit "Agree and continue", class: "btn-link" %>
+    <% end %>
+
+    <p class="auth-secondary">
+      <%= link_to "Back to sign up", sign_up_path %>
+    </p>
+  </section>
+</main>

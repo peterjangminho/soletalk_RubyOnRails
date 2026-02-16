@@ -109,6 +109,169 @@ h1 {
   color: var(--muted);
 }
 
+.home-main-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.home-opening-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: #21203a;
+  animation: home-opening-fade 5.2s ease forwards;
+}
+
+.home-opening-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.home-opening-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.home-opening-logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: #7dd5f7;
+  text-shadow: 0 0 28px rgba(67, 232, 197, 0.35);
+}
+
+@keyframes home-opening-fade {
+  0% { opacity: 1; }
+  78% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+.home-hero-stage {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 420px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(95, 176, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 84% 26%, rgba(136, 132, 255, 0.14), transparent 44%),
+    linear-gradient(155deg, rgba(16, 21, 44, 0.9), rgba(12, 16, 34, 0.92));
+}
+
+.home-hero-copy {
+  position: relative;
+  z-index: 2;
+  padding: 1.15rem 1.1rem;
+  max-width: 560px;
+}
+
+.home-hero-copy h1 {
+  font-size: clamp(2rem, 4.2vw, 2.7rem);
+  letter-spacing: 0.02em;
+}
+
+.main-orb-stage {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+}
+
+.main-orb-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.home-main-mic {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 228, 209, 0.55);
+  background: radial-gradient(circle at 38% 30%, rgba(77, 224, 197, 0.5), rgba(25, 42, 72, 0.9));
+  color: #f5fcff;
+  font-size: 2rem;
+  box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48);
+}
+
+.login-panel {
+  max-width: 560px;
+}
+
+.consent-inline {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.btn-link-disabled,
+.btn-link-disabled:hover {
+  opacity: 0.52;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-shell {
+  min-height: calc(100vh - 6rem);
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 520px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.1rem;
+  background: linear-gradient(145deg, rgba(20, 23, 44, 0.9), rgba(14, 17, 34, 0.9));
+}
+
+.auth-brand h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  color: #79d0f5;
+}
+
+.auth-brand h1 span {
+  color: #59e7c2;
+}
+
+.auth-brand p {
+  margin: 0.25rem 0 0.85rem;
+  color: var(--muted);
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.auth-secondary {
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+}
+
+.consent-card .consent-content {
+  max-height: 260px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.consent-checkbox {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.8rem 0;
+  align-items: flex-start;
+}
+
 .top-nav-shell {
   position: sticky;
   top: 0;
@@ -332,7 +495,11 @@ textarea::placeholder {
 }
 
 .orb-hero-home {
-  min-height: 230px;
+  min-height: 420px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .projectb-feature-panel {
@@ -354,7 +521,7 @@ textarea::placeholder {
   z-index: 1;
   display: block;
   width: 100%;
-  height: 210px;
+  height: 300px;
 }
 
 .orb-hero-session canvas {
@@ -511,6 +678,50 @@ textarea::placeholder {
   gap: 0.95rem;
 }
 
+.settings-hero-stage {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  min-height: 300px;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(95, 176, 255, 0.14), transparent 44%),
+    radial-gradient(circle at 78% 22%, rgba(131, 124, 255, 0.12), transparent 46%),
+    linear-gradient(150deg, rgba(14, 18, 38, 0.9), rgba(12, 16, 33, 0.92));
+}
+
+.settings-hero-stage .orb-hero-home {
+  min-height: 300px;
+}
+
+.settings-hero-stage .orb-hero-home canvas {
+  height: 300px;
+}
+
+.settings-hero-copy {
+  position: absolute;
+  inset: 0 auto auto 0;
+  z-index: 2;
+  max-width: 520px;
+  padding: 1rem;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.settings-card-primary {
+  grid-column: 1 / -1;
+}
+
+.settings-form-grid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .settings-card h2 {
   margin-top: 0;
 }
@@ -540,11 +751,11 @@ textarea::placeholder {
   }
 
   .orb-hero-home {
-    min-height: 195px;
+    min-height: 360px;
   }
 
   .orb-hero canvas {
-    height: 182px;
+    height: 260px;
   }
 
   .orb-hero-session canvas {
@@ -565,5 +776,41 @@ textarea::placeholder {
 
   .session-overlay-bottom #messages {
     max-height: 28vh;
+  }
+
+  .home-hero-stage {
+    min-height: 360px;
+  }
+
+  .home-hero-copy {
+    padding: 0.95rem 0.85rem;
+  }
+
+  .home-main-mic {
+    width: 68px;
+    height: 68px;
+    font-size: 1.7rem;
+  }
+
+  .settings-grid,
+  .settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-hero-stage {
+    min-height: 262px;
+  }
+
+  .settings-hero-stage .orb-hero-home {
+    min-height: 262px;
+  }
+
+  .settings-hero-stage .orb-hero-home canvas {
+    height: 262px;
+  }
+
+  .settings-hero-copy {
+    padding: 0.85rem;
+    max-width: 100%;
   }
 }

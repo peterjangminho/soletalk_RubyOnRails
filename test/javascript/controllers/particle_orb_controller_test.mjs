@@ -2,6 +2,7 @@ import test from "node:test"
 import assert from "node:assert/strict"
 import ParticleOrbController, {
   PARTICLE_COUNT,
+  adaptDensity,
   extractFirstNumber,
   motionProfile,
   nextPhase,
@@ -9,6 +10,7 @@ import ParticleOrbController, {
   phaseDuration,
   phaseMultiplier,
   readPhaseBadge,
+  shouldAdvancePhase,
   voicePhaseToMotionPhase
 } from "../../../app/javascript/controllers/particle_orb_controller.js"
 
@@ -22,6 +24,12 @@ test("particle_orb phaseDuration returns positive durations", () => {
   assert.ok(phaseDuration("gather") > 0)
   assert.ok(phaseDuration("spread") > 0)
   assert.ok(phaseDuration("orb") > 0)
+})
+
+test("particle_orb shouldAdvancePhase locks orb in hero mode", () => {
+  assert.equal(shouldAdvancePhase("hero", "orb"), false)
+  assert.equal(shouldAdvancePhase("hero", "gather"), true)
+  assert.equal(shouldAdvancePhase("loop", "orb"), true)
 })
 
 test("particle_orb motionProfile disables animation on reduced motion", () => {
@@ -74,6 +82,33 @@ test("particle_orb motionProfile scales particle count by density", () => {
   })
 
   assert.ok(highDensity.particleCount > lowDensity.particleCount)
+})
+
+test("particle_orb adaptDensity reduces density on sustained fps drop", () => {
+  const next = adaptDensity({
+    currentDensity: 1.2,
+    desiredDensity: 1.2,
+    measuredFps: 18,
+    targetFps: 36,
+    saveData: false,
+    reducedMotion: false
+  })
+
+  assert.ok(next < 1.2)
+})
+
+test("particle_orb adaptDensity recovers toward desired density when fps is healthy", () => {
+  const next = adaptDensity({
+    currentDensity: 0.72,
+    desiredDensity: 1.1,
+    measuredFps: 36,
+    targetFps: 36,
+    saveData: false,
+    reducedMotion: false
+  })
+
+  assert.ok(next > 0.72)
+  assert.ok(next <= 1.1)
 })
 
 test("particle_orb voicePhaseToMotionPhase maps opener and calm safely", () => {

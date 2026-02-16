@@ -52,6 +52,9 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/sessions/#{session_record.id}"
     assert_includes response.body, "home insight situation"
     assert_not_includes response.body, "other user home insight"
+    assert_includes response.body, "href=\"/setting#uploads\""
+    assert_includes response.body, "main-orb-stage"
+    assert_includes response.body, "home-main-mic"
   end
 
   test "UX-T1 signed-in root page does not expose raw google_sub identifier text" do
@@ -76,6 +79,8 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_includes response.body, "orb-hero orb-hero-home"
+    assert_includes response.body, "home-hero-stage"
+    assert_includes response.body, "data-particle-orb-mode-value=\"hero\""
   end
 
   test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do

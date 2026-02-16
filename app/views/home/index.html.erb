@@ -1,11 +1,33 @@
-<section class="page-shell">
-  <header class="page-header">
-    <h1><%= t("home.title") %></h1>
-    <p><%= t("home.subtitle") %></p>
-  </header>
+<section class="page-shell home-main-shell">
+  <section class="home-opening-overlay" aria-hidden="true">
+    <section class="home-opening-canvas" data-controller="particle-orb" data-particle-orb-mode-value="hero" data-particle-orb-density-value="1.45">
+      <canvas data-particle-orb-target="canvas"></canvas>
+    </section>
+    <div class="home-opening-logo">SoleTalk</div>
+  </section>
 
-  <section class="orb-hero orb-hero-home" data-controller="particle-orb" data-particle-orb-density-value="1.2">
-    <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+  <section class="home-hero-stage">
+    <section
+      class="orb-hero orb-hero-home"
+      data-controller="particle-orb"
+      data-particle-orb-mode-value="hero"
+      data-particle-orb-density-value="1.25">
+      <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+    </section>
+
+    <header class="page-header home-hero-copy">
+      <h1><%= t("home.title") %></h1>
+      <p><%= t("home.subtitle") %></p>
+      <p class="action-row">
+        <% if current_user %>
+          <%= link_to "File Upload", "#{setting_path}#uploads", class: "btn-link btn-link-secondary" %>
+          <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
+        <% else %>
+          <%= link_to "Create account", sign_up_path, class: "btn-link btn-link-secondary" %>
+          <%= link_to "Review consent", consent_path, class: "btn-link btn-link-secondary" %>
+        <% end %>
+      </p>
+    </header>
   </section>
 
   <section class="projectb-feature-panel">
@@ -13,6 +35,25 @@
   </section>
 
   <% if current_user %>
+    <section class="insight-detail-card main-orb-stage">
+      <header class="main-orb-top">
+        <%= link_to "File Upload", "#{setting_path}#uploads", class: "btn-link btn-link-secondary" %>
+        <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
+      </header>
+
+      <section
+        class="orb-hero orb-hero-home"
+        data-controller="particle-orb"
+        data-particle-orb-density-value="1.1"
+        data-particle-orb-phase-value="calm">
+        <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+      </section>
+
+      <button type="button" class="home-main-mic" aria-label="microphone">
+        <span>🎤</span>
+      </button>
+    </section>
+
     <section class="insight-detail-card">
       <h2><%= t("home.welcome", name: current_user.name.presence || current_user.google_sub) %></h2>
       <p><%= t("home.connected") %></p>
@@ -53,20 +94,49 @@
       <% end %>
     </section>
   <% else %>
-    <section class="insight-detail-card" id="sign-in">
+    <% policy_agreed = session[:policy_agreed] == true %>
+    <section class="insight-detail-card login-panel" id="sign-in">
       <h2><%= t("home.sign_in.title") %></h2>
       <p><%= t("home.sign_in.description") %></p>
-      <p><%= t("home.sign_in.privacy") %></p>
-      <p class="action-row">
-        <%= link_to t("home.sign_in.cta"), "/auth/google_oauth2", class: "btn-link", data: { turbo: false } %>
+      <form class="auth-form" action="#" method="post">
+        <p>
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="Email" autocomplete="email">
+        </p>
+        <p>
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
+        </p>
+      </form>
 
-        <% if Rails.env.development? || Rails.env.test? %>
+      <p class="consent-inline">
+        <% if policy_agreed %>
+          Policy agreed. You can continue.
+        <% else %>
+          Consent required:
+          <%= link_to "Open consent screen", consent_path %>
+        <% end %>
+      </p>
+
+      <p class="action-row">
+        <% google_cta_classes = policy_agreed ? "btn-link" : "btn-link btn-link-disabled" %>
+        <% if policy_agreed %>
+          <%= link_to "Continue with Google", "/auth/google_oauth2", class: google_cta_classes, data: { turbo: false } %>
+          <%= link_to "Continue as Guest", sessions_path, class: "btn-link btn-link-secondary" %>
+        <% else %>
+          <%= link_to "Continue with Google", "/auth/google_oauth2", class: google_cta_classes, data: { turbo: false, policy_required: true }, aria: { disabled: true } %>
+          <button type="button" class="btn-link btn-link-secondary btn-link-disabled" disabled>Continue as Guest</button>
+        <% end %>
+      </p>
+
+      <% if Rails.env.development? || Rails.env.test? %>
+        <p class="action-row">
           <%= form_with url: dev_sign_in_path, method: :post, local: true, class: "dev-sign-in-form" do |form| %>
             <%= form.hidden_field :google_sub, value: "dev-mobile-user" %>
             <%= form.submit t("home.sign_in.dev_cta"), class: "btn-link btn-link-secondary" %>
           <% end %>
-        <% end %>
-      </p>
+        </p>
+      <% end %>
     </section>
   <% end %>
 </section>
