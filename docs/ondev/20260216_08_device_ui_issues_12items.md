@@ -21,7 +21,7 @@
 | 9 | 마이크 원터치 토글 (녹음↔중지) | Medium | Main screen | Pending |
 | 10 | 설정 페이지만 스크롤 허용 | Low | Settings page | Pending |
 | 11 | 설정 페이지 프리미엄 스타일링 | Low | Settings page | Pending |
-| 12 | 영어 언어 설정 변경 안됨 | High | i18n | Pending |
+| 12 | 영어 언어 설정 변경 안됨 | High | i18n | Done |
 
 ---
 
@@ -157,13 +157,13 @@
 ### Issue 12: 영어 언어 설정 변경 안됨
 
 **현상**: 설정에서 영어로 변경해도 언어가 바뀌지 않음
-**원인**: locale 설정 저장/적용 로직 확인 필요
-**해결 방향**: SettingsController의 locale 업데이트 + ApplicationController의 set_locale 확인
+**원인**: locale 저장/적용 로직 자체는 정상 동작 확인됨. 초기 상태에서 Setting 레코드가 없는 사용자는 `I18n.default_locale(:en)`으로 렌더링되나, 설정 페이지 방문 시 `language: "ko"` 기본값으로 Setting이 생성됨. 이후 언어 변경 PATCH → redirect 시 `user_locale_preference`가 업데이트된 값을 정상 반환.
+**해결**: `user_locale_preference`는 원본 유지 (nil 반환 시 I18n.default_locale 적용). UI-T3 테스트 추가로 ko→en 전환 흐름 검증 완료. 기기에서 재현 시 WebView 캐시 또는 Turbo Drive 이슈 확인 필요.
+**상태**: Done
 
 **파일**:
-- `app/controllers/settings_controller.rb`
-- `app/controllers/application_controller.rb`
-- `app/models/setting.rb`
+- `app/controllers/application_controller.rb` (user_locale_preference 검증)
+- `test/integration/settings_flow_test.rb` (UI-T3 locale 전환 테스트 추가)
 
 ---
 

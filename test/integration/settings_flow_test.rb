@@ -128,6 +128,30 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Restore Subscription"
   end
 
+  test "UI-T3 PATCH /setting language change takes effect on next page load" do
+    sign_in(google_sub: "locale-switch-user")
+    user = User.find_by!(google_sub: "locale-switch-user")
+    user.settings.create!(language: "ko", voice_speed: 1.0)
+
+    # verify page renders in Korean
+    get "/setting"
+    assert_response :ok
+    assert_includes response.body, "<h1>설정</h1>"
+
+    # change to english
+    patch "/setting", params: {
+      setting: { language: "en", voice_speed: 1.0, preferences_json: "" }
+    }
+    assert_redirected_to "/setting"
+    follow_redirect!
+
+    assert_response :ok
+    # Page content renders in English after locale change
+    assert_includes response.body, "<h1>Settings</h1>"
+    # Language dropdown shows English as selected
+    assert_includes response.body, "selected=\"selected\" value=\"en\""
+  end
+
   test "P82-T1 GET /setting renders particle hero stage for unified UI language" do
     sign_in(google_sub: "setting-particle-hero-user")
 
