@@ -71,3 +71,30 @@ export function particleAlpha(scale, status, volume) {
   }
   return Math.max(0, Math.min(1, alpha))
 }
+
+const DISPLACEMENT_FACTOR = 20
+
+export function displaceParticle(particle, volume, time) {
+  if (volume <= 0) {
+    return { x: particle.ox, y: particle.oy, z: particle.oz }
+  }
+
+  const dist = Math.sqrt(particle.ox ** 2 + particle.oy ** 2 + particle.oz ** 2)
+  if (dist === 0) {
+    return { x: particle.ox, y: particle.oy, z: particle.oz }
+  }
+
+  const nx = particle.ox / dist
+  const ny = particle.oy / dist
+  const nz = particle.oz / dist
+
+  const phi = Math.atan2(particle.oz, particle.ox)
+  const wave = 0.5 + Math.sin(phi * 3 + time * 0.005) * 0.5
+  const displacement = volume * DISPLACEMENT_FACTOR * wave
+
+  return {
+    x: particle.ox + nx * displacement,
+    y: particle.oy + ny * displacement,
+    z: particle.oz + nz * displacement
+  }
+}

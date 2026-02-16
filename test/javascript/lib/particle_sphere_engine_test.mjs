@@ -7,7 +7,8 @@ import {
   projectParticle3D,
   sortByDepth,
   rotationSpeed,
-  particleAlpha
+  particleAlpha,
+  displaceParticle
 } from "../../../app/javascript/lib/particle_sphere_engine.js"
 
 // --- Test 1: SPHERE_CONFIG exports essential constants ---
@@ -135,4 +136,43 @@ test("particleAlpha returns depth-based opacity", () => {
   const alpha = particleAlpha(0.8, "idle", 0)
   assert.ok(alpha > 0)
   assert.ok(alpha <= 1)
+})
+
+// --- Test 14: Volume displacement with non-zero volume ---
+test("displaceParticle moves particle outward when volume > 0", () => {
+  const particle = { ox: 50, oy: 0, oz: 0 }
+  const result = displaceParticle(particle, 0.8, 100)
+  assert.ok(result.x !== particle.ox || result.y !== particle.oy || result.z !== particle.oz,
+    "particle should be displaced from original position")
+  // Distance from origin should be >= original radius
+  const dist = Math.sqrt(result.x ** 2 + result.y ** 2 + result.z ** 2)
+  const origDist = Math.sqrt(particle.ox ** 2 + particle.oy ** 2 + particle.oz ** 2)
+  assert.ok(dist >= origDist - 1, `displaced dist ${dist} should be >= original ${origDist}`)
+})
+
+// --- Test 15: Volume 0 returns original position ---
+test("displaceParticle returns original position when volume is 0", () => {
+  const particle = { ox: 50, oy: 30, oz: -20 }
+  const result = displaceParticle(particle, 0, 0)
+  assert.equal(result.x, particle.ox)
+  assert.equal(result.y, particle.oy)
+  assert.equal(result.z, particle.oz)
+})
+
+// --- Test 16: Displacement scales with volume ---
+test("displaceParticle displacement magnitude scales with volume", () => {
+  const particle = { ox: 50, oy: 0, oz: 0 }
+  const lowVol = displaceParticle(particle, 0.2, 0)
+  const highVol = displaceParticle(particle, 0.9, 0)
+
+  const lowDist = Math.sqrt(lowVol.x ** 2 + lowVol.y ** 2 + lowVol.z ** 2)
+  const highDist = Math.sqrt(highVol.x ** 2 + highVol.y ** 2 + highVol.z ** 2)
+  assert.ok(highDist >= lowDist, `high volume dist ${highDist} should >= low volume dist ${lowDist}`)
+})
+
+// --- Test 17: particleAlpha increases for listening with volume ---
+test("particleAlpha is brighter for listening status with volume", () => {
+  const noVol = particleAlpha(0.5, "listening", 0)
+  const withVol = particleAlpha(0.5, "listening", 0.8)
+  assert.ok(withVol >= noVol, `with volume ${withVol} should >= without ${noVol}`)
 })

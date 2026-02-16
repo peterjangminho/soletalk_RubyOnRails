@@ -5,7 +5,8 @@ import {
   projectParticle3D,
   sortByDepth,
   rotationSpeed,
-  particleAlpha
+  particleAlpha,
+  displaceParticle
 } from "lib/particle_sphere_engine"
 
 export default class extends Controller {
@@ -89,15 +90,24 @@ export default class extends Controller {
 
     const sorted = sortByDepth(this.particles)
 
+    const isListening = status === "listening" && volume > 0
+
     for (const particle of sorted) {
-      const projected = projectParticle3D(particle, fov, centerX, centerY, this.rotationY)
+      const pos = isListening
+        ? displaceParticle(particle, volume, timestamp)
+        : { x: particle.x, y: particle.y, z: particle.z }
+
+      const projected = projectParticle3D(pos, fov, centerX, centerY, this.rotationY)
 
       if (projected.scale <= 0) continue
 
       const alpha = particleAlpha(projected.scale, status, volume)
       const radius = projected.scale * 1.5
 
-      ctx.fillStyle = `rgba(${SPHERE_CONFIG.PARTICLE_COLOR}, ${alpha})`
+      const useSparkle = isListening && Math.random() < 0.01
+      const color = useSparkle ? SPHERE_CONFIG.SPARKLE_COLOR : SPHERE_CONFIG.PARTICLE_COLOR
+
+      ctx.fillStyle = `rgba(${color}, ${alpha})`
       ctx.beginPath()
       ctx.arc(projected.px, projected.py, radius, 0, Math.PI * 2)
       ctx.fill()

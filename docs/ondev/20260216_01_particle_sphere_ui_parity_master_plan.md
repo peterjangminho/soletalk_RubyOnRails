@@ -65,7 +65,7 @@ Project_B의 3D 구형 파티클 애니메이션과 UI 요소들을 Project_A(Ra
 - Pulse 애니메이션
 - **세부계획**: `20260216_04_phase3_mic_button.md`
 
-### Phase 4: Voice-Reactive Particle Behavior [Not Started]
+### Phase 4: Voice-Reactive Particle Behavior [Done]
 - 볼륨 기반 displacement
 - 상태별 회전 속도 변화
 - 색상 변화 (LISTENING 모드)

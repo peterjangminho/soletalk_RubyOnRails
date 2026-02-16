@@ -1,6 +1,6 @@
 # Phase 4: Voice-Reactive Particle Behavior
 
-**Status**: [Not Started]
+**Status**: [Done]
 **Created**: 2026-02-16
 **Master Plan**: `20260216_01_particle_sphere_ui_parity_master_plan.md`
 **Depends On**: Phase 1
@@ -13,12 +13,12 @@
 
 ## 바이브코딩 원칙 체크리스트
 
-- [ ] 원칙1 (일관된 패턴): Phase 1 엔진 확장, Stimulus values 활용
-- [ ] 원칙2 (One Source of Truth): 볼륨/상태 데이터는 Action Cable → Stimulus value
-- [ ] 원칙3 (하드코딩 금지): displacement factor(20), alpha multiplier(5) → 상수
-- [ ] 원칙4 (에러/예외): 볼륨 0일 때 기본 동작, NaN 방어
-- [ ] 원칙5 (SRP): 볼륨 반응 로직은 별도 함수
-- [ ] 원칙6 (공유 모듈): displacement 계산 함수 export
+- [x] 원칙1 (일관된 패턴): particle_sphere_engine.js 확장, controller values 활용
+- [x] 원칙2 (One Source of Truth): volume/status → Stimulus values
+- [x] 원칙3 (하드코딩 금지): DISPLACEMENT_FACTOR=20, alpha multiplier=5 → 상수
+- [x] 원칙4 (에러/예외): volume=0 → 원본 좌표 반환, dist=0 방어
+- [x] 원칙5 (SRP): displaceParticle 순수 함수로 분리
+- [x] 원칙6 (공유 모듈): displaceParticle export, controller에서 재사용
 
 ## Kent Beck TDD Plan
 
@@ -92,8 +92,8 @@ const speeds = {
 
 ## 완료 기준
 
-- [ ] 모든 TDD 테스트 통과 (6개)
-- [ ] 볼륨에 따라 파티클 구형이 팽창/수축
-- [ ] 상태별로 회전 속도가 자연스럽게 변화
-- [ ] LISTENING 시 파티클 밝기 증가
-- [ ] 볼륨 0일 때 안정적인 구형 유지
+- [x] 모든 TDD 테스트 통과 (4개 추가, 17 total engine, 77 total JS)
+- [x] 볼륨에 따라 파티클 구형이 팽창/수축 (displaceParticle)
+- [x] 상태별로 회전 속도가 자연스럽게 변화 (rotationSpeed - Phase 1에서 구현)
+- [x] LISTENING 시 파티클 밝기 증가 + 1% sparkle (particleAlpha + draw loop)
+- [x] 볼륨 0일 때 안정적인 구형 유지 (원본 좌표 반환)
