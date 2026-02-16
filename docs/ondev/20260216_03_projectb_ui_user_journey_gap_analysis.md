@@ -23,6 +23,7 @@
 | quality | Playwright 자동 점검 결과 오탐(DEPTH/bridge selector) | Medium | Closed | 한/영 라벨 동시 매칭 + data-target selector 보강 |
 | feature | Subscription standalone page가 Settings 중심 UX와 분리됨 | High | Closed | `/subscription` 리다이렉트 + Settings 섹션 통합 + nav 제거 |
 | feature | Project_B의 실제 brand asset이 Project_A UI에 직접 반영되지 않음 | Medium | Closed | Project_B logo/feature graphic을 `public/brand`로 이식 후 nav/home에 반영 |
+| quality | session orb 레이어가 debug/details 클릭을 가로채는 상호작용 충돌 | Medium | Closed | orb를 background-only(`pointer-events:none`)로 전환하고 overlay shell로 구조 분리 |
 | documentation | Project_B 대비 user journey 검증 절차 문서화 부족 | Medium | Closed | phase plan + 실행 스크립트 + report 경로 고정 |
 | external-gate | localhost OAuth consent 성공은 Google Console redirect 설정 의존 | Medium | Open | callback URI 허용 후 동일 script로 재검증 예정 |
 

@@ -227,13 +227,13 @@
 - [x] P79-T3 Top navigation에서 standalone Subscription 탭 제거, Settings 중심 UX로 정합화 (`home_flow_test`)
 - [x] P80-T1 Project_B UI asset 재사용: `soletalk-logo-v2.png`, `feature-graphic.png`를 Project_A home/nav에 통합
 - [x] P80-T2 Playwright user journey audit에 Project_B asset 존재 체크 추가 (`hasProjectBLogoAsset`, `hasProjectBFeatureGraphic`)
-- [ ] P80-T3 Project_B 대비 픽셀 단위 시각 정합화(메인/세션 레이아웃) 2차 반영
+- [x] P80-T3 Project_B 대비 시각 정합화 2차: session overlay layout(`session-stage`, `session-overlay-top/bottom`) 반영 + Playwright 검증
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
-- 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트) + `P80-T3` (Project_B 시각 정합화 2차)다.
+- 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`

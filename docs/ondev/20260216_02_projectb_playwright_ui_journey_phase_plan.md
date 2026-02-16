@@ -108,7 +108,10 @@ script/playwright/run_ui_journey_gap_audit.sh
   - `P80-T1~T2` 완료 (Project_B asset import + home/nav 적용 + Playwright 체크 green)
 - Pending
   - `P78-T2`: localhost OAuth consent success 외부 게이트
-  - `P80-T3`: Project_B 레이아웃/모션 픽셀 정합화 2차
+- `P80-T3`: Project_B 레이아웃/모션 픽셀 정합화 2차
+  - `app/views/sessions/show.html.erb` overlay shell(`session-stage`, `session-overlay-top`, `session-overlay-bottom`) 반영
+  - `app/assets/stylesheets/application.css`에서 orb background pointer-event 차단 및 overlay 상호작용 보장
+  - `script/playwright/ui_journey_gap_audit.js`에서 `sessionUsesOverlayLayout` 검증 통과
 - Mismatch
   - 없음 (현재 갭은 내부 코드 기준 0)
 - Next Test
