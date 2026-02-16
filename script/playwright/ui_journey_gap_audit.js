@@ -280,6 +280,9 @@ const collectProjectAFlow = async (browser) => {
     await page.waitForTimeout(2000);
     const url = page.url();
     data.checks.oauthRedirectUrl = url;
+    const oauthPageErrorText = await page.locator("body").innerText().catch(() => "");
+    const hasRedirectUriMismatch = /redirect_uri_mismatch|access blocked|앱에서 요청이 잘못됨|invalid request/i.test(oauthPageErrorText);
+    data.checks.oauthHasRedirectMismatch = hasRedirectUriMismatch;
     await saveShot(page, 'a2_oauth_redirect');
 
     if (!/accounts\.google\.com|\/auth\/google_oauth2/.test(url)) {
@@ -289,6 +292,12 @@ const collectProjectAFlow = async (browser) => {
     if (url.includes('/signin/oauth/error')) {
       data.externalGates.push(
         'Google OAuth consent did not complete in-browser. Verify localhost callback URI registration in Google Cloud Console.'
+      );
+    }
+
+    if (hasRedirectUriMismatch) {
+      data.externalGates.push(
+        'Google OAuth returned redirect_uri mismatch/access blocked. Register both localhost and 127.0.0.1 callback URIs in Google Cloud Console.'
       );
     }
   });

@@ -70,3 +70,20 @@
 - `bin/rails test test/integration/onboarding_flow_test.rb` pass
 - `PARALLEL_WORKERS=1 bin/rails test test/integration/onboarding_flow_test.rb test/integration/home_flow_test.rb test/integration/session_creation_flow_test.rb test/integration/sessions_flow_test.rb test/integration/settings_flow_test.rb test/integration/subscription_flow_test.rb` pass
 - `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`
+
+## P89 Follow-up (Local OAuth External Gate Readiness)
+- Added `script/oauth/collect_local_oauth_redirect_evidence.sh` to extract actual provider redirect payload from:
+  - `http://127.0.0.1:3000/auth/google_oauth2`
+  - `http://localhost:3000/auth/google_oauth2`
+- Captured evidence report:
+  - `/tmp/oauth-local-gate/local_oauth_redirect_20260216_122746.txt`
+  - Verified redirect URIs:
+    - `http://127.0.0.1:3000/auth/google_oauth2/callback`
+    - `http://localhost:3000/auth/google_oauth2/callback`
+- Hardened Playwright OAuth step to classify `redirect_uri_mismatch` / `access blocked` messages as external-gate diagnostics.
+- Added checklist doc:
+  - `docs/ondev/20260216_05_local_oauth_external_gate_checklist.md`
+
+### P89 Validation
+- `script/oauth/collect_local_oauth_redirect_evidence.sh` pass
+- `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`

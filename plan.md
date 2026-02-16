@@ -247,6 +247,9 @@
 - [x] P88-T1 Consent gate UI parity: `/consent` 화면에서 정책 열람 전에는 동의 체크박스/진행 CTA를 비활성화하고 열람 액션 후에만 활성화
 - [x] P88-T2 Auth visual parity polish: signup/consent 카드에 Project_B 톤(브랜드 divider, 보조 안내 텍스트, 버튼 계층) 반영
 - [x] P88-T3 Consent journey regression: onboarding 통합 테스트 + Playwright journey audit 재검증 (`GAP_COUNT=0`)
+- [x] P89-T1 Local OAuth evidence automation: `script/oauth/collect_local_oauth_redirect_evidence.sh`로 localhost/127 redirect URI 자동 수집
+- [x] P89-T2 OAuth gap diagnostics hardening: Playwright audit가 `redirect_uri_mismatch`/`access blocked` 문구를 external gate로 분류
+- [x] P89-T3 Local OAuth gate checklist 문서화 + 증적 리포트 생성 (`docs/ondev/20260216_05_local_oauth_external_gate_checklist.md`)
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
@@ -255,6 +258,7 @@
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
 - 현재 실행 대상(병행 구현)은 `P88-T1` (consent UI gate parity)다.
 - 현재 실행 대상(병행 구현)은 `P87-T1` (메인 마이크 진입 자동 녹음 부트스트랩)이다.
+- 현재 실행 대상 외 병행 완료: `P89`(local OAuth redirect 증적 자동화 + external gate 진단 강화).
 - 현재 실행 대상 외 병행 완료: `P88`(consent gate + signup/consent visual parity + Playwright 회귀).
 - 현재 실행 대상 외 병행 완료: `P87`(메인 마이크 엔트리포인트 기반 세션 자동 녹음 부트스트랩).
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
