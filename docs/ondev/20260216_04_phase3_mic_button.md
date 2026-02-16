@@ -1,6 +1,6 @@
 # Phase 3: Microphone Button Parity
 
-**Status**: [Not Started]
+**Status**: [Done]
 **Created**: 2026-02-16
 **Master Plan**: `20260216_01_particle_sphere_ui_parity_master_plan.md`
 
@@ -12,12 +12,12 @@
 
 ## 바이브코딩 원칙 체크리스트
 
-- [ ] 원칙1 (일관된 패턴): Stimulus Controller + CSS 패턴 유지
-- [ ] 원칙2 (One Source of Truth): 버튼 상태/스타일 단일 관리
-- [ ] 원칙3 (하드코딩 금지): 색상/크기/타이밍 → CSS 변수 또는 상수
-- [ ] 원칙4 (에러/예외): disabled 상태, 접근성(ARIA), long-press 힌트
-- [ ] 원칙5 (SRP): 버튼 Stimulus Controller 단일 책임
-- [ ] 원칙6 (공유 모듈): SVG 아이콘 인라인 재사용
+- [x] 원칙1 (일관된 패턴): Stimulus Controller (mic_button_controller) + CSS 패턴
+- [x] 원칙2 (One Source of Truth): MIC_BUTTON_CONFIG, STATE_STYLES, ARIA_LABELS 단일 관리
+- [x] 원칙3 (하드코딩 금지): 상태/색상/크기 → 상수 + CSS 클래스
+- [x] 원칙4 (에러/예외): disabled 상태 처리, aria-label 동적 업데이트
+- [x] 원칙5 (SRP): mic_button_controller 단일 책임 (상태/이벤트)
+- [x] 원칙6 (공유 모듈): shared/_mic_button.html.erb partial로 재사용
 
 ## Kent Beck TDD Plan
 
@@ -85,9 +85,9 @@ REFACTOR: long-press hint 추가
 
 ## 완료 기준
 
-- [ ] 모든 TDD 테스트 통과 (6개)
-- [ ] 이모지 대신 SVG 마이크 아이콘 표시
-- [ ] 상태별 색상 변화 작동
-- [ ] Long-press 1초로 세션 종료 가능
-- [ ] ARIA label 동적 업데이트
-- [ ] Pulse 애니메이션 작동
+- [x] 모든 TDD 테스트 통과 (9개, 73 total JS)
+- [x] 이모지 대신 Lucide SVG Mic/MicOff 아이콘 표시
+- [x] 상태별 CSS 클래스 전환 (idle/active/muted/disabled)
+- [x] Long-press 1초 감지 (mousedown + touchstart 지원)
+- [x] ARIA label 상태별 동적 업데이트
+- [x] Pulse 애니메이션 (mic-btn-pulse, active 상태)

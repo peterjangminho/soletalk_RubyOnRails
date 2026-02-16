@@ -199,15 +199,58 @@ h1 {
   gap: 0.5rem;
 }
 
-.home-main-mic {
-  width: 76px;
-  height: 76px;
+.mic-btn {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  border: 1px solid rgba(126, 228, 209, 0.55);
-  background: radial-gradient(circle at 38% 30%, rgba(77, 224, 197, 0.5), rgba(25, 42, 72, 0.9));
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, opacity 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mic-btn-icon {
+  pointer-events: none;
+}
+
+.mic-btn-idle {
+  background: radial-gradient(circle at 38% 30%, rgba(100, 100, 120, 0.5), rgba(25, 30, 50, 0.9));
   color: #f5fcff;
-  font-size: 2rem;
-  box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48);
+  box-shadow: 0 8px 24px rgba(6, 17, 34, 0.4);
+}
+
+.mic-btn-active {
+  background: radial-gradient(circle at 38% 30%, rgba(77, 224, 197, 0.5), rgba(25, 42, 72, 0.9));
+  color: #7ee4d1;
+  border: 1px solid rgba(126, 228, 209, 0.55);
+  box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48), 0 0 20px rgba(126, 228, 209, 0.15);
+}
+
+.mic-btn-muted {
+  background: radial-gradient(circle at 38% 30%, rgba(234, 179, 8, 0.3), rgba(40, 35, 20, 0.9));
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  box-shadow: 0 8px 24px rgba(6, 17, 34, 0.4);
+}
+
+.mic-btn-disabled {
+  background: radial-gradient(circle at 38% 30%, rgba(100, 100, 120, 0.3), rgba(25, 30, 50, 0.6));
+  color: rgba(245, 252, 255, 0.5);
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 0 4px 12px rgba(6, 17, 34, 0.3);
+}
+
+.mic-btn-pulse {
+  animation: mic-pulse 2s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48), 0 0 20px rgba(126, 228, 209, 0.15); }
+  50% { box-shadow: 0 12px 28px rgba(6, 17, 34, 0.48), 0 0 40px rgba(126, 228, 209, 0.3); }
 }
 
 .home-main-mic-form {
@@ -839,10 +882,9 @@ textarea::placeholder {
     padding: 0.95rem 0.85rem;
   }
 
-  .home-main-mic {
+  .mic-btn {
     width: 68px;
     height: 68px;
-    font-size: 1.7rem;
   }
 
   .settings-grid,

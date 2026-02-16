@@ -58,7 +58,7 @@ Project_B의 3D 구형 파티클 애니메이션과 UI 요소들을 Project_A(Ra
 - 페이드아웃 + Skip 버튼
 - **세부계획**: `20260216_03_phase2_opening_animation.md`
 
-### Phase 3: Microphone Button Parity [In Progress]
+### Phase 3: Microphone Button Parity [Done]
 - SVG 마이크 아이콘 (🎤 이모지 제거)
 - 상태별 스타일 (idle/active/muted/disabled)
 - Long-press 지원 (1초)

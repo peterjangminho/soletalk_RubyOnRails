@@ -55,9 +55,7 @@
 
       <%= form_with url: sessions_path, method: :post, local: true, class: "home-main-mic-form" do |form| %>
         <%= form.hidden_field :entrypoint, value: "main_mic" %>
-        <%= form.button type: :submit, class: "home-main-mic", "aria-label": "microphone" do %>
-          <span>🎤</span>
-        <% end %>
+        <%= render "shared/mic_button", state: "idle" %>
       <% end %>
     </section>
 
