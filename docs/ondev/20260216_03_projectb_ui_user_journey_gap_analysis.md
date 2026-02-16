@@ -32,6 +32,7 @@
 ## Current Verification Result
 - `bin/rails test test/integration/settings_flow_test.rb` -> pass
 - `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`
+- `journey_report.json` -> `projectA.externalGates[0]`에 localhost OAuth consent 미완료 경고 기록
 - user journey checks:
   - Guest Home CTA: pass
   - OAuth redirect: pass (Google error page 진입 확인)
