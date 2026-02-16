@@ -223,6 +223,7 @@
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P76-T3b` (로그인 사용자 기준 validate/restore 운영 smoke)다.
 - 자동화로 가능한 서버측 smoke(`P76-T3a`)는 완료했고, 최종 사용자 인증 기반 증적만 수동 검증이 필요하다.
+- 수동 검증 체크리스트: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 
 ## TDD Rule
 - Always execute next unchecked item first.

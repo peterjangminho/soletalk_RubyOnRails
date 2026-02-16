@@ -170,6 +170,7 @@
   - `Subscription::RevenueCatClient.new` -> `client_init=ok`
   - `Subscription::SyncService.new.call(user: temp_user)` -> `sync_success=true`, `user_subscription_status=free`
 - `P76-T3b` 로그인 사용자 기준 validate/restore 플로우 운영 smoke 증적 확보 (수동 인증 필요)
+  - 증적 수집 명령: `script/railway/collect_subscription_validate_evidence.sh <deployment_id>`
 
 ## Sequential vs Parallel Matrix
 | Phase | Depends On | Parallel Feasibility | Decision |
@@ -223,4 +224,4 @@ bundle exec brakeman -q -w2
 - Mismatch:
   - Sub-plan 상태가 `Done`으로 남아있어 현재 운영 하드닝 작업을 반영하지 못했던 문제를 `In Progress`로 교정
 - Next Test:
-  - `P76-T3b` 로그인 사용자 기준 `/subscription/validate` validate/restore smoke 증적 캡처
+  - `P76-T3b` 로그인 사용자 기준 `/subscription/validate` validate/restore smoke 후 `script/railway/collect_subscription_validate_evidence.sh`로 로그 증적 캡처
