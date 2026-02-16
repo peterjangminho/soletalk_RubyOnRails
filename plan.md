@@ -228,12 +228,16 @@
 - [x] P80-T1 Project_B UI asset 재사용: `soletalk-logo-v2.png`, `feature-graphic.png`를 Project_A home/nav에 통합
 - [x] P80-T2 Playwright user journey audit에 Project_B asset 존재 체크 추가 (`hasProjectBLogoAsset`, `hasProjectBFeatureGraphic`)
 - [x] P80-T3 Project_B 대비 시각 정합화 2차: session overlay layout(`session-stage`, `session-overlay-top/bottom`) 반영 + Playwright 검증
+- [x] P81-T1 Core UX Motion 2차: Canvas spark sprite 기반 고밀도 파티클(기본 1,800+) 렌더러 적용 (`particle_orb_controller`)
+- [x] P81-T2 Core UX Motion 2차: density 기반 화면별 튜닝(home 1.2, session 1.0) + 모바일 가드레일(절전/저성능/감속) 유지
+- [x] P81-T3 Core UX Motion 2차: JS unit test 확장(고밀도/밀도 스케일) 및 회귀 green (`npm run test:js`)
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
+- 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`
