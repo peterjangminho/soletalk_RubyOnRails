@@ -1,9 +1,17 @@
 <section class="page-shell home-main-shell">
-  <section class="home-opening-overlay" aria-hidden="true">
-    <section class="home-opening-canvas" data-controller="particle-sphere">
-      <canvas data-particle-sphere-target="canvas"></canvas>
-    </section>
+  <section
+    class="home-opening-overlay"
+    data-controller="opening-animation"
+    data-opening-animation-target="overlay"
+    aria-hidden="true">
+    <canvas class="home-opening-canvas" data-opening-animation-target="canvas"></canvas>
     <div class="home-opening-logo">SoleTalk</div>
+    <button
+      class="home-opening-skip"
+      data-action="opening-animation#skip"
+      aria-label="Skip animation">
+      Skip
+    </button>
   </section>
 
   <section class="home-hero-stage">

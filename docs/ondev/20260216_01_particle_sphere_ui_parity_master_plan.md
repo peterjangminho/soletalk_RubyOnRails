@@ -51,14 +51,14 @@ Project_B의 3D 구형 파티클 애니메이션과 UI 요소들을 Project_A(Ra
 - Stimulus Controller 리팩토링
 - **세부계획**: `20260216_02_phase1_3d_particle_engine.md`
 
-### Phase 2: Opening Animation (Explosion → Reform) [Not Started]
+### Phase 2: Opening Animation (Explosion → Reform) [Done]
 - 파티클 폭발 효과
 - 구형 재결합 (cubic easing)
 - 회전 시작 트랜지션
 - 페이드아웃 + Skip 버튼
 - **세부계획**: `20260216_03_phase2_opening_animation.md`
 
-### Phase 3: Microphone Button Parity [Not Started]
+### Phase 3: Microphone Button Parity [In Progress]
 - SVG 마이크 아이콘 (🎤 이모지 제거)
 - 상태별 스타일 (idle/active/muted/disabled)
 - Long-press 지원 (1초)

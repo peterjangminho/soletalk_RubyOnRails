@@ -1,6 +1,6 @@
 # Phase 2: Opening Animation (Explosion → Reform)
 
-**Status**: [Not Started]
+**Status**: [Done]
 **Created**: 2026-02-16
 **Master Plan**: `20260216_01_particle_sphere_ui_parity_master_plan.md`
 **Depends On**: Phase 1
@@ -13,12 +13,12 @@
 
 ## 바이브코딩 원칙 체크리스트
 
-- [ ] 원칙1 (일관된 패턴): Stimulus Controller + Phase 1 엔진 재사용
-- [ ] 원칙2 (One Source of Truth): 타이밍/이징 설정 단일 상수
-- [ ] 원칙3 (하드코딩 금지): DURATION=5000, phases 비율 → 상수
-- [ ] 원칙4 (에러/예외): Skip 버튼(WCAG 2.2.2), 타임아웃 안전장치
-- [ ] 원칙5 (SRP): 오프닝 전용 controller, 이징 함수 분리
-- [ ] 원칙6 (공유 모듈): easing 함수 재사용 가능하게 export
+- [x] 원칙1 (일관된 패턴): Stimulus Controller + Phase 1 엔진 재사용
+- [x] 원칙2 (One Source of Truth): OPENING_CONFIG 단일 상수 객체
+- [x] 원칙3 (하드코딩 금지): DURATION=5000, phases 비율 → OPENING_CONFIG
+- [x] 원칙4 (에러/예외): Skip 버튼(aria-label), 타임아웃 안전장치(completionTimer)
+- [x] 원칙5 (SRP): opening_animation_controller 전용, easing.js 분리
+- [x] 원칙6 (공유 모듈): easing.js (easeInOutCubic, easeInCubic, lerp) 재사용 가능
 
 ## Kent Beck TDD Plan
 
@@ -92,8 +92,10 @@ REFACTOR: 기존 home-opening-overlay CSS와 통합
 
 ## 완료 기준
 
-- [ ] 모든 TDD 테스트 통과 (7개)
-- [ ] 파티클이 중앙에서 폭발 후 구형으로 재결합
-- [ ] Skip 버튼으로 즉시 건너뛰기 가능
-- [ ] 5초 후 자동으로 메인 화면 표시
-- [ ] 기존 오프닝 CSS 애니메이션과 충돌 없음
+- [x] 모든 TDD 테스트 통과 (8개 easing + opening animation, 64 total JS)
+- [x] 파티클이 중앙에서 폭발 후 구형으로 재결합
+- [x] Skip 버튼으로 즉시 건너뛰기 가능
+- [x] 5초 후 자동으로 메인 화면 표시 (completionTimer)
+- [x] 기존 CSS @keyframes 제거, JS 컨트롤러로 교체 완료
+- [x] importmap 핀 설정 (lib/easing, lib/particle_sphere_engine)
+- [x] Node.js 테스트 로더 업데이트 (lib/* 경로 해석)

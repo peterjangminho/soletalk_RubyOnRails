@@ -6,7 +6,7 @@ import {
   sortByDepth,
   rotationSpeed,
   particleAlpha
-} from "../lib/particle_sphere_engine.js"
+} from "lib/particle_sphere_engine"
 
 export default class extends Controller {
   static targets = ["canvas"]
