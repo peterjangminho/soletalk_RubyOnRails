@@ -43,7 +43,8 @@
 | M3 | GAP remediation (settings upload, locale keys) | M2 | Low (동일 뷰/locale 충돌) | 완료 |
 | M4 | 재검증 + 증적 고정(script/report) | M3 | High (Rails test/Playwright 병렬 가능) | 완료 |
 | M5 | Subscription in Settings 통합 + nav 정합화 | M4 | Low (settings/subscription controller/test 동시 수정) | 완료 |
-| M6 | 실제 Google consent 성공(localhost callback 허용) 외부 게이트 | Google Console 설정 | Low (외부 콘솔 변경 필요) | 진행 중 |
+| M6 | Project_B asset import (logo/feature graphic) + home/nav 반영 | M5 | Medium (뷰+스타일+asset 복사) | 완료 |
+| M7 | 실제 Google consent 성공(localhost callback 허용) 외부 게이트 | Google Console 설정 | Low (외부 콘솔 변경 필요) | 진행 중 |
 
 ## TDD Checkpoints
 - Red
@@ -82,6 +83,12 @@
 - `app/views/shared/_top_nav.html.erb` standalone subscription 탭 제거
 - `test/integration/subscription_flow_test.rb`, `test/integration/settings_flow_test.rb`, `test/integration/home_flow_test.rb` 회귀 보강
 
+7. `P80-T1~T2` Project_B asset 재사용
+- `public/brand/soletalk-logo-v2.png`, `public/brand/projectb-feature-graphic.png`, `public/brand/projectb-app-icon.png` 복사
+- `app/views/shared/_top_nav.html.erb`에서 Project_B 로고 사용
+- `app/views/home/index.html.erb`에서 feature graphic 패널 추가
+- `script/playwright/ui_journey_gap_audit.js`에 asset 존재 체크 추가
+
 ## Validation
 ```bash
 bin/rails test test/integration/settings_flow_test.rb
@@ -98,8 +105,10 @@ script/playwright/run_ui_journey_gap_audit.sh
   - `P78-T1` 완료 (settings 파일 업로드 TDD 구현)
   - locale 업로드 키 보강 완료
   - `P79-T1~T3` 완료 (subscription settings 통합 + nav 정합화 + 테스트/Playwright green)
+  - `P80-T1~T2` 완료 (Project_B asset import + home/nav 적용 + Playwright 체크 green)
 - Pending
   - `P78-T2`: localhost OAuth consent success 외부 게이트
+  - `P80-T3`: Project_B 레이아웃/모션 픽셀 정합화 2차
 - Mismatch
   - 없음 (현재 갭은 내부 코드 기준 0)
 - Next Test
