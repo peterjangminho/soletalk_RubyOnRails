@@ -44,3 +44,4 @@ curl -sS -m 15 -o /dev/null -w "%{http_code}\n" -X POST https://soletalk-rails-p
 - 2026-02-16: 운영 컨테이너 smoke (`railway run`) 결과
   - `Subscription::RevenueCatClient.new` => `client_init=ok`
   - `Subscription::SyncService.new.call(user: temp_user)` => `sync_success=true`, `sync_premium=false`, `user_subscription_status=free`
+- 2026-02-16: 로그인 사용자 수동 restore 검증(`P76-T3b`)에서 `POST /subscription/validate` request_id `80aca412-77e5-4e1f-bba6-440e3023c2cb`가 `Completed 302 Found`로 확인됨.

@@ -215,15 +215,15 @@
 - [x] P76-T2a Railway `REVENUECAT_BASE_URL=https://api.revenuecat.com` 주입
 - [x] P76-T2b Railway `REVENUECAT_API_KEY` 운영값 주입
 - [x] P76-T3a 운영 서버측 smoke: `RevenueCatClient` 초기화 및 `Subscription::SyncService` 실행 검증 (`railway run`)
-- [ ] P76-T3b 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보
+- [x] P76-T3b 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보 (request_id `80aca412-77e5-4e1f-bba6-440e3023c2cb`, `302`)
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
-- 현재 실행 대상은 `P76-T3b` (로그인 사용자 기준 validate/restore 운영 smoke)다.
-- 자동화로 가능한 서버측 smoke(`P76-T3a`)는 완료했고, 최종 사용자 인증 기반 증적만 수동 검증이 필요하다.
-- 수동 검증 체크리스트: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
+- 현재 실행 대상은 App Store/운영 외부 게이트(수동 트랙)다.
+- RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
+- 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 
 ## TDD Rule
 - Always execute next unchecked item first.

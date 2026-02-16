@@ -1,4 +1,4 @@
-# Status: [In Progress]
+# Status: [Done]
 
 # P76-T3b Subscription Validate Manual Smoke Checklist (2026-02-16)
 
@@ -34,4 +34,7 @@ script/railway/collect_subscription_validate_evidence.sh f5384e97-058d-417b-8a15
 
 ## Current Result
 - 자동화 증적(`P76-T3a`) 완료
-- 로그인 사용자 수동 증적(`P76-T3b`) 대기
+- 로그인 사용자 수동 증적(`P76-T3b`) 완료
+  - UI 캡처: 복원 버튼 클릭 후 `RevenueCat Customer ID is required.` flash 확인
+  - 서버 로그: request_id `80aca412-77e5-4e1f-bba6-440e3023c2cb`
+  - 결과: `POST /subscription/validate` -> `Completed 302 Found`

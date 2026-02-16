@@ -1,4 +1,4 @@
-# Status: [In Progress]
+# Status: [Done]
 
 # Improvement Orchestration Sub-Plan (2026-02-15)
 
@@ -17,11 +17,11 @@
 - Phase I (Completed): InCar frontend design overhaul (`P72-T1~T3`)
 - Phase J (Completed): Local-first Hotwire Native workflow enablement (`P73-T1~T3`)
 - Phase K (Completed): Production hardening follow-up (`P74-T3~T4`)
-- Phase L (In Progress): RevenueCat production validation follow-up (`P76-T1~T3`)
+- Phase L (Completed): RevenueCat production validation follow-up (`P76-T1~T3`)
 
 ## Active Phase Pointer
-- Current In Progress phase: `Phase L`
-- Current next unchecked test item: `P76-T3b`
+- Current In Progress phase: `None`
+- Current next unchecked test item: `None`
 
 ## TDD Checkpoints
 - Red
@@ -162,7 +162,7 @@
 - Production validation:
   - `P74-T4` Railway smoke로 `/subscription/validate` non-500 확인 + 로그 증적 기록
 
-12. Phase L - RevenueCat production validation follow-up (In Progress)
+12. Phase L - RevenueCat production validation follow-up (Done)
 - `P76-T1` Railway 변수 존재 여부 점검 완료: `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 미설정 확인
 - `P76-T2a` Railway `REVENUECAT_BASE_URL=https://api.revenuecat.com` 주입 완료 (deployment `5e42c1ad-a4d9-40e2-8a99-1443f410e2c7`)
 - `P76-T2b` Railway `REVENUECAT_API_KEY` 운영값 주입 완료 (deployment `f5384e97-058d-417b-8a15-cdb4c8f41660`)
@@ -171,6 +171,10 @@
   - `Subscription::SyncService.new.call(user: temp_user)` -> `sync_success=true`, `user_subscription_status=free`
 - `P76-T3b` 로그인 사용자 기준 validate/restore 플로우 운영 smoke 증적 확보 (수동 인증 필요)
   - 증적 수집 명령: `script/railway/collect_subscription_validate_evidence.sh <deployment_id>`
+  - 완료 증적:
+    - request_id `80aca412-77e5-4e1f-bba6-440e3023c2cb`
+    - `POST /subscription/validate` as `TURBO_STREAM`
+    - `Completed 302 Found`
 
 ## Sequential vs Parallel Matrix
 | Phase | Depends On | Parallel Feasibility | Decision |
@@ -186,7 +190,7 @@
 | I (InCar frontend overhaul) | H 후속 UI 리뉴얼 | High | 순차 실행 완료 |
 | J (Local-first mobile workflow) | I 후속 개발 생산성 | High | 순차 실행 완료 |
 | K (Production hardening follow-up) | J 이후 운영 안정화 | Medium (코드 수정은 순차, smoke 검증은 병렬 가능) | 순차 실행 완료 |
-| L (RevenueCat production validation) | K 완료 후 운영 구독 검증 | Medium (ENV 확인/사용자 E2E는 부분 병렬 가능) | **진행 중** |
+| L (RevenueCat production validation) | K 완료 후 운영 구독 검증 | Medium (ENV 확인/사용자 E2E는 부분 병렬 가능) | 순차 실행 완료 |
 | External Gates (Android evidence/App Store) | Rails 코드와 독립 | High | 병렬 추적 가능 |
 
 ## Validation
@@ -219,9 +223,8 @@ bundle exec brakeman -q -w2
   - `plan.md`에 신규 항목/큐 반영
   - GAP 분석 문서 신규 작성 (`20260215_04`)
 - Pending:
-  - `P76-T3b` 로그인 사용자 기준 validate/restore 운영 smoke 증적
   - App Store/운영 외부 게이트(수동)
 - Mismatch:
   - Sub-plan 상태가 `Done`으로 남아있어 현재 운영 하드닝 작업을 반영하지 못했던 문제를 `In Progress`로 교정
 - Next Test:
-  - `P76-T3b` 로그인 사용자 기준 `/subscription/validate` validate/restore smoke 후 `script/railway/collect_subscription_validate_evidence.sh`로 로그 증적 캡처
+  - 없음 (`P76` 완료)
