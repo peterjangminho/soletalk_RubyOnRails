@@ -7,7 +7,7 @@
  * depending on specificity.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
 
 :root {
   --bg: #21203a;
@@ -15,12 +15,13 @@
   --bg-shell: rgba(17, 20, 36, 0.74);
   --surface: rgba(255, 255, 255, 0.08);
   --surface-strong: rgba(255, 255, 255, 0.14);
-  --surface-alt: rgba(30, 183, 164, 0.2);
+  --surface-alt: rgba(125, 211, 232, 0.2);
   --text: #eef3ff;
   --muted: #b8c1da;
-  --accent: #1eb7a4;
-  --accent-strong: #49c4e8;
-  --accent-soft: rgba(30, 183, 164, 0.24);
+  --accent: #7DD3E8;
+  --accent-green: #5EECC7;
+  --accent-strong: #5EECC7;
+  --accent-soft: rgba(125, 211, 232, 0.24);
   --border: rgba(255, 255, 255, 0.13);
   --danger: #ffd1d8;
   --danger-bg: rgba(221, 66, 110, 0.28);
@@ -38,11 +39,11 @@ body {
 body {
   margin: 0;
   color: var(--text);
-  font-family: "Space Grotesk", "Noto Serif KR", sans-serif;
+  font-family: "Quicksand", "Noto Serif KR", sans-serif;
   line-height: 1.55;
   background:
-    radial-gradient(circle at 20% 16%, rgba(73, 196, 232, 0.25) 0%, rgba(73, 196, 232, 0) 46%),
-    radial-gradient(circle at 82% 8%, rgba(30, 183, 164, 0.23) 0%, rgba(30, 183, 164, 0) 44%),
+    radial-gradient(circle at 20% 16%, rgba(125, 211, 232, 0.25) 0%, rgba(125, 211, 232, 0) 46%),
+    radial-gradient(circle at 82% 8%, rgba(94, 236, 199, 0.23) 0%, rgba(94, 236, 199, 0) 44%),
     linear-gradient(160deg, #22203b 0%, #1a1a2f 55%, #121527 100%);
 }
 
@@ -138,8 +139,8 @@ h1 {
   font-size: clamp(2.4rem, 8vw, 4.2rem);
   font-weight: 300;
   letter-spacing: 0.04em;
-  color: #7dd5f7;
-  text-shadow: 0 0 28px rgba(67, 232, 197, 0.35);
+  color: var(--accent);
+  text-shadow: 0 0 28px rgba(94, 236, 199, 0.35);
 }
 
 .home-opening-skip {
@@ -148,18 +149,18 @@ h1 {
   right: 1rem;
   z-index: 1;
   padding: 0.4rem 1rem;
-  border: 1px solid rgba(125, 213, 247, 0.3);
+  border: 1px solid rgba(125, 211, 232, 0.3);
   border-radius: 6px;
   background: rgba(33, 32, 58, 0.6);
-  color: rgba(125, 213, 247, 0.7);
+  color: rgba(125, 211, 232, 0.7);
   font-size: 0.85rem;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
 
 .home-opening-skip:hover {
-  color: #7dd5f7;
-  border-color: rgba(125, 213, 247, 0.6);
+  color: var(--accent);
+  border-color: rgba(125, 211, 232, 0.6);
 }
 
 .home-hero-stage {
@@ -313,11 +314,11 @@ h1 {
 .auth-brand h1 {
   margin: 0;
   font-size: 2.2rem;
-  color: #79d0f5;
+  color: #7DD3E8;
 }
 
 .auth-brand h1 span {
-  color: #59e7c2;
+  color: #5EECC7;
 }
 
 .auth-brand p {
@@ -329,7 +330,7 @@ h1 {
   width: 132px;
   height: 2px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(125, 213, 247, 0.95), rgba(89, 231, 194, 0.9));
+  background: linear-gradient(90deg, rgba(125, 211, 232, 0.95), rgba(94, 236, 199, 0.9));
 }
 
 .auth-form {
@@ -429,7 +430,7 @@ h1 {
 
 .top-nav-links a:hover {
   transform: translateY(-1px);
-  background: rgba(30, 183, 164, 0.24);
+  background: var(--accent-soft);
 }
 
 .flash-stack {
@@ -508,8 +509,8 @@ input[type="submit"],
 button {
   display: inline-block;
   text-decoration: none;
-  border: 1px solid rgba(114, 228, 204, 0.5);
-  background: linear-gradient(120deg, rgba(30, 183, 164, 0.95), rgba(73, 196, 232, 0.88));
+  border: 1px solid rgba(94, 236, 199, 0.5);
+  background: linear-gradient(120deg, rgba(125, 211, 232, 0.95), rgba(94, 236, 199, 0.88));
   color: #071b20;
   border-radius: 11px;
   padding: 0.5rem 0.84rem;
@@ -522,7 +523,7 @@ button {
 input[type="submit"]:hover,
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(49, 170, 198, 0.34);
+  box-shadow: 0 10px 24px rgba(125, 211, 232, 0.34);
   filter: brightness(1.04);
 }
 
@@ -745,8 +746,8 @@ textarea::placeholder {
 }
 
 [data-native-bridge-target="status"][data-state="ok"] {
-  border-color: rgba(114, 228, 204, 0.5);
-  background: rgba(30, 183, 164, 0.24);
+  border-color: rgba(94, 236, 199, 0.5);
+  background: var(--accent-soft);
 }
 
 [data-native-bridge-target="status"][data-state="error"] {
