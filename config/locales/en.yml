@@ -1,31 +1,151 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  navigation:
+    brand: "SoleTalk"
+    sessions: "Sessions"
+    insights: "Insights"
+    subscription: "Subscription"
+    settings: "Settings"
+    sign_in: "Sign In"
+
+  home:
+    title: "SoleTalk"
+    subtitle: "Drive-safe voice companion for session memory and insight."
+    welcome: "Welcome, %{name}"
+    connected: "Your account is connected. Start a session or review your recent history."
+    actions:
+      start_session: "Start New Session"
+      open_sessions: "Open Sessions"
+      open_insights: "Open Insights"
+      settings: "Settings"
+    recent_sessions:
+      title: "Recent Sessions"
+      empty: "No sessions yet. Start your first session."
+    recent_insights:
+      title: "Recent Insights"
+      empty: "No insights yet."
+    sign_in:
+      title: "Sign In"
+      description: "Use Google OAuth to start voice sessions and view insights."
+      privacy: "For your privacy, authentication is delegated to Google and your session stays in your account scope."
+      cta: "Continue with Google"
+      dev_cta: "Quick Dev Sign In"
+
+  sessions:
+    record_label: "Session #%{id}"
+    index:
+      title: "Sessions"
+      subtitle: "Review your conversation history and continue an active session."
+      actions:
+        new_session: "New Session"
+        settings: "Settings"
+    new:
+      title: "New Session"
+      subtitle: "Start a new voice chat session. Your current phase and metadata will initialize automatically."
+      submit: "Start Session"
+    show:
+      title: "Voice Chat Session #%{id}"
+      actions:
+        back: "Back to Sessions"
+        settings: "Settings"
+      depth_snapshot:
+        title: "DEPTH Snapshot"
+        current_phase: "Current Phase: %{phase}"
+        emotion_level: "Emotion Level: %{level}"
+      debug:
+        summary: "Debug Tools (Android Bridge)"
+        guide: "This panel is for Android bridge verification. In browser-only mode, controls may remain unavailable."
+        start_recording: "Start Recording"
+        stop_recording: "Stop Recording"
+        transcription_label: "Transcription"
+        send_transcription: "Send Transcription"
+        transcription_sample: "Sample transcript"
+        latitude_label: "Latitude"
+        longitude_label: "Longitude"
+        weather_label: "Weather"
+        send_location: "Send Location"
+        request_location: "Request Current Location"
+        play_audio: "Play Audio"
+        tts_sample: "Play this sentence."
+      message_form:
+        label: "Message"
+        placeholder: "Type a short update from the current drive context."
+        submit: "Send"
+        sending: "Sending..."
+      recent_insights:
+        title: "Recent Insights"
+
+  insights:
+    index:
+      title: "Insights Timeline"
+      back: "Back to Sessions"
+      empty: "No insights yet. Complete a session and DEPTH flow to generate your first insight."
+    show:
+      title: "Insight Detail"
+      back: "Back to Insights"
+
+  settings:
+    show:
+      title: "Settings"
+      subtitle: "Update language, voice speed, and advanced preferences for your next sessions."
+      back: "Back to Sessions"
+      form:
+        language: "Language"
+        languages:
+          korean: "Korean"
+          english: "English"
+        voice_speed: "Voice speed"
+        preferences_json: "Preferences (JSON)"
+        preferences_placeholder: "{\"focus\":\"commute\"}"
+        uploaded_file: "Reference file upload"
+        uploaded_file_help: "Upload notes or context files to keep with your account."
+        submit: "Save Settings"
+      uploaded_files:
+        title: "Uploaded reference files"
+        empty: "No uploaded files yet."
+
+  subscription:
+    show:
+      title: "Subscription"
+      back: "Back to Sessions"
+      manage:
+        title: "Manage Subscription"
+        description: "Premium access is active."
+      upgrade:
+        title: "Upgrade to Premium"
+        plans_title: "Choose Your Plan"
+        description: "Unlock DEPTH/INSIGHT and external info features."
+        plan_depth: "DEPTH guidance for difficult moments"
+        plan_insight: "Actionable INSIGHT summaries after each drive"
+        plan_memory: "Memory retrieval support from past sessions"
+        restore_title: "Already subscribed?"
+        helper: "Use your RevenueCat customer ID to validate entitlement state."
+        revenue_cat_id: "RevenueCat Customer ID"
+        submit: "Validate Subscription"
+        restore_submit: "Restore Subscription"
+
+  flash:
+    sessions:
+      create:
+        notice: "New session started."
+        alert: "Failed to start session."
+    messages:
+      create:
+        notice: "Message sent."
+    settings:
+      update:
+        notice: "Settings updated."
+        invalid_json: "Invalid preferences JSON."
+    subscription:
+      validate:
+        notice: "Subscription status refreshed."
+        errors:
+          configuration_missing: "Subscription service is not configured. Please try again later."
+          revenue_cat_id_missing: "RevenueCat Customer ID is required."
+          default: "Failed to refresh subscription status."
+    auth:
+      failure: "Google sign-in failed. Please try again."
+    dev:
+      sign_in:
+        notice: "Developer sign-in enabled for local testing."
+      sign_out:
+        notice: "Developer session ended."

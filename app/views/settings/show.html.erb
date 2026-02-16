@@ -1,7 +1,8 @@
 <main class="page-shell">
-  <h1>Settings</h1>
+  <h1><%= t("settings.show.title") %></h1>
+  <p><%= t("settings.show.subtitle") %></p>
 
-  <p><%= link_to "Back to Sessions", sessions_path %></p>
+  <p><%= link_to t("settings.show.back"), sessions_path, class: "btn-link btn-link-secondary" %></p>
 
   <%= form_with model: @setting,
     url: setting_path,
@@ -9,22 +10,42 @@
     local: true,
     data: { controller: "settings-form" } do |form| %>
     <p>
-      <%= form.label :language, "Language" %>
-      <%= form.select :language, options_for_select([["Korean", "ko"], ["English", "en"]], @setting.language) %>
+      <%= form.label :language, t("settings.show.form.language") %>
+      <%= form.select :language, options_for_select([[t("settings.show.form.languages.korean"), "ko"], [t("settings.show.form.languages.english"), "en"]], @setting.language) %>
     </p>
 
     <p>
-      <%= form.label :voice_speed, "Voice speed" %>
+      <%= form.label :voice_speed, t("settings.show.form.voice_speed") %>
       <%= form.number_field :voice_speed, step: 0.1 %>
     </p>
 
     <p>
-      <%= form.label :preferences_json, "Preferences (JSON)" %>
+      <%= form.label :preferences_json, t("settings.show.form.preferences_json") %>
       <%= text_area_tag "setting[preferences_json]",
         @setting.preferences.to_json,
+        placeholder: t("settings.show.form.preferences_placeholder"),
         data: { settings_form_target: "preferences", action: "blur->settings-form#normalizeJson" } %>
     </p>
+    <p>
+      <%= form.label :uploaded_file, t("settings.show.form.uploaded_file") %>
+      <%= form.file_field :uploaded_file %>
+      <small><%= t("settings.show.form.uploaded_file_help") %></small>
+    </p>
+    <p class="form-status" data-settings-form-target="status" aria-live="polite"></p>
 
-    <%= form.submit "Save Settings" %>
+    <%= form.submit t("settings.show.form.submit") %>
   <% end %>
+
+  <section class="insight-detail-card">
+    <h2><%= t("settings.show.uploaded_files.title") %></h2>
+    <% if current_user.uploaded_files.attached? %>
+      <ul class="insight-timeline">
+        <% current_user.uploaded_files.each do |file| %>
+          <li><%= link_to file.filename.to_s, url_for(file) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p><%= t("settings.show.uploaded_files.empty") %></p>
+    <% end %>
+  </section>
 </main>

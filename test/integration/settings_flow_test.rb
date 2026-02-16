@@ -73,4 +73,47 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "type=\"importmap\""
     assert_includes response.body, "module"
   end
+
+  test "P63-T2 PATCH /setting keeps preferences unchanged when preferences_json is invalid" do
+    sign_in(google_sub: "setting-invalid-json-user")
+    user = User.find_by!(google_sub: "setting-invalid-json-user")
+    existing_setting = user.settings.create!(
+      language: "en",
+      voice_speed: 1.1,
+      preferences: { "theme" => "focus" }
+    )
+
+    patch "/setting", params: {
+      setting: {
+        language: "ko",
+        voice_speed: 1.0,
+        preferences_json: "{\"theme\":\"broken\""
+      }
+    }
+
+    assert_redirected_to "/setting"
+    assert_equal({ "theme" => "focus" }, existing_setting.reload.preferences)
+    follow_redirect!
+    assert_includes response.body, "Invalid preferences JSON."
+  end
+
+  test "P78-T1 PATCH /setting uploads a reference file and keeps it on user" do
+    sign_in(google_sub: "setting-file-upload-user")
+    user = User.find_by!(google_sub: "setting-file-upload-user")
+    upload = fixture_file_upload("sample_upload.txt", "text/plain")
+
+    patch "/setting", params: {
+      setting: {
+        language: "en",
+        voice_speed: 1.0,
+        preferences_json: "{\"focus\":\"commute\"}",
+        uploaded_file: upload
+      }
+    }
+
+    assert_redirected_to "/setting"
+    user.reload
+    assert_equal 1, user.uploaded_files.attachments.count
+    assert_equal "sample_upload.txt", user.uploaded_files.attachments.first.filename.to_s
+  end
 end

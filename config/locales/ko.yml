@@ -1,0 +1,151 @@
+ko:
+  navigation:
+    brand: "SoleTalk"
+    sessions: "세션"
+    insights: "인사이트"
+    subscription: "구독"
+    settings: "설정"
+    sign_in: "로그인"
+
+  home:
+    title: "SoleTalk"
+    subtitle: "운전 중 대화를 기억과 인사이트로 연결하는 동반자"
+    welcome: "%{name}님, 환영합니다"
+    connected: "계정이 연결되었습니다. 새 세션을 시작하거나 최근 기록을 확인하세요."
+    actions:
+      start_session: "새 세션 시작"
+      open_sessions: "세션 보기"
+      open_insights: "인사이트 보기"
+      settings: "설정"
+    recent_sessions:
+      title: "최근 세션"
+      empty: "아직 세션이 없습니다. 첫 세션을 시작해보세요."
+    recent_insights:
+      title: "최근 인사이트"
+      empty: "아직 인사이트가 없습니다."
+    sign_in:
+      title: "로그인"
+      description: "Google OAuth로 로그인하면 음성 세션과 인사이트 기능을 사용할 수 있습니다."
+      privacy: "개인정보 보호를 위해 인증은 Google에서 처리되며, 세션은 본인 계정 범위에서만 유지됩니다."
+      cta: "Google로 계속하기"
+      dev_cta: "개발용 빠른 로그인"
+
+  sessions:
+    record_label: "세션 #%{id}"
+    index:
+      title: "세션"
+      subtitle: "대화 기록을 확인하고 진행 중인 세션을 이어가세요."
+      actions:
+        new_session: "새 세션"
+        settings: "설정"
+    new:
+      title: "새 세션"
+      subtitle: "새 음성 채팅 세션을 시작합니다. 현재 phase와 메타데이터가 자동으로 초기화됩니다."
+      submit: "세션 시작"
+    show:
+      title: "음성 채팅 세션 #%{id}"
+      actions:
+        back: "세션 목록으로"
+        settings: "설정"
+      depth_snapshot:
+        title: "DEPTH 스냅샷"
+        current_phase: "현재 Phase: %{phase}"
+        emotion_level: "감정 레벨: %{level}"
+      debug:
+        summary: "디버그 도구 (Android 브리지)"
+        guide: "이 패널은 Android 브리지 검증용입니다. 브라우저 전용 모드에서는 일부 제어가 비활성일 수 있습니다."
+        start_recording: "녹음 시작"
+        stop_recording: "녹음 중지"
+        transcription_label: "전사"
+        send_transcription: "전사 전송"
+        transcription_sample: "샘플 전사 문장"
+        latitude_label: "위도"
+        longitude_label: "경도"
+        weather_label: "날씨"
+        send_location: "위치 전송"
+        request_location: "현재 위치 요청"
+        play_audio: "오디오 재생"
+        tts_sample: "이 문장을 재생하세요."
+      message_form:
+        label: "메시지"
+        placeholder: "현재 주행 맥락의 짧은 업데이트를 입력하세요."
+        submit: "전송"
+        sending: "전송 중..."
+      recent_insights:
+        title: "최근 인사이트"
+
+  insights:
+    index:
+      title: "인사이트 타임라인"
+      back: "세션 목록으로"
+      empty: "아직 인사이트가 없습니다. 세션과 DEPTH 흐름을 완료하면 첫 인사이트가 생성됩니다."
+    show:
+      title: "인사이트 상세"
+      back: "인사이트 목록으로"
+
+  settings:
+    show:
+      title: "설정"
+      subtitle: "다음 세션을 위해 언어, 음성 속도, 고급 환경설정을 업데이트하세요."
+      back: "세션 목록으로"
+      form:
+        language: "언어"
+        languages:
+          korean: "한국어"
+          english: "영어"
+        voice_speed: "음성 속도"
+        preferences_json: "환경설정 (JSON)"
+        preferences_placeholder: "{\"focus\":\"commute\"}"
+        uploaded_file: "참고 파일 업로드"
+        uploaded_file_help: "계정 맥락에 보관할 메모/참고 파일을 업로드하세요."
+        submit: "설정 저장"
+      uploaded_files:
+        title: "업로드된 참고 파일"
+        empty: "아직 업로드된 파일이 없습니다."
+
+  subscription:
+    show:
+      title: "구독"
+      back: "세션 목록으로"
+      manage:
+        title: "구독 관리"
+        description: "프리미엄 접근이 활성화되어 있습니다."
+      upgrade:
+        title: "프리미엄 업그레이드"
+        plans_title: "요금제 선택"
+        description: "DEPTH/INSIGHT 및 외부 정보 기능을 잠금 해제합니다."
+        plan_depth: "어려운 순간을 위한 DEPTH 가이드"
+        plan_insight: "주행 후 실행 가능한 INSIGHT 요약"
+        plan_memory: "과거 세션 기반 메모리 리트리벌 지원"
+        restore_title: "이미 구독 중이신가요?"
+        helper: "RevenueCat 고객 ID를 입력해 entitlement 상태를 검증하세요."
+        revenue_cat_id: "RevenueCat 고객 ID"
+        submit: "구독 검증"
+        restore_submit: "구독 복원"
+
+  flash:
+    sessions:
+      create:
+        notice: "새 세션이 시작되었습니다."
+        alert: "세션 시작에 실패했습니다."
+    messages:
+      create:
+        notice: "메시지가 전송되었습니다."
+    settings:
+      update:
+        notice: "설정이 업데이트되었습니다."
+        invalid_json: "환경설정 JSON 형식이 올바르지 않습니다."
+    subscription:
+      validate:
+        notice: "구독 상태를 새로고침했습니다."
+        errors:
+          configuration_missing: "구독 서비스 설정이 누락되었습니다. 잠시 후 다시 시도해 주세요."
+          revenue_cat_id_missing: "RevenueCat 고객 ID가 필요합니다."
+          default: "구독 상태 새로고침에 실패했습니다."
+    auth:
+      failure: "Google 로그인에 실패했습니다. 다시 시도해 주세요."
+    dev:
+      sign_in:
+        notice: "로컬 테스트용 개발자 로그인에 성공했습니다."
+      sign_out:
+        notice: "개발자 세션을 종료했습니다."

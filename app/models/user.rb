@@ -2,7 +2,9 @@ class User < ApplicationRecord
   SUBSCRIPTION_STATUSES = %w[free premium expired].freeze
 
   has_many :sessions, dependent: :destroy
+  has_many :insights, dependent: :destroy
   has_many :settings, dependent: :destroy
+  has_many_attached :uploaded_files
 
   validates :google_sub, presence: true, uniqueness: true
   validates :subscription_status, inclusion: { in: SUBSCRIPTION_STATUSES }
