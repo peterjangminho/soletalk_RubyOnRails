@@ -21,6 +21,7 @@
 |---|---|---|---|---|
 | feature | Settings 파일 업로드 사용자 플로우 부재 | High | Closed | ActiveStorage + upload input + attachment list + integration test 추가 |
 | quality | Playwright 자동 점검 결과 오탐(DEPTH/bridge selector) | Medium | Closed | 한/영 라벨 동시 매칭 + data-target selector 보강 |
+| feature | Subscription standalone page가 Settings 중심 UX와 분리됨 | High | Closed | `/subscription` 리다이렉트 + Settings 섹션 통합 + nav 제거 |
 | documentation | Project_B 대비 user journey 검증 절차 문서화 부족 | Medium | Closed | phase plan + 실행 스크립트 + report 경로 고정 |
 | external-gate | localhost OAuth consent 성공은 Google Console redirect 설정 의존 | Medium | Open | callback URI 허용 후 동일 script로 재검증 예정 |
 
@@ -28,6 +29,7 @@
 1. 초기 UI 점검이 수동 스크린샷 위주라, 반복 가능한 user journey 자동화가 부족했다.
 2. Settings는 JSON 선호도 중심 구현이었고 파일 맥락 업로드 요구사항이 반영되지 않았다.
 3. OAuth consent 성공 여부는 앱 코드만으로 닫히지 않고 Google Console 설정까지 필요하다.
+4. 기존 정보구조에서 Subscription이 별도 화면으로 분리되어 Project_B의 Settings 중심 관리 패턴과 어긋나 있었다.
 
 ## Current Verification Result
 - `bin/rails test test/integration/settings_flow_test.rb` -> pass
@@ -40,7 +42,7 @@
   - Session create/show: pass
   - Debug tools transcription action: pass
   - Settings upload + persistence visible: pass
-  - Subscription validation guard: pass
+  - Subscription validation guard(Settings section): pass
 
 ## Minimal Next Action Plan
 1. `external-gate` - Google Console redirect URI에 `http://127.0.0.1:3000/auth/google_oauth2/callback` 등록

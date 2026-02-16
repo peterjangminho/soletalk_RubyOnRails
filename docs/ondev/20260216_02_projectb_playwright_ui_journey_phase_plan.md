@@ -18,7 +18,8 @@
   - Sessions(New/Show)
   - Debug Tools (Android bridge)
   - Settings(파일 업로드 포함)
-  - Subscription(validate/restore guard)
+- Subscription(validate/restore guard)
+- Subscription은 standalone page가 아니라 Settings 내부 섹션(`#subscription`)으로 통합
 
 ## Skill Orchestration (Sequential)
 1. `roadmap-skill`
@@ -41,7 +42,8 @@
 | M2 | Playwright user journey automation | M1 | Medium (한 브라우저 내 flow는 순차, 앱별 실행은 병렬 가능) | 완료 |
 | M3 | GAP remediation (settings upload, locale keys) | M2 | Low (동일 뷰/locale 충돌) | 완료 |
 | M4 | 재검증 + 증적 고정(script/report) | M3 | High (Rails test/Playwright 병렬 가능) | 완료 |
-| M5 | 실제 Google consent 성공(localhost callback 허용) 외부 게이트 | Google Console 설정 | Low (외부 콘솔 변경 필요) | 진행 중 |
+| M5 | Subscription in Settings 통합 + nav 정합화 | M4 | Low (settings/subscription controller/test 동시 수정) | 완료 |
+| M6 | 실제 Google consent 성공(localhost callback 허용) 외부 게이트 | Google Console 설정 | Low (외부 콘솔 변경 필요) | 진행 중 |
 
 ## TDD Checkpoints
 - Red
@@ -74,6 +76,12 @@
 5. `P78-T2` 외부 게이트
 - Google Cloud Console에 localhost callback 추가 후 real consent success 재검증
 
+6. `P79-T1~T3` Subscription UI 통합
+- `app/controllers/subscription_controller.rb` `/subscription -> /setting#subscription` 리다이렉트
+- `app/views/settings/show.html.erb` 내 구독 섹션 통합 렌더
+- `app/views/shared/_top_nav.html.erb` standalone subscription 탭 제거
+- `test/integration/subscription_flow_test.rb`, `test/integration/settings_flow_test.rb`, `test/integration/home_flow_test.rb` 회귀 보강
+
 ## Validation
 ```bash
 bin/rails test test/integration/settings_flow_test.rb
@@ -89,6 +97,7 @@ script/playwright/run_ui_journey_gap_audit.sh
   - `P77-T1`, `P77-T2`, `P77-T3` 완료 (script+report 고정, gap 0)
   - `P78-T1` 완료 (settings 파일 업로드 TDD 구현)
   - locale 업로드 키 보강 완료
+  - `P79-T1~T3` 완료 (subscription settings 통합 + nav 정합화 + 테스트/Playwright green)
 - Pending
   - `P78-T2`: localhost OAuth consent success 외부 게이트
 - Mismatch

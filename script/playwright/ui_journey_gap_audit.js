@@ -192,15 +192,15 @@ const collectProjectAFlow = async (browser) => {
   });
 
   await step('A7_subscription_validate_guard', async () => {
-    const moved = await findAndClick(page, ['Subscription', '구독']);
-    if (!moved) {
-      data.gaps.push('Subscription navigation link missing.');
-      await saveShot(page, 'a7_subscription_missing');
-      return;
-    }
+    const moved = await findAndClick(page, ['Settings', '설정']);
+    if (!moved) throw new Error('settings nav not found for subscription section');
 
     await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(500);
+    const hasSubscriptionSection = (await page.locator('#subscription').count()) > 0;
+    if (!hasSubscriptionSection) {
+      data.gaps.push('Settings page does not contain subscription section.');
+    }
     await findAndClick(page, ['Restore Subscription', 'Validate Subscription', '구독 복원', '검증']);
     await page.waitForTimeout(700);
     await saveShot(page, 'a7_subscription_validate');
