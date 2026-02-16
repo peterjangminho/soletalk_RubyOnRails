@@ -239,6 +239,8 @@
 - [x] P85-T1 Consent gate hardening: `/auth/google_oauth2/start`에서 웹 로그인은 동의 전 `/consent`로 강제 리다이렉트
 - [x] P85-T2 Consent-accepted OAuth start regression: 동의 후에는 `/auth/google_oauth2/start -> /auth/google_oauth2` 유지
 - [x] P85-T3 Guest entry parity: `POST /guest_sign_in` 경로 추가 및 guest session 진입 구현/검증
+- [x] P86-T1 Main mic CTA wiring: 홈 메인 3D orb 하단 마이크 버튼을 `POST /sessions` 실제 세션 생성 동작과 연결
+- [x] P86-T2 Login parity polish: guest 로그인 패널에 Project_B형 `or` divider + privacy/terms quick-link 배치
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
@@ -248,6 +250,7 @@
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
 - 현재 실행 대상 외 병행 완료: `P83`(로그인/가입/동의/오프닝 UI) + `P84`(메인 orb + 업로드/설정/마이크).
 - 현재 실행 대상 외 병행 완료: `P85`(동의 게이트 서버 강제 + 게스트 로그인 동작).
+- 현재 실행 대상 외 병행 완료: `P86`(메인 마이크 CTA 동작 + 로그인 패널 정합화 polish).
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`

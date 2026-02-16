@@ -28,6 +28,7 @@
   - `app/controllers/auth/oauth_starts_controller.rb`에서 policy 미동의 웹 로그인 차단(`-> /consent`)
 - Views
   - `app/views/home/index.html.erb`: guest login parity + opening overlay + signed-in main orb/mic/top actions 반영
+  - `app/views/home/index.html.erb`: main mic CTA를 `POST /sessions`로 연결(실제 세션 시작)
   - `app/views/onboarding/signup.html.erb` 추가
   - `app/views/onboarding/consent.html.erb` 추가
   - `app/views/settings/show.html.erb`: 업로드 섹션 anchor(`id="uploads"`) 추가
@@ -35,7 +36,7 @@
   - `public/legal/en/privacy-policy.html` (from Project_B)
   - `public/legal/en/terms-of-service.html` (from Project_B)
 - Styles / motion
-  - `app/assets/stylesheets/application.css`: auth shell, consent card, opening overlay, main orb/mic, disabled CTA 스타일 추가
+  - `app/assets/stylesheets/application.css`: auth shell, consent card, opening overlay, main orb/mic, disabled CTA + login divider 스타일 추가
 
 ## Validation
 - `bin/rails test test/integration/auth/auth_flow_test.rb` pass
