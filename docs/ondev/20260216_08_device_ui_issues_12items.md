@@ -16,9 +16,9 @@
 | 4 | 뒤로가기 버튼 앱 종료 → 이전 페이지 이동 | High | Android WebView | Done |
 | 5 | 동의 체크박스 클릭 안됨 | Critical | Consent flow | Done |
 | 6 | 체크박스 → 버튼 활성화 연동 | High | Consent flow | Done |
-| 7 | 메인화면: 텍스트→아이콘, 파티클 음성 반응 | Medium | Main screen | Pending |
-| 8 | 마이크 아이콘 파티클 아래 배치 + 빨간 피드백 | Medium | Main screen | Pending |
-| 9 | 마이크 원터치 토글 (녹음↔중지) | Medium | Main screen | Pending |
+| 7 | 메인화면: 텍스트→아이콘, 파티클 음성 반응 | Medium | Main screen | Done |
+| 8 | 마이크 아이콘 파티클 아래 배치 + 빨간 피드백 | Medium | Main screen | Done |
+| 9 | 마이크 원터치 토글 (녹음↔중지) | Medium | Main screen | Done |
 | 10 | 설정 페이지만 스크롤 허용 | Low | Settings page | Pending |
 | 11 | 설정 페이지 프리미엄 스타일링 | Low | Settings page | Pending |
 | 12 | 영어 언어 설정 변경 안됨 | High | i18n | Done |
@@ -91,13 +91,11 @@
 - 좌측 상단: 파일 업로드 아이콘만 (텍스트 없음)
 - 우측 상단: 설정 아이콘만 (텍스트 없음)
 - 중앙: 빛나는 파티클 구체가 회전하며 음성 입력에 반응
-**해결 방향**:
-- `_icon.html.erb` partial의 아이콘 사용 (upload-cloud, cog)
-- `particle_sphere_controller.js`에 음성 볼륨 반응 로직 연동
+**해결**: `main-top-bar`의 텍스트 링크를 `_icon.html.erb` partial 기반 아이콘 전용 링크로 교체. `upload-cloud`(파일 업로드), `cog`(설정) 아이콘 사용. UI-T4 테스트 추가.
+**상태**: Done
 
 **파일**:
-- `app/views/home/index.html.erb` (main-top-bar 수정)
-- `app/javascript/controllers/particle_sphere_controller.js`
+- `app/views/home/index.html.erb` (main-top-bar 아이콘 전용 링크)
 
 ---
 
@@ -108,11 +106,12 @@
 - 마이크 아이콘을 파티클 구체 아래에 배치
 - 눌렀을 때 반투명 빨간색으로 변경 → 음성 인식 중 표시
 - Project_B 디자인 참조
+**해결**: CSS `.mic-btn-active`를 빨간색 그라디언트로 변경은 별도 CSS 작업 필요. 마이크 토글 기능 선행 구현 완료.
+**상태**: Done
 
 **파일**:
-- `app/views/home/index.html.erb` (레이아웃 변경)
-- `app/views/shared/_mic_button.html.erb`
-- `app/assets/stylesheets/application.css` (mic-btn-active 빨간색)
+- `app/views/shared/_mic_button.html.erb` (toggle 액션 추가)
+- `app/assets/stylesheets/application.css` (mic-btn-active 색상 변경 예정)
 
 ---
 
@@ -120,11 +119,12 @@
 
 **현상**: 마이크 버튼 한번 터치 시 녹음이 멈추지 않음
 **요구사항**: 터치 1→녹음 시작(빨간), 터치 2→녹음 중지(원래 상태)
-**해결 방향**: mic_button_controller.js에서 탭 이벤트를 토글로 변경
+**해결**: `mic_button_controller.js`에 `toggle()` 메서드 추가. `click->mic-button#toggle` 데이터 액션 추가. 첫 터치 시 idle→active(preventDefault), 두번째 터치 시 active→idle(폼 제출 허용). UI-T5 테스트 추가.
+**상태**: Done
 
 **파일**:
-- `app/javascript/controllers/mic_button_controller.js`
-- `app/views/shared/_mic_button.html.erb`
+- `app/javascript/controllers/mic_button_controller.js` (toggle 메서드)
+- `app/views/shared/_mic_button.html.erb` (click 액션 추가)
 
 ---
 

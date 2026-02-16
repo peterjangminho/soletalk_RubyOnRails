@@ -6,7 +6,7 @@
   class="mic-btn mic-btn-<%= state %>"
   data-controller="mic-button"
   data-mic-button-state-value="<%= state %>"
-  data-action="mousedown->mic-button#pressStart mouseup->mic-button#pressEnd mouseleave->mic-button#cancelPress touchstart->mic-button#pressStart touchend->mic-button#pressEnd"
+  data-action="click->mic-button#toggle mousedown->mic-button#pressStart mouseup->mic-button#pressEnd mouseleave->mic-button#cancelPress touchstart->mic-button#pressStart touchend->mic-button#pressEnd"
   aria-label="<%= state == 'active' ? 'Pause Conversation' : state == 'muted' ? 'Resume Conversation' : state == 'disabled' ? 'Processing...' : 'Start Conversation' %>">
   <svg
     class="mic-btn-icon"

@@ -67,6 +67,18 @@ export default class extends Controller {
     }
   }
 
+  toggle(event) {
+    if (this.stateValue === "disabled") return
+
+    if (this.stateValue === "idle") {
+      this.stateValue = "active"
+      event.preventDefault()
+    } else if (this.stateValue === "active") {
+      this.stateValue = "idle"
+      // Allow default action (form submit) when stopping
+    }
+  }
+
   pressStart(event) {
     if (this.stateValue === "disabled") return
     event.preventDefault()

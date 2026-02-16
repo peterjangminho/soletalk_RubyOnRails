@@ -1,78 +1,37 @@
-<section class="page-shell home-main-shell">
-  <section
-    class="home-opening-overlay"
-    data-controller="opening-animation"
-    data-opening-animation-target="overlay"
-    aria-hidden="true">
-    <canvas class="home-opening-canvas" data-opening-animation-target="canvas"></canvas>
-    <div class="home-opening-logo">SoleTalk</div>
-    <button
-      class="home-opening-skip"
-      data-action="opening-animation#skip"
-      aria-label="Skip animation">
-      Skip
-    </button>
-  </section>
-
-  <section class="home-hero-stage">
-    <section
-      class="orb-hero orb-hero-home"
+<% if current_user %>
+  <section class="main-screen">
+    <div class="main-orb-bg"
       data-controller="particle-sphere">
       <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
-    </section>
+    </div>
 
-    <header class="page-header home-hero-copy">
-      <h1><%= t("home.title") %></h1>
-      <p><%= t("home.subtitle") %></p>
-      <p class="action-row">
-        <% if current_user %>
-          <%= link_to "File Upload", "#{setting_path}#uploads", class: "btn-link btn-link-secondary" %>
-          <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
-        <% else %>
-          <%= link_to "Create account", sign_up_path, class: "btn-link btn-link-secondary" %>
-          <%= link_to "Review consent", consent_path, class: "btn-link btn-link-secondary" %>
-        <% end %>
-      </p>
+    <header class="main-top-bar">
+      <a href="<%= setting_path %>#uploads" class="main-top-icon" aria-label="File Upload">
+        <%= render "shared/icon", name: "upload-cloud" %>
+      </a>
+      <a href="<%= setting_path %>" class="main-top-icon" aria-label="Settings">
+        <%= render "shared/icon", name: "cog" %>
+      </a>
     </header>
-  </section>
 
-  <section class="projectb-feature-panel">
-    <img src="/brand/projectb-feature-graphic.png" alt="SoleTalk feature graphic" class="projectb-feature-image">
-  </section>
-
-  <% if current_user %>
-    <section class="insight-detail-card main-orb-stage">
-      <header class="main-orb-top">
-        <%= link_to "File Upload", "#{setting_path}#uploads", class: "btn-link btn-link-secondary" %>
-        <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
-      </header>
-
-      <section
-        class="orb-hero orb-hero-home"
-        data-controller="particle-sphere">
-        <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
-      </section>
-
+    <div class="main-mic-center main-orb-stage">
       <%= form_with url: sessions_path, method: :post, local: true, class: "home-main-mic-form" do |form| %>
         <%= form.hidden_field :entrypoint, value: "main_mic" %>
         <%= render "shared/mic_button", state: "idle" %>
       <% end %>
-    </section>
+    </div>
 
-    <section class="insight-detail-card">
+    <footer class="main-bottom-bar">
       <h2><%= t("home.welcome", name: current_user.name.presence || current_user.google_sub) %></h2>
       <p><%= t("home.connected") %></p>
       <p class="action-row">
         <%= link_to t("home.actions.start_session"), new_session_path, class: "btn-link" %>
         <%= link_to t("home.actions.open_sessions"), sessions_path, class: "btn-link btn-link-secondary" %>
         <%= link_to t("home.actions.open_insights"), insights_path, class: "btn-link btn-link-secondary" %>
-        <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
       </p>
-    </section>
 
-    <section class="insight-detail-card">
-      <h2><%= t("home.recent_sessions.title") %></h2>
       <% if @recent_sessions.present? %>
+        <h3><%= t("home.recent_sessions.title") %></h3>
         <ul class="insight-timeline">
           <% @recent_sessions.each do |session_record| %>
             <li>
@@ -81,40 +40,43 @@
             </li>
           <% end %>
         </ul>
-      <% else %>
-        <p><%= t("home.recent_sessions.empty") %></p>
       <% end %>
-    </section>
 
-    <section class="insight-detail-card">
-      <h2><%= t("home.recent_insights.title") %></h2>
       <% if @recent_insights.present? %>
+        <h3><%= t("home.recent_insights.title") %></h3>
         <ul class="insight-timeline">
           <% @recent_insights.each do |insight| %>
             <li><%= link_to insight.situation, insight_path(insight) %></li>
           <% end %>
         </ul>
-      <% else %>
-        <p><%= t("home.recent_insights.empty") %></p>
       <% end %>
+    </footer>
+  </section>
+<% else %>
+  <% policy_agreed = session[:policy_agreed] == true %>
+  <section class="login-screen">
+    <section
+      class="home-opening-overlay"
+      data-controller="opening-animation"
+      data-opening-animation-target="overlay"
+      aria-hidden="true">
+      <canvas class="home-opening-canvas" data-opening-animation-target="canvas"></canvas>
+      <div class="home-opening-logo">SoleTalk</div>
+      <button
+        class="home-opening-skip"
+        data-action="opening-animation#skip"
+        aria-label="Skip animation">
+        Skip
+      </button>
     </section>
-  <% else %>
-    <% policy_agreed = session[:policy_agreed] == true %>
-    <section class="insight-detail-card login-panel" id="sign-in">
+
+    <h1 class="login-brand">Sole<span>Talk</span></h1>
+    <div class="login-brand-divider"></div>
+    <p class="login-tagline"><%= t("home.subtitle") %></p>
+
+    <div class="login-card" id="sign-in">
       <h2><%= t("home.sign_in.title") %></h2>
       <p><%= t("home.sign_in.description") %></p>
-      <form class="auth-form" action="#" method="post">
-        <p>
-          <label for="login-email">Email</label>
-          <input id="login-email" type="email" placeholder="Email" autocomplete="email">
-        </p>
-        <p>
-          <label for="login-password">Password</label>
-          <input id="login-password" type="password" placeholder="Password" autocomplete="current-password">
-        </p>
-      </form>
-
-      <div class="login-divider"><span>or</span></div>
 
       <p class="consent-inline">
         <% if policy_agreed %>
@@ -123,9 +85,9 @@
           Consent required:
           <%= link_to "Open consent screen", consent_path %>
         <% end %>
-        ·
+        &middot;
         <a href="/legal/en/privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-        ·
+        &middot;
         <a href="/legal/en/terms-of-service.html" target="_blank" rel="noopener noreferrer">Terms</a>
       </p>
 
@@ -136,14 +98,22 @@
             <%= render "shared/google_icon" %>
             <%= t("home.sign_in.cta") %>
           <% end %>
-          <%= form_with url: guest_sign_in_path, method: :post, local: true, class: "inline-auth-action" do |form| %>
-            <%= form.submit "Continue as Guest", class: "btn-link btn-link-secondary" %>
-          <% end %>
         <% else %>
           <%= link_to "/auth/google_oauth2/start", class: "#{google_cta_classes} btn-google", data: { turbo: false, policy_required: true }, aria: { disabled: true } do %>
             <%= render "shared/google_icon" %>
             <%= t("home.sign_in.cta") %>
           <% end %>
+        <% end %>
+      </p>
+
+      <div class="login-divider"><span>or</span></div>
+
+      <p class="action-row">
+        <% if policy_agreed %>
+          <%= form_with url: guest_sign_in_path, method: :post, local: true, class: "inline-auth-action" do |form| %>
+            <%= form.submit "Continue as Guest", class: "btn-link btn-link-secondary" %>
+          <% end %>
+        <% else %>
           <button type="button" class="btn-link btn-link-secondary btn-link-disabled" disabled>Continue as Guest</button>
         <% end %>
       </p>
@@ -156,6 +126,6 @@
           <% end %>
         </p>
       <% end %>
-    </section>
-  <% end %>
-</section>
+    </div>
+  </section>
+<% end %>

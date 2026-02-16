@@ -130,6 +130,28 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/guest_sign_in"
   end
 
+  test "UI-T4 signed-in main top bar uses icon-only links (no text labels)" do
+    sign_in(google_sub: "icon-topbar-user")
+
+    get "/"
+
+    assert_response :ok
+    # Icon-only links: upload-cloud for file upload, cog for settings
+    assert_includes response.body, "icon-upload-cloud"
+    assert_includes response.body, "icon-cog"
+    # No text labels in top bar
+    assert_not_includes response.body, ">File Upload<"
+  end
+
+  test "UI-T5 signed-in main screen mic button has toggle data action" do
+    sign_in(google_sub: "mic-toggle-user")
+
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "mic-button#toggle"
+  end
+
   test "P87-T2 signed-in home main mic form includes main_mic entrypoint hidden field" do
     sign_in(google_sub: "home-main-mic-entrypoint-user")
 
