@@ -5,43 +5,186 @@
  * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
  * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
  * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
  */
 
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
+
 :root {
-  --bg: #f3f7f4;
-  --surface: #ffffff;
-  --surface-alt: #e7efe9;
-  --text: #1f2a24;
-  --muted: #5f6f66;
-  --accent: #0d7a5f;
-  --border: #c9d8cf;
+  --bg: #21203a;
+  --bg-deep: #1a1a2f;
+  --bg-shell: rgba(17, 20, 36, 0.74);
+  --surface: rgba(255, 255, 255, 0.08);
+  --surface-strong: rgba(255, 255, 255, 0.14);
+  --surface-alt: rgba(30, 183, 164, 0.2);
+  --text: #eef3ff;
+  --muted: #b8c1da;
+  --accent: #1eb7a4;
+  --accent-strong: #49c4e8;
+  --accent-soft: rgba(30, 183, 164, 0.24);
+  --border: rgba(255, 255, 255, 0.13);
+  --danger: #ffd1d8;
+  --danger-bg: rgba(221, 66, 110, 0.28);
 }
 
 * {
   box-sizing: border-box;
 }
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  background: linear-gradient(180deg, #e9f4ee 0%, var(--bg) 55%, #fdfefe 100%);
   color: var(--text);
-  font-family: "Iowan Old Style", "Noto Serif KR", serif;
-  line-height: 1.45;
+  font-family: "Space Grotesk", "Noto Serif KR", sans-serif;
+  line-height: 1.55;
+  background:
+    radial-gradient(circle at 20% 16%, rgba(73, 196, 232, 0.25) 0%, rgba(73, 196, 232, 0) 46%),
+    radial-gradient(circle at 82% 8%, rgba(30, 183, 164, 0.23) 0%, rgba(30, 183, 164, 0) 44%),
+    linear-gradient(160deg, #22203b 0%, #1a1a2f 55%, #121527 100%);
+}
+
+a {
+  color: #c7e4ff;
+}
+
+.incar-body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.incar-aurora,
+.incar-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.incar-aurora {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 14% 82%, rgba(100, 181, 246, 0.18), transparent 38%),
+    radial-gradient(circle at 82% 72%, rgba(107, 120, 255, 0.16), transparent 35%);
+}
+
+.incar-noise {
+  z-index: 1;
+  opacity: 0.09;
+  background-image:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.65) 0 0.8px, transparent 1px),
+    radial-gradient(circle at 72% 62%, rgba(255, 255, 255, 0.5) 0 0.8px, transparent 1px),
+    radial-gradient(circle at 88% 30%, rgba(255, 255, 255, 0.45) 0 0.8px, transparent 1px);
+  background-size: 180px 180px;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  backdrop-filter: blur(2px);
+}
+
+.app-content {
+  padding-bottom: max(1.6rem, env(safe-area-inset-bottom));
 }
 
 .page-shell {
   max-width: 980px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 2rem;
+  padding: 1.2rem 1rem;
 }
 
 .page-header h1,
 h1 {
-  margin: 0 0 1rem;
-  font-size: 1.8rem;
-  letter-spacing: 0.02em;
+  margin: 0 0 0.85rem;
+  font-size: 2rem;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+.page-header p {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.top-nav-shell {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.glass-nav {
+  background: rgba(17, 20, 36, 0.76);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px rgba(7, 10, 20, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-top: 0.95rem;
+  padding-bottom: 0.85rem;
+}
+
+.brand-link {
+  text-decoration: none;
+  font-size: 1.32rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f8fbff;
+}
+
+.top-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.top-nav-links a {
+  text-decoration: none;
+  color: #dde6ff;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.36rem 0.78rem;
+  font-size: 0.9rem;
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+
+.top-nav-links a:hover {
+  transform: translateY(-1px);
+  background: rgba(30, 183, 164, 0.24);
+}
+
+.flash-stack {
+  display: grid;
+  gap: 0.42rem;
+  padding-top: 0.65rem;
+}
+
+.flash-message {
+  margin: 0;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--text);
+  padding: 0.46rem 0.72rem;
+}
+
+.flash-notice {
+  border-color: rgba(120, 200, 255, 0.4);
+  background: rgba(100, 181, 246, 0.2);
+}
+
+.flash-alert {
+  border-color: rgba(255, 149, 175, 0.42);
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
 .insight-timeline {
@@ -54,59 +197,274 @@ h1 {
 
 .insight-card,
 .insight-detail-card,
+.settings-card,
 .depth-panel,
 .recent-insights-panel,
-#messages article {
+#messages article,
+.native-bridge-panel,
+#subscription-restore {
   border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
-  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(24, 28, 46, 0.78), rgba(17, 21, 38, 0.72));
+  box-shadow: 0 10px 28px rgba(6, 10, 24, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.05rem;
 }
 
 .insight-time {
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.38rem;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.dev-sign-in-form {
+  display: inline-block;
+  margin: 0;
+}
+
+.dev-sign-in-form input[type="submit"] {
+  margin-top: 0;
+}
+
+.btn-link,
+input[type="submit"],
+button {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid rgba(114, 228, 204, 0.5);
+  background: linear-gradient(120deg, rgba(30, 183, 164, 0.95), rgba(73, 196, 232, 0.88));
+  color: #071b20;
+  border-radius: 11px;
+  padding: 0.5rem 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.btn-link:hover,
+input[type="submit"]:hover,
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(49, 170, 198, 0.34);
+  filter: brightness(1.04);
+}
+
+.btn-link.btn-link-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.62rem;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+textarea {
+  min-height: 96px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #c2cae3;
 }
 
 #voice_chat_phase_badge {
   display: inline-flex;
-  gap: 0.5rem;
-  margin-bottom: 0.8rem;
-  padding: 0.4rem 0.7rem;
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+  padding: 0.34rem 0.75rem;
   border-radius: 999px;
-  background: var(--surface-alt);
   border: 1px solid var(--border);
+  background: rgba(99, 176, 245, 0.16);
 }
 
-#messages {
+.orb-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0.85rem 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  min-height: 185px;
+  background:
+    radial-gradient(circle at 15% 18%, rgba(100, 181, 246, 0.22), transparent 44%),
+    radial-gradient(circle at 84% 20%, rgba(144, 120, 255, 0.2), transparent 46%),
+    linear-gradient(145deg, rgba(20, 27, 52, 0.92), rgba(15, 22, 41, 0.92));
+}
+
+.orb-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.44;
+  background-image:
+    radial-gradient(circle at 14% 35%, rgba(189, 226, 255, 0.52) 0 1px, transparent 2px),
+    radial-gradient(circle at 66% 28%, rgba(189, 226, 255, 0.45) 0 1px, transparent 2px),
+    radial-gradient(circle at 84% 76%, rgba(189, 226, 255, 0.52) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 76%, rgba(189, 226, 255, 0.42) 0 1px, transparent 2px);
+}
+
+.orb-hero-home {
+  min-height: 230px;
+}
+
+.orb-hero canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 210px;
+}
+
+.orb-hero-session canvas {
+  height: 162px;
+}
+
+.conversation-stack {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.66rem;
   margin: 1rem 0;
 }
 
-textarea {
-  width: 100%;
-  min-height: 90px;
+#messages article {
+  margin: 0;
 }
 
-input[type="submit"],
-button {
-  margin-top: 0.5rem;
-  border: 0;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 10px;
-  padding: 0.5rem 0.8rem;
+#messages article[data-role="user"] {
+  border-color: rgba(147, 203, 255, 0.48);
+  background: linear-gradient(135deg, rgba(48, 92, 143, 0.56), rgba(38, 53, 89, 0.56));
+}
+
+#messages article[data-role="assistant"] {
+  border-color: rgba(173, 157, 255, 0.46);
+  background: linear-gradient(135deg, rgba(80, 63, 140, 0.52), rgba(33, 33, 70, 0.52));
+}
+
+.emotion-gauge {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.native-bridge-debug {
+  margin: 1rem 0;
+}
+
+.native-bridge-debug > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.native-bridge-guide {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.native-bridge-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: flex-end;
+  margin-bottom: 0.65rem;
+}
+
+.native-bridge-actions label {
+  display: grid;
+  gap: 0.2rem;
+  flex: 1 1 170px;
+}
+
+.native-bridge-actions button {
+  margin-top: 0;
+}
+
+[data-native-bridge-target="status"] {
+  display: inline-block;
+  margin: 0 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.16rem 0.64rem;
+  font-size: 0.84rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-native-bridge-target="status"][data-state="ok"] {
+  border-color: rgba(114, 228, 204, 0.5);
+  background: rgba(30, 183, 164, 0.24);
+}
+
+[data-native-bridge-target="status"][data-state="error"] {
+  border-color: rgba(255, 149, 175, 0.5);
+  background: rgba(226, 76, 121, 0.28);
+  color: #ffe3eb;
+}
+
+.form-status {
+  min-height: 1.2rem;
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.subscription-plan-list {
+  margin: 0.68rem 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.38rem;
+  color: #e0e8ff;
+}
+
+.settings-shell {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.settings-card h2 {
+  margin-top: 0;
+}
+
+.settings-note {
+  color: var(--muted);
 }
 
 @media (max-width: 720px) {
   .page-shell {
-    padding: 1rem 0.75rem 1.5rem;
+    padding: 0.95rem 0.75rem;
   }
 
   .page-header h1,
   h1 {
-    font-size: 1.45rem;
+    font-size: 1.62rem;
+  }
+
+  .top-nav {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.56rem;
+  }
+
+  .orb-hero-home {
+    min-height: 195px;
+  }
+
+  .orb-hero canvas {
+    height: 182px;
+  }
+
+  .orb-hero-session canvas {
+    height: 152px;
   }
 }

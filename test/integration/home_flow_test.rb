@@ -30,10 +30,18 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     user = User.find_by!(google_sub: "home-signed-user")
     session_record = Session.create!(user: user, status: "active")
     Insight.create!(
+      user: user,
       situation: "home insight situation",
       decision: "home insight decision",
       action_guide: "home insight action",
       data_info: "home insight data"
+    )
+    Insight.create!(
+      user: User.create!(google_sub: "home-signed-other-user"),
+      situation: "other user home insight",
+      decision: "other user decision",
+      action_guide: "other user action",
+      data_info: "other user data"
     )
 
     get "/"
@@ -43,5 +51,40 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/sessions/new"
     assert_includes response.body, "/sessions/#{session_record.id}"
     assert_includes response.body, "home insight situation"
+    assert_not_includes response.body, "other user home insight"
+  end
+
+  test "UX-T1 signed-in root page does not expose raw google_sub identifier text" do
+    sign_in(google_sub: "home-private-user")
+
+    get "/"
+
+    assert_response :ok
+    assert_not_includes response.body, "Signed in with Google Sub"
+  end
+
+  test "P72-T1 root page renders cinematic app shell and glass navigation" do
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "class=\"app-shell\""
+    assert_includes response.body, "class=\"top-nav-shell glass-nav\""
+  end
+
+  test "P72-T2 guest root page renders dedicated home orb stage class" do
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "orb-hero orb-hero-home"
+  end
+
+  test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do
+    sign_in(google_sub: "home-settings-nav-user")
+
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "href=\"/setting\""
+    assert_not_includes response.body, "href=\"/subscription\""
   end
 end

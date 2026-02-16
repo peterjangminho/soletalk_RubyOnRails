@@ -116,4 +116,15 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_equal 1, user.uploaded_files.attachments.count
     assert_equal "sample_upload.txt", user.uploaded_files.attachments.first.filename.to_s
   end
+
+  test "P79-T2 GET /setting includes subscription restore form section" do
+    sign_in(google_sub: "setting-subscription-user")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_includes response.body, "id=\"subscription\""
+    assert_includes response.body, "/subscription/validate"
+    assert_includes response.body, "Restore Subscription"
+  end
 end

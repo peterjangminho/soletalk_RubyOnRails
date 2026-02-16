@@ -57,10 +57,10 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
     User.find_by!(google_sub: google_sub).update!(subscription_status: status, subscription_tier: status)
   end
 
-  test "P35-T1 GET /subscription renders paywall UI" do
+  test "P35-T1 GET /setting renders paywall UI inside settings page" do
     sign_in(google_sub: "sub-paywall-user", status: "free")
 
-    get "/subscription"
+    get "/setting"
 
     assert_response :ok
     assert_includes response.body, "Choose Your Plan"
@@ -76,7 +76,7 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
 
     post "/subscription/validate", params: { revenue_cat_id: "rc_paywall_1" }
 
-    assert_redirected_to "/subscription"
+    assert_redirected_to "/setting#subscription"
     user.reload
     assert_equal "rc_paywall_1", user.revenue_cat_id
     assert_equal "premium", user.subscription_status
@@ -85,22 +85,22 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
     SubscriptionController.subscription_sync_service_class = original if original
   end
 
-  test "P35-T3 premium users see manage-subscription state on paywall page" do
+  test "P35-T3 premium users see manage-subscription state in settings page" do
     sign_in(google_sub: "sub-premium-user", status: "premium")
     user = User.find_by!(google_sub: "sub-premium-user")
     user.update!(subscription_expires_at: 3.days.from_now)
 
-    get "/subscription"
+    get "/setting"
 
     assert_response :ok
-    assert_includes response.body, "Manage Subscription"
-    assert_not_includes response.body, "Upgrade to Premium"
+    assert_includes response.body, "Premium access is active."
+    assert_not_includes response.body, "Choose Your Plan"
   end
 
-  test "P71-T1 free subscription page shows plan guidance and restore section" do
+  test "P71-T1 free settings subscription section shows plan guidance and restore section" do
     sign_in(google_sub: "sub-upgrade-guide-user", status: "free")
 
-    get "/subscription"
+    get "/setting"
 
     assert_response :ok
     assert_includes response.body, "Choose Your Plan"
@@ -116,7 +116,7 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
 
     post "/subscription/validate", params: { revenue_cat_id: "  " }
 
-    assert_redirected_to "/subscription"
+    assert_redirected_to "/setting#subscription"
     follow_redirect!
     assert_includes response.body, "RevenueCat Customer ID is required"
     assert_equal 1, FakeMissingIdService.calls.size
@@ -134,7 +134,7 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
 
     post "/subscription/validate", params: { revenue_cat_id: " " }
 
-    assert_redirected_to "/subscription"
+    assert_redirected_to "/setting#subscription"
     user.reload
     assert_equal "rc_existing_1", user.revenue_cat_id
     assert_equal [ user.id ], FakeSyncService.calls
@@ -149,7 +149,7 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
 
     post "/subscription/validate", params: { revenue_cat_id: "rc_anything" }
 
-    assert_redirected_to "/subscription"
+    assert_redirected_to "/setting#subscription"
     follow_redirect!
     assert_response :ok
     assert_includes response.body, "Subscription service is not configured"
@@ -164,5 +164,13 @@ class SubscriptionFlowTest < ActionDispatch::IntegrationTest
       assert_response :unprocessable_entity
       assert_includes response.body, "invalid authenticity token"
     end
+  end
+
+  test "P79-T1 GET /subscription redirects to settings subscription anchor" do
+    sign_in(google_sub: "sub-redirect-user", status: "free")
+
+    get "/subscription"
+
+    assert_redirected_to "/setting#subscription"
   end
 end
