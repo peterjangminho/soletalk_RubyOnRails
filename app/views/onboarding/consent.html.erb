@@ -1,8 +1,9 @@
 <main class="page-shell auth-shell">
-  <section class="auth-card consent-card">
+  <section class="auth-card auth-card-consent consent-card" data-controller="consent-gate">
     <header class="auth-brand">
       <h1>Consent & Terms</h1>
       <p>Review policy before continuing.</p>
+      <div class="auth-divider" aria-hidden="true"></div>
       <% if @pending_email.present? %>
         <p class="consent-account"><strong><%= @pending_email %></strong></p>
       <% end %>
@@ -17,18 +18,31 @@
       </ul>
       <p>
         Full documents:
-        <a href="/legal/en/privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        <a
+          id="consent_policy_review"
+          href="/legal/en/privacy-policy.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-action="click->consent-gate#markPolicyReviewed">Privacy Policy</a>
         ·
-        <a href="/legal/en/terms-of-service.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+        <a
+          href="/legal/en/terms-of-service.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-action="click->consent-gate#markPolicyReviewed">Terms of Service</a>
       </p>
     </section>
 
-    <%= form_with url: accept_consent_path, method: :post, local: true, class: "consent-form" do |form| %>
+    <%= form_with url: accept_consent_path,
+      method: :post,
+      local: true,
+      class: "consent-form" do |form| %>
+      <p class="consent-note" data-consent-gate-target="status">Read policy to enable agreement.</p>
       <label class="consent-checkbox">
-        <%= form.check_box :agree, { checked: false }, "1", "0" %>
+        <%= form.check_box :agree, { checked: false, disabled: true, data: { consent_gate_target: "agree", action: "change->consent-gate#toggleAgree" } }, "1", "0" %>
         I have read and agree to the policy and terms.
       </label>
-      <%= form.submit "Agree and continue", class: "btn-link" %>
+      <%= form.submit "Agree and continue", class: "btn-link btn-link-disabled", disabled: true, data: { consent_gate_target: "submit" } %>
     <% end %>
 
     <p class="auth-secondary">

@@ -27,4 +27,27 @@ class OnboardingFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "/legal/en/terms-of-service.html"
     assert_includes response.body, "/consent/accept"
   end
+
+  test "P88-T1 GET /consent keeps agreement controls disabled before policy review action" do
+    get "/consent"
+
+    assert_response :ok
+    assert_includes response.body, "data-controller=\"consent-gate\""
+    assert_includes response.body, "id=\"consent_policy_review\""
+    assert_includes response.body, "name=\"agree\""
+    assert_includes response.body, "disabled=\"disabled\""
+    assert_includes response.body, "value=\"Agree and continue\""
+  end
+
+  test "P88-T2 sign-up and consent cards expose auth visual parity hooks" do
+    get "/sign_up"
+    assert_response :ok
+    assert_includes response.body, "auth-divider"
+    assert_includes response.body, "auth-card auth-card-signup"
+
+    get "/consent"
+    assert_response :ok
+    assert_includes response.body, "auth-card auth-card-consent"
+    assert_includes response.body, "consent-note"
+  end
 end

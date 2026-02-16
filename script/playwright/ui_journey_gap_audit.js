@@ -260,6 +260,11 @@ const collectProjectAFlow = async (browser) => {
       if (!movedToConsent) throw new Error('consent entry not found when OAuth CTA is disabled');
 
       await page.waitForLoadState('domcontentloaded');
+      const reviewPolicy = page.locator('#consent_policy_review');
+      if (await reviewPolicy.count()) {
+        await reviewPolicy.first().click();
+        await page.waitForTimeout(200);
+      }
       const agree = page.locator('input[name="agree"][type="checkbox"]');
       if (await agree.count()) await agree.first().check();
       const agreed = await findAndClick(page, ['Agree and continue', 'Agree']);

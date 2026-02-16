@@ -244,13 +244,18 @@
 - [x] P87-T1 Main mic session bootstrap: 홈 메인 마이크 엔트리(`entrypoint=main_mic`)로 생성된 세션은 `auto_start_recording=1` 쿼리와 함께 세션 화면으로 리다이렉트
 - [x] P87-T2 Main mic entrypoint wiring: 로그인 홈 마이크 폼이 `entrypoint=main_mic` hidden 필드를 포함하고 기존 `/sessions/new` 동선은 기존 동작 유지
 - [x] P87-T3 Native bridge auto-start: 세션 화면 `native-bridge`가 `auto_start_recording=1`인 경우 bridge 가용 시 `startRecording()`을 자동 호출
+- [x] P88-T1 Consent gate UI parity: `/consent` 화면에서 정책 열람 전에는 동의 체크박스/진행 CTA를 비활성화하고 열람 액션 후에만 활성화
+- [x] P88-T2 Auth visual parity polish: signup/consent 카드에 Project_B 톤(브랜드 divider, 보조 안내 텍스트, 버튼 계층) 반영
+- [x] P88-T3 Consent journey regression: onboarding 통합 테스트 + Playwright journey audit 재검증 (`GAP_COUNT=0`)
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
+- 현재 실행 대상(병행 구현)은 `P88-T1` (consent UI gate parity)다.
 - 현재 실행 대상(병행 구현)은 `P87-T1` (메인 마이크 진입 자동 녹음 부트스트랩)이다.
+- 현재 실행 대상 외 병행 완료: `P88`(consent gate + signup/consent visual parity + Playwright 회귀).
 - 현재 실행 대상 외 병행 완료: `P87`(메인 마이크 엔트리포인트 기반 세션 자동 녹음 부트스트랩).
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
 - 현재 실행 대상 외 병행 완료: `P83`(로그인/가입/동의/오프닝 UI) + `P84`(메인 orb + 업로드/설정/마이크).

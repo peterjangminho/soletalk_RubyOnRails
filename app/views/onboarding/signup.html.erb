@@ -1,8 +1,9 @@
 <main class="page-shell auth-shell">
-  <section class="auth-card">
+  <section class="auth-card auth-card-signup">
     <header class="auth-brand">
       <h1>Sole<span>Talk</span></h1>
       <p>Create account</p>
+      <div class="auth-divider" aria-hidden="true"></div>
     </header>
 
     <%= form_with url: sign_up_path, method: :post, local: true, class: "auth-form" do |form| %>

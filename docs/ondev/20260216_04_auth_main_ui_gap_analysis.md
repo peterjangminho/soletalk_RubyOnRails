@@ -59,3 +59,14 @@
 - `bin/rails test test/integration/sessions_flow_test.rb` pass
 - `npm run test:js -- test/javascript/controllers/native_bridge_controller_test.mjs` pass
 - `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`
+
+## P88 Follow-up (Consent Gate + Auth Visual Polish)
+- `consent` 화면에 `consent-gate` Stimulus 컨트롤러를 적용해 정책 열람 액션 전 동의 체크/진행 버튼을 비활성화.
+- 정책 링크 클릭 시 동의 체크 활성화, 체크 완료 시 `Agree and continue` 활성화.
+- signup/consent 카드에 `auth-card-signup`, `auth-card-consent`, `auth-divider`, `consent-note` 스타일 훅 추가.
+- Playwright audit 스크립트를 consent gate 플로우(정책 열람 -> 동의 체크)에 맞춰 갱신.
+
+### P88 Validation
+- `bin/rails test test/integration/onboarding_flow_test.rb` pass
+- `PARALLEL_WORKERS=1 bin/rails test test/integration/onboarding_flow_test.rb test/integration/home_flow_test.rb test/integration/session_creation_flow_test.rb test/integration/sessions_flow_test.rb test/integration/settings_flow_test.rb test/integration/subscription_flow_test.rb` pass
+- `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`
