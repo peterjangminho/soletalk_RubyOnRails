@@ -231,6 +231,11 @@
 - [x] P81-T1 Core UX Motion 2차: Canvas spark sprite 기반 고밀도 파티클(기본 1,800+) 렌더러 적용 (`particle_orb_controller`)
 - [x] P81-T2 Core UX Motion 2차: density 기반 화면별 튜닝(home 1.2, session 1.0) + 모바일 가드레일(절전/저성능/감속) 유지
 - [x] P81-T3 Core UX Motion 2차: JS unit test 확장(고밀도/밀도 스케일) 및 회귀 green (`npm run test:js`)
+- [x] P83-T1 Login parity: Project_B 기준 로그인 카드 구조(email/password + Google CTA + consent gate 진입)를 Home guest 화면에 적용
+- [x] P83-T2 Signup/Consent flow: `/sign_up`, `/consent` 화면 추가 및 Project_B legal 문서(`privacy-policy`, `terms-of-service`) 정적 이식
+- [x] P83-T3 Opening sequence: 홈 진입 시 고밀도 파티클 + `SoleTalk` 로고 오프닝 오버레이 구현
+- [x] P84-T1 Main surface parity: 로그인 후 메인 화면에 3D orb + 하단 마이크 버튼 + 좌상단 파일업로드/우상단 설정 액션 구현
+- [x] P84-T2 Main/Auth parity 회귀: `home_flow_test`, `settings_flow_test`, `onboarding_flow_test` green 검증
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
@@ -238,6 +243,7 @@
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
+- 현재 실행 대상 외 병행 완료: `P83`(로그인/가입/동의/오프닝 UI) + `P84`(메인 orb + 업로드/설정/마이크).
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`
