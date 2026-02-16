@@ -67,21 +67,38 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "Signed in with Google Sub"
   end
 
-  test "P72-T1 root page renders cinematic app shell and glass navigation" do
+  test "P72-T1 root page renders cinematic app shell" do
     get "/"
 
     assert_response :ok
     assert_includes response.body, "class=\"app-shell\""
-    assert_includes response.body, "class=\"top-nav-shell glass-nav\""
   end
 
-  test "P72-T2 guest root page renders dedicated home orb stage class" do
+  test "UI-T1 guest pages hide top nav bar" do
+    get "/"
+    assert_response :ok
+    assert_not_includes response.body, "top-nav-shell"
+
+    get "/consent"
+    assert_response :ok
+    assert_not_includes response.body, "top-nav-shell"
+  end
+
+  test "UI-T2 signed-in pages show top nav bar" do
+    sign_in(google_sub: "nav-test-user")
+
+    get "/"
+    assert_response :ok
+    assert_includes response.body, "top-nav-shell"
+  end
+
+  test "P72-T2 guest root page renders login screen with opening animation" do
     get "/"
 
     assert_response :ok
-    assert_includes response.body, "orb-hero orb-hero-home"
-    assert_includes response.body, "home-hero-stage"
-    assert_includes response.body, "data-controller=\"particle-sphere\""
+    assert_includes response.body, "login-screen"
+    assert_includes response.body, "login-card"
+    assert_includes response.body, "data-controller=\"opening-animation\""
   end
 
   test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do
@@ -94,12 +111,13 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "href=\"/subscription\""
   end
 
-  test "P80-T1 guest home uses Project_B brand assets (logo and feature graphic)" do
+  test "P80-T1 signed-in home uses Project_B brand assets (logo in nav)" do
+    sign_in(google_sub: "brand-logo-user")
+
     get "/"
 
     assert_response :ok
     assert_includes response.body, "/brand/soletalk-logo-v2.png"
-    assert_includes response.body, "/brand/projectb-feature-graphic.png"
   end
 
   test "P85-T3 guest home shows actionable guest entry after policy consent" do

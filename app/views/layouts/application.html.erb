@@ -30,7 +30,9 @@
     <div class="incar-aurora" aria-hidden="true"></div>
     <div class="incar-noise" aria-hidden="true"></div>
     <div class="app-shell">
-      <%= render "shared/top_nav" %>
+      <% if current_user %>
+        <%= render "shared/top_nav" %>
+      <% end %>
       <%= render "shared/flash" %>
       <div class="app-content">
         <%= yield %>
