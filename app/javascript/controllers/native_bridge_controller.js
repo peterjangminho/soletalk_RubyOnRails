@@ -1,10 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static values = {
+    autoStart: Boolean
+  }
+
   static targets = ["status", "transcription", "tts", "latitude", "longitude", "weather"]
 
   connect() {
     this.updateStatus(this.bridge ? "bridge-connected" : "bridge-unavailable")
+    this.startRecordingIfRequested()
   }
 
   startRecording() {
@@ -73,10 +78,25 @@ export default class extends Controller {
   updateStatus(message) {
     if (this.hasStatusTarget) {
       this.statusTarget.textContent = message
+      this.statusTarget.dataset.state = this.statusState(message)
     }
+  }
+
+  statusState(message) {
+    if (/unavailable|empty|invalid/i.test(message)) return "error"
+    if (/sent|requested|connected/i.test(message)) return "ok"
+    return "info"
   }
 
   get bridge() {
     return window.SoleTalkBridge
+  }
+
+  startRecordingIfRequested() {
+    if (!this.autoStartValue) return
+    if (!this.bridge || typeof this.bridge.startRecording !== "function") return
+
+    this.bridge.startRecording()
+    this.updateStatus("auto start recording sent")
   }
 }

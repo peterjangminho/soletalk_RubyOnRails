@@ -111,4 +111,14 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "/guest_sign_in"
   end
+
+  test "P87-T2 signed-in home main mic form includes main_mic entrypoint hidden field" do
+    sign_in(google_sub: "home-main-mic-entrypoint-user")
+
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "name=\"entrypoint\""
+    assert_includes response.body, "value=\"main_mic\""
+  end
 end

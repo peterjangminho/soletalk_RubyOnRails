@@ -203,4 +203,15 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "session-overlay-top"
     assert_includes response.body, "session-overlay-bottom"
   end
+
+  test "P87-T3 session show exposes native bridge auto-start value when query flag is set" do
+    sign_in(google_sub: "sessions-auto-start-flag-user")
+    user = User.find_by!(google_sub: "sessions-auto-start-flag-user")
+    session_record = Session.create!(user: user, status: "active")
+
+    get "/sessions/#{session_record.id}?auto_start_recording=1"
+
+    assert_response :ok
+    assert_includes response.body, "data-native-bridge-auto-start-value=\"true\""
+  end
 end

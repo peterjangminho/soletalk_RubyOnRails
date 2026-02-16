@@ -65,7 +65,10 @@
 
   <details class="native-bridge-debug">
     <summary><%= t("sessions.show.debug.summary") %></summary>
-    <section class="native-bridge-panel" data-controller="native-bridge">
+    <section
+      class="native-bridge-panel"
+      data-controller="native-bridge"
+      data-native-bridge-auto-start-value="<%= params[:auto_start_recording] == "1" %>">
       <p class="native-bridge-guide">
         <%= t("sessions.show.debug.guide") %>
       </p>

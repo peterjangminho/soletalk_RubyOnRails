@@ -241,12 +241,17 @@
 - [x] P85-T3 Guest entry parity: `POST /guest_sign_in` 경로 추가 및 guest session 진입 구현/검증
 - [x] P86-T1 Main mic CTA wiring: 홈 메인 3D orb 하단 마이크 버튼을 `POST /sessions` 실제 세션 생성 동작과 연결
 - [x] P86-T2 Login parity polish: guest 로그인 패널에 Project_B형 `or` divider + privacy/terms quick-link 배치
+- [x] P87-T1 Main mic session bootstrap: 홈 메인 마이크 엔트리(`entrypoint=main_mic`)로 생성된 세션은 `auto_start_recording=1` 쿼리와 함께 세션 화면으로 리다이렉트
+- [x] P87-T2 Main mic entrypoint wiring: 로그인 홈 마이크 폼이 `entrypoint=main_mic` hidden 필드를 포함하고 기존 `/sessions/new` 동선은 기존 동작 유지
+- [x] P87-T3 Native bridge auto-start: 세션 화면 `native-bridge`가 `auto_start_recording=1`인 경우 bridge 가용 시 `startRecording()`을 자동 호출
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
 - 현재 실행 대상은 `P78-T2` (localhost Google OAuth consent 외부 게이트)다.
+- 현재 실행 대상(병행 구현)은 `P87-T1` (메인 마이크 진입 자동 녹음 부트스트랩)이다.
+- 현재 실행 대상 외 병행 완료: `P87`(메인 마이크 엔트리포인트 기반 세션 자동 녹음 부트스트랩).
 - 현재 실행 대상 외 병행 완료: `P81`(파티클 오브 고밀도 모션 2차).
 - 현재 실행 대상 외 병행 완료: `P83`(로그인/가입/동의/오프닝 UI) + `P84`(메인 orb + 업로드/설정/마이크).
 - 현재 실행 대상 외 병행 완료: `P85`(동의 게이트 서버 강제 + 게스트 로그인 동작).

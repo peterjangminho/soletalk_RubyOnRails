@@ -46,3 +46,16 @@
 
 ## Remaining External Gate
 - localhost Google OAuth callback mismatch(`P78-T2`)은 Google Console redirect URI 수동 등록 필요
+
+## P87 Follow-up (Main Mic Auto-Start)
+- Home main mic form now includes `entrypoint=main_mic` hidden field.
+- `SessionsController#create` now redirects to `/sessions/:id?auto_start_recording=1` only for `main_mic` entrypoint.
+- Session debug bridge panel now exposes `data-native-bridge-auto-start-value`.
+- `native_bridge_controller` auto-starts `startRecording()` on connect when the flag is true and bridge is available.
+
+### P87 Validation
+- `bin/rails test test/integration/session_creation_flow_test.rb` pass
+- `bin/rails test test/integration/home_flow_test.rb` pass
+- `bin/rails test test/integration/sessions_flow_test.rb` pass
+- `npm run test:js -- test/javascript/controllers/native_bridge_controller_test.mjs` pass
+- `script/playwright/run_ui_journey_gap_audit.sh` -> `GAP_COUNT=0`

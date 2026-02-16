@@ -48,4 +48,36 @@ class SessionCreationFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, "/sessions/new"
   end
+
+  test "P63-T1 POST /sessions rolls back session when voice_chat_data initialization fails" do
+    sign_in(google_sub: "session-create-failure-user")
+
+    original_create = VoiceChatData.method(:create!)
+    VoiceChatData.singleton_class.define_method(:create!) do |*|
+      raise ActiveRecord::RecordInvalid.new(VoiceChatData.new)
+    end
+
+    begin
+      assert_no_difference("Session.count") do
+        assert_no_difference("VoiceChatData.count") do
+          post "/sessions"
+        end
+      end
+    ensure
+      VoiceChatData.singleton_class.define_method(:create!, original_create)
+    end
+
+    assert_redirected_to "/sessions/new"
+    follow_redirect!
+    assert_includes response.body, "Failed to start session."
+  end
+
+  test "P87-T1 POST /sessions with main mic entrypoint redirects with auto-start query" do
+    sign_in(google_sub: "session-main-mic-entry-user")
+
+    post "/sessions", params: { entrypoint: "main_mic" }
+
+    created = Session.order(:id).last
+    assert_redirected_to "/sessions/#{created.id}?auto_start_recording=1"
+  end
 end
