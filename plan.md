@@ -213,16 +213,16 @@
 - [x] P75-T1 Roadmap sync baseline: 현재 실행 작업을 `plan.md`/sub-plan/gap 문서에 동기화
 - [x] P76-T1 Railway RevenueCat ENV 존재 여부 점검 (`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 미설정 확인)
 - [x] P76-T2a Railway `REVENUECAT_BASE_URL=https://api.revenuecat.com` 주입
-- [ ] P76-T2b Railway `REVENUECAT_API_KEY` 운영값 주입
-- [ ] P76-T3 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보
+- [x] P76-T2b Railway `REVENUECAT_API_KEY` 운영값 주입
+- [x] P76-T3a 운영 서버측 smoke: `RevenueCatClient` 초기화 및 `Subscription::SyncService` 실행 검증 (`railway run`)
+- [ ] P76-T3b 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
 - iOS는 실기기 부재로 `Deferred` 트랙으로 관리한다.
 - App Store 관련 Remaining은 수동/외부 트랙 게이트로 별도 관리한다.
-- 현재 실행 대상은 `P76-T2b` (RevenueCat API Key 운영값 주입)다.
-- 이후 실행 대상은 `P76-T3` (로그인 사용자 기준 validate/restore 운영 smoke)다.
-- 현재 블로커: 로컬/저장소/CI 어디에도 `REVENUECAT_API_KEY` 값이 없어 주입 대기 상태다.
+- 현재 실행 대상은 `P76-T3b` (로그인 사용자 기준 validate/restore 운영 smoke)다.
+- 자동화로 가능한 서버측 smoke(`P76-T3a`)는 완료했고, 최종 사용자 인증 기반 증적만 수동 검증이 필요하다.
 
 ## TDD Rule
 - Always execute next unchecked item first.

@@ -21,7 +21,7 @@
 
 ## Active Phase Pointer
 - Current In Progress phase: `Phase L`
-- Current next unchecked test item: `P76-T2b`
+- Current next unchecked test item: `P76-T3b`
 
 ## TDD Checkpoints
 - Red
@@ -165,8 +165,11 @@
 12. Phase L - RevenueCat production validation follow-up (In Progress)
 - `P76-T1` Railway 변수 존재 여부 점검 완료: `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 미설정 확인
 - `P76-T2a` Railway `REVENUECAT_BASE_URL=https://api.revenuecat.com` 주입 완료 (deployment `5e42c1ad-a4d9-40e2-8a99-1443f410e2c7`)
-- `P76-T2b` Railway `REVENUECAT_API_KEY` 운영값 주입 (대기)
-- `P76-T3` 로그인 사용자 기준 validate/restore 플로우 운영 smoke 증적 확보
+- `P76-T2b` Railway `REVENUECAT_API_KEY` 운영값 주입 완료 (deployment `f5384e97-058d-417b-8a15-cdb4c8f41660`)
+- `P76-T3a` 운영 서버측 smoke 완료 (`railway run`):
+  - `Subscription::RevenueCatClient.new` -> `client_init=ok`
+  - `Subscription::SyncService.new.call(user: temp_user)` -> `sync_success=true`, `user_subscription_status=free`
+- `P76-T3b` 로그인 사용자 기준 validate/restore 플로우 운영 smoke 증적 확보 (수동 인증 필요)
 
 ## Sequential vs Parallel Matrix
 | Phase | Depends On | Parallel Feasibility | Decision |
@@ -215,12 +218,9 @@ bundle exec brakeman -q -w2
   - `plan.md`에 신규 항목/큐 반영
   - GAP 분석 문서 신규 작성 (`20260215_04`)
 - Pending:
-  - `P76-T2b` RevenueCat API Key 운영값 주입
-  - `P76-T3` 로그인 사용자 기준 validate/restore 운영 smoke 증적
+  - `P76-T3b` 로그인 사용자 기준 validate/restore 운영 smoke 증적
   - App Store/운영 외부 게이트(수동)
-  - RevenueCat 운영 ENV 미설정으로 인한 subscription validate 500
-  - RevenueCat 운영 ENV(`REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY`) 주입
 - Mismatch:
   - Sub-plan 상태가 `Done`으로 남아있어 현재 운영 하드닝 작업을 반영하지 못했던 문제를 `In Progress`로 교정
 - Next Test:
-  - `P76-T2b` Railway에 `REVENUECAT_API_KEY` 운영값 주입
+  - `P76-T3b` 로그인 사용자 기준 `/subscription/validate` validate/restore smoke 증적 캡처

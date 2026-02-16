@@ -40,3 +40,7 @@ curl -sS -m 15 -o /dev/null -w "%{http_code}\n" -X POST https://soletalk-rails-p
 - 2026-02-15: Railway deployment `7bf4d706-ac1a-483a-824e-46b4f68e8fae` SUCCESS.
 - 2026-02-15: production smoke 재확인 결과 `/subscription/validate` direct POST `422` (`invalid authenticity token`).
 - 2026-02-15: Railway runtime log에서 `rescue_from handled ActionController::InvalidAuthenticityToken` 확인.
+- 2026-02-16: Railway env에 `REVENUECAT_BASE_URL`, `REVENUECAT_API_KEY` 주입 완료.
+- 2026-02-16: 운영 컨테이너 smoke (`railway run`) 결과
+  - `Subscription::RevenueCatClient.new` => `client_init=ok`
+  - `Subscription::SyncService.new.call(user: temp_user)` => `sync_success=true`, `sync_premium=false`, `user_subscription_status=free`
