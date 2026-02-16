@@ -1,6 +1,8 @@
 <header class="top-nav-shell glass-nav">
   <nav class="top-nav page-shell" aria-label="Primary">
-    <%= link_to t("navigation.brand"), root_path, class: "brand-link" %>
+    <%= link_to root_path, class: "brand-link brand-logo-link", "aria-label": t("navigation.brand") do %>
+      <img src="/brand/soletalk-logo-v2.png" alt="<%= t("navigation.brand") %>" class="brand-logo-image">
+    <% end %>
 
     <% if current_user %>
       <div class="top-nav-links">

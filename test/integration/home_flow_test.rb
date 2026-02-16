@@ -87,4 +87,12 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "href=\"/setting\""
     assert_not_includes response.body, "href=\"/subscription\""
   end
+
+  test "P80-T1 guest home uses Project_B brand assets (logo and feature graphic)" do
+    get "/"
+
+    assert_response :ok
+    assert_includes response.body, "/brand/soletalk-logo-v2.png"
+    assert_includes response.body, "/brand/projectb-feature-graphic.png"
+  end
 end

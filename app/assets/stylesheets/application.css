@@ -139,6 +139,18 @@ h1 {
   color: #f8fbff;
 }
 
+.brand-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-logo-image {
+  width: 132px;
+  max-width: 42vw;
+  height: auto;
+  display: block;
+}
+
 .top-nav-links {
   display: flex;
   flex-wrap: wrap;
@@ -323,6 +335,20 @@ textarea::placeholder {
   min-height: 230px;
 }
 
+.projectb-feature-panel {
+  margin: 0.9rem 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(15, 19, 35, 0.66);
+}
+
+.projectb-feature-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .orb-hero canvas {
   position: relative;
   z-index: 1;
@@ -454,6 +480,10 @@ textarea::placeholder {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.56rem;
+  }
+
+  .brand-logo-image {
+    width: 118px;
   }
 
   .orb-hero-home {

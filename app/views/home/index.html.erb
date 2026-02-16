@@ -1,42 +1,47 @@
 <section class="page-shell">
   <header class="page-header">
-    <h1>SoleTalk</h1>
-    <p>Drive-safe voice companion for session memory and insight.</p>
+    <h1><%= t("home.title") %></h1>
+    <p><%= t("home.subtitle") %></p>
   </header>
+
+  <section class="orb-hero orb-hero-home" data-controller="particle-orb">
+    <canvas data-particle-orb-target="canvas" aria-hidden="true"></canvas>
+  </section>
+
+  <section class="projectb-feature-panel">
+    <img src="/brand/projectb-feature-graphic.png" alt="SoleTalk feature graphic" class="projectb-feature-image">
+  </section>
 
   <% if current_user %>
     <section class="insight-detail-card">
-      <h2>Welcome, <%= current_user.name.presence || current_user.google_sub %></h2>
-      <p>Signed in with Google Sub: <code><%= current_user.google_sub %></code></p>
-      <p>
-        <%= link_to "Start New Session", new_session_path %>
-        |
-        <%= link_to "Open Sessions", sessions_path %>
-        |
-        <%= link_to "Open Insights", insights_path %>
-        |
-        <%= link_to "Settings", setting_path %>
+      <h2><%= t("home.welcome", name: current_user.name.presence || current_user.google_sub) %></h2>
+      <p><%= t("home.connected") %></p>
+      <p class="action-row">
+        <%= link_to t("home.actions.start_session"), new_session_path, class: "btn-link" %>
+        <%= link_to t("home.actions.open_sessions"), sessions_path, class: "btn-link btn-link-secondary" %>
+        <%= link_to t("home.actions.open_insights"), insights_path, class: "btn-link btn-link-secondary" %>
+        <%= link_to t("home.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
       </p>
     </section>
 
     <section class="insight-detail-card">
-      <h2>Recent Sessions</h2>
+      <h2><%= t("home.recent_sessions.title") %></h2>
       <% if @recent_sessions.present? %>
         <ul class="insight-timeline">
           <% @recent_sessions.each do |session_record| %>
             <li>
-              <%= link_to "Session ##{session_record.id}", session_path(session_record) %>
+              <%= link_to t("sessions.record_label", id: session_record.id), session_path(session_record) %>
               <small>(<%= session_record.status %>)</small>
             </li>
           <% end %>
         </ul>
       <% else %>
-        <p>No sessions yet. Start your first session.</p>
+        <p><%= t("home.recent_sessions.empty") %></p>
       <% end %>
     </section>
 
     <section class="insight-detail-card">
-      <h2>Recent Insights</h2>
+      <h2><%= t("home.recent_insights.title") %></h2>
       <% if @recent_insights.present? %>
         <ul class="insight-timeline">
           <% @recent_insights.each do |insight| %>
@@ -44,14 +49,24 @@
           <% end %>
         </ul>
       <% else %>
-        <p>No insights yet.</p>
+        <p><%= t("home.recent_insights.empty") %></p>
       <% end %>
     </section>
   <% else %>
-    <section class="insight-detail-card">
-      <h2>Sign In</h2>
-      <p>Use Google OAuth to start voice sessions and view insights.</p>
-      <p><%= link_to "Continue with Google", "/auth/google_oauth2", data: { turbo: false } %></p>
+    <section class="insight-detail-card" id="sign-in">
+      <h2><%= t("home.sign_in.title") %></h2>
+      <p><%= t("home.sign_in.description") %></p>
+      <p><%= t("home.sign_in.privacy") %></p>
+      <p class="action-row">
+        <%= link_to t("home.sign_in.cta"), "/auth/google_oauth2", class: "btn-link", data: { turbo: false } %>
+
+        <% if Rails.env.development? || Rails.env.test? %>
+          <%= form_with url: dev_sign_in_path, method: :post, local: true, class: "dev-sign-in-form" do |form| %>
+            <%= form.hidden_field :google_sub, value: "dev-mobile-user" %>
+            <%= form.submit t("home.sign_in.dev_cta"), class: "btn-link btn-link-secondary" %>
+          <% end %>
+        <% end %>
+      </p>
     </section>
   <% end %>
 </section>

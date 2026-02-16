@@ -79,6 +79,14 @@ const collectProjectAFlow = async (browser) => {
     const hasGoogleCta = (await page.locator('text=/Continue with Google|Google로 계속/').count()) > 0;
     data.checks.homeHasGoogleCta = hasGoogleCta;
     if (!hasGoogleCta) data.gaps.push('Guest home does not show Google sign-in CTA.');
+
+    const hasProjectBLogoAsset = (await page.locator('img[src="/brand/soletalk-logo-v2.png"]').count()) > 0;
+    data.checks.hasProjectBLogoAsset = hasProjectBLogoAsset;
+    if (!hasProjectBLogoAsset) data.gaps.push('Top navigation is missing Project_B logo asset.');
+
+    const hasProjectBFeatureGraphic = (await page.locator('img[src="/brand/projectb-feature-graphic.png"]').count()) > 0;
+    data.checks.hasProjectBFeatureGraphic = hasProjectBFeatureGraphic;
+    if (!hasProjectBFeatureGraphic) data.gaps.push('Home is missing Project_B feature graphic asset panel.');
   });
 
   await step('A2_google_oauth_redirect', async () => {
