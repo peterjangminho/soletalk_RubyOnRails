@@ -17,6 +17,101 @@ const saveShot = async (page, name) => {
   return file;
 };
 
+const readCanvasDigest = async (page, selector) => page.evaluate((targetSelector) => {
+  const canvas = document.querySelector(targetSelector);
+  if (!canvas) return null;
+  if (typeof canvas.getContext !== 'function') return null;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  if (!context) return null;
+
+  const sourceWidth = canvas.width || canvas.clientWidth || 1;
+  const sourceHeight = canvas.height || canvas.clientHeight || 1;
+  const width = Math.max(1, Math.min(sourceWidth, 180));
+  const height = Math.max(1, Math.min(sourceHeight, 180));
+  const startX = Math.max(0, Math.floor((sourceWidth - width) / 2));
+  const startY = Math.max(0, Math.floor((sourceHeight - height) / 2));
+  const frame = context.getImageData(startX, startY, width, height).data;
+
+  let hash = 2166136261;
+  let alphaCoverage = 0;
+  let brightness = 0;
+  let samples = 0;
+  const stride = Math.max(16, Math.floor(frame.length / 3000));
+
+  for (let i = 0; i < frame.length; i += stride) {
+    const r = frame[i] || 0;
+    const g = frame[i + 1] || 0;
+    const b = frame[i + 2] || 0;
+    const a = frame[i + 3] || 0;
+    hash ^= (r + (g << 8) + (b << 16) + (a << 24));
+    hash = Math.imul(hash, 16777619) >>> 0;
+    if (a > 8) alphaCoverage += 1;
+    brightness += (r + g + b) / 3;
+    samples += 1;
+  }
+
+  return {
+    hash,
+    alphaCoverage: samples === 0 ? 0 : alphaCoverage / samples,
+    brightness: samples === 0 ? 0 : brightness / samples,
+    width,
+    height
+  };
+}, selector);
+
+const readOrbHeartbeat = async (page, selector) => page.evaluate((targetSelector) => {
+  const root = document.querySelector(targetSelector);
+  if (!root || !root.dataset) return null;
+  const value = Number.parseFloat(root.dataset.orbLastRenderAt || '');
+  const particleCount = Number.parseInt(root.dataset.orbParticleCount || '0', 10);
+  const density = Number.parseFloat(root.dataset.orbDensity || '');
+  return {
+    lastRenderAt: Number.isFinite(value) ? value : null,
+    particleCount: Number.isFinite(particleCount) ? particleCount : null,
+    density: Number.isFinite(density) ? density : null
+  };
+}, selector);
+
+const measureCanvasMotion = async (page, orbSelector, canvasSelector, waitMs = 520) => {
+  const firstHeartbeat = await readOrbHeartbeat(page, orbSelector);
+  const first = await readCanvasDigest(page, canvasSelector);
+  await page.waitForTimeout(waitMs);
+  const secondHeartbeat = await readOrbHeartbeat(page, orbSelector);
+  const second = await readCanvasDigest(page, canvasSelector);
+
+  const heartbeatMoved = Number.isFinite(firstHeartbeat?.lastRenderAt)
+    && Number.isFinite(secondHeartbeat?.lastRenderAt)
+    && secondHeartbeat.lastRenderAt > firstHeartbeat.lastRenderAt;
+
+  if (heartbeatMoved) {
+    return {
+      detected: true,
+      method: 'heartbeat',
+      firstHeartbeat,
+      secondHeartbeat
+    };
+  }
+
+  if (!first || !second) return { detected: false, reason: 'canvas-unavailable', firstHeartbeat, secondHeartbeat };
+
+  const hashDelta = Math.abs(second.hash - first.hash);
+  const alphaDelta = Math.abs(second.alphaCoverage - first.alphaCoverage);
+  const brightnessDelta = Math.abs(second.brightness - first.brightness);
+  const motionScore = hashDelta + alphaDelta * 200000 + brightnessDelta * 1200;
+  const detected = motionScore > 36000;
+
+  return {
+    detected,
+    method: 'digest',
+    motionScore,
+    hashDelta,
+    alphaDelta,
+    brightnessDelta,
+    firstHeartbeat,
+    secondHeartbeat
+  };
+};
+
 const textList = async (page, selector) => {
   const loc = page.locator(selector);
   const count = await loc.count();
@@ -53,6 +148,11 @@ const findAndClick = async (page, patterns) => {
 
 const collectProjectAFlow = async (browser) => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const runtimeErrors = [];
+  page.on('pageerror', (error) => runtimeErrors.push(`[pageerror] ${error.message}`));
+  page.on('console', (message) => {
+    if (message.type() === 'error') runtimeErrors.push(`[console] ${message.text()}`);
+  });
   const data = {
     url: PROJECT_A_URL,
     steps: [],
@@ -75,6 +175,10 @@ const collectProjectAFlow = async (browser) => {
     await page.goto(PROJECT_A_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(800);
     await saveShot(page, 'a1_guest_home');
+    const prefersReducedMotion = await page.evaluate(
+      () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+    data.checks.prefersReducedMotion = prefersReducedMotion;
 
     const hasGoogleCta = (await page.locator('text=/Continue with Google|Google로 계속/').count()) > 0;
     data.checks.homeHasGoogleCta = hasGoogleCta;
@@ -87,9 +191,84 @@ const collectProjectAFlow = async (browser) => {
     const hasProjectBFeatureGraphic = (await page.locator('img[src="/brand/projectb-feature-graphic.png"]').count()) > 0;
     data.checks.hasProjectBFeatureGraphic = hasProjectBFeatureGraphic;
     if (!hasProjectBFeatureGraphic) data.gaps.push('Home is missing Project_B feature graphic asset panel.');
+
+    data.checks.homeOrbDebug = await page.evaluate(() => {
+      const host = document.querySelector('.orb-hero-home');
+      const canvas = document.querySelector('.orb-hero-home canvas');
+      const app = window.Stimulus;
+      let hasController = false;
+      let registered = [];
+      if (app && app.router && app.router.modules) {
+        registered = app.router.modules.map((module) => module.identifier);
+      }
+      if (app && typeof app.getControllerForElementAndIdentifier === 'function' && host) {
+        hasController = !!app.getControllerForElementAndIdentifier(host, 'particle-orb');
+      }
+      const controller = app && host && typeof app.getControllerForElementAndIdentifier === 'function'
+        ? app.getControllerForElementAndIdentifier(host, 'particle-orb')
+        : null;
+      let controllerState = null;
+      if (controller) {
+        try {
+          controllerState = {
+            hasContext: !!controller.context,
+            phase: controller.phase || null,
+            particleCount: controller.particles?.length || 0,
+            profileParticleCount: controller.profile?.particleCount || 0,
+            frameRequest: controller.frameRequest || null
+          };
+        } catch (error) {
+          controllerState = { error: String(error) };
+        }
+      }
+      return {
+        hasHost: !!host,
+        hasCanvas: !!canvas,
+        hasContext2d: !!canvas?.getContext?.('2d'),
+        width: canvas?.width || null,
+        height: canvas?.height || null,
+        clientWidth: canvas?.clientWidth || null,
+        clientHeight: canvas?.clientHeight || null,
+        orbLastRenderAt: host?.dataset?.orbLastRenderAt || null,
+        hasStimulus: !!window.Stimulus,
+        hasController,
+        registered,
+        controllerState
+      };
+    });
+
+    const homeMotion = await measureCanvasMotion(page, '.orb-hero-home', '.orb-hero-home canvas');
+    data.checks.homeOrbMotion = homeMotion;
+    await saveShot(page, 'a1_guest_home_motion');
+    if (!homeMotion.detected) {
+      if (prefersReducedMotion) {
+        data.externalGates.push(
+          `Home orb motion skipped because prefers-reduced-motion is enabled (${homeMotion.reason || `score=${homeMotion.motionScore}`}).`
+        );
+      } else {
+        data.gaps.push(`Home orb motion not detected (${homeMotion.reason || `score=${homeMotion.motionScore}`}).`);
+      }
+    }
   });
 
   await step('A2_google_oauth_redirect', async () => {
+    const googleCta = page.getByRole('link', { name: 'Continue with Google', exact: false });
+    const ctaDisabled = (await googleCta.count()) > 0
+      && (await googleCta.first().getAttribute('aria-disabled')) === 'true';
+    if (ctaDisabled) {
+      const movedToConsent = await findAndClick(page, ['Open consent screen', 'Review consent', 'Consent']);
+      if (!movedToConsent) throw new Error('consent entry not found when OAuth CTA is disabled');
+
+      await page.waitForLoadState('domcontentloaded');
+      const agree = page.locator('input[name="agree"][type="checkbox"]');
+      if (await agree.count()) await agree.first().check();
+      const agreed = await findAndClick(page, ['Agree and continue', 'Agree']);
+      if (!agreed) throw new Error('consent agree action not found');
+
+      await page.waitForLoadState('domcontentloaded');
+      await page.waitForTimeout(500);
+    }
+
     const clicked = await findAndClick(page, ['Continue with Google', 'Google로 계속', 'Sign In']);
     if (!clicked) throw new Error('OAuth entry CTA not found');
 
@@ -155,6 +334,64 @@ const collectProjectAFlow = async (browser) => {
       && (await page.locator('.session-stage .session-overlay-bottom').count()) > 0;
     data.checks.sessionUsesOverlayLayout = hasOverlayLayout;
     if (!hasOverlayLayout) data.gaps.push('Session page does not use Project_B-style overlay layout.');
+
+    data.checks.sessionOrbDebug = await page.evaluate(() => {
+      const host = document.querySelector('.orb-hero-session');
+      const canvas = document.querySelector('.orb-hero-session canvas');
+      const app = window.Stimulus;
+      let hasController = false;
+      let registered = [];
+      if (app && app.router && app.router.modules) {
+        registered = app.router.modules.map((module) => module.identifier);
+      }
+      if (app && typeof app.getControllerForElementAndIdentifier === 'function' && host) {
+        hasController = !!app.getControllerForElementAndIdentifier(host, 'particle-orb');
+      }
+      const controller = app && host && typeof app.getControllerForElementAndIdentifier === 'function'
+        ? app.getControllerForElementAndIdentifier(host, 'particle-orb')
+        : null;
+      let controllerState = null;
+      if (controller) {
+        try {
+          controllerState = {
+            hasContext: !!controller.context,
+            phase: controller.phase || null,
+            particleCount: controller.particles?.length || 0,
+            profileParticleCount: controller.profile?.particleCount || 0,
+            frameRequest: controller.frameRequest || null
+          };
+        } catch (error) {
+          controllerState = { error: String(error) };
+        }
+      }
+      return {
+        hasHost: !!host,
+        hasCanvas: !!canvas,
+        hasContext2d: !!canvas?.getContext?.('2d'),
+        width: canvas?.width || null,
+        height: canvas?.height || null,
+        clientWidth: canvas?.clientWidth || null,
+        clientHeight: canvas?.clientHeight || null,
+        orbLastRenderAt: host?.dataset?.orbLastRenderAt || null,
+        hasStimulus: !!window.Stimulus,
+        hasController,
+        registered,
+        controllerState
+      };
+    });
+
+    const sessionMotion = await measureCanvasMotion(page, '.orb-hero-session', '.orb-hero-session canvas');
+    data.checks.sessionOrbMotion = sessionMotion;
+    await saveShot(page, 'a4_session_motion');
+    if (!sessionMotion.detected) {
+      if (data.checks.prefersReducedMotion) {
+        data.externalGates.push(
+          `Session orb motion skipped because prefers-reduced-motion is enabled (${sessionMotion.reason || `score=${sessionMotion.motionScore}`}).`
+        );
+      } else {
+        data.gaps.push(`Session orb motion not detected (${sessionMotion.reason || `score=${sessionMotion.motionScore}`}).`);
+      }
+    }
   });
 
   await step('A5_debug_tools_actions', async () => {
@@ -170,7 +407,12 @@ const collectProjectAFlow = async (browser) => {
     const transcription = page.locator('[data-native-bridge-target="transcription"], textarea[name="transcript"], input[name="transcript"], #transcript');
     if (await transcription.count()) {
       await transcription.first().fill('Sample transcript from Playwright journey audit');
-      await findAndClick(page, ['Send Transcription', '전송']);
+      const sendTranscription = page.locator('[data-action="native-bridge#sendTranscription"]');
+      if (await sendTranscription.count()) {
+        await sendTranscription.first().click();
+      } else {
+        await findAndClick(page, ['Send Transcription']);
+      }
       await page.waitForTimeout(400);
     } else {
       data.gaps.push('Debug transcription input not found.');
@@ -226,6 +468,10 @@ const collectProjectAFlow = async (browser) => {
   });
 
   data.navLinks = await textList(page, 'a, button');
+  data.checks.runtimeErrors = runtimeErrors;
+  if (runtimeErrors.length) {
+    data.gaps.push(`Runtime JS errors detected: ${runtimeErrors[0]}`);
+  }
   await page.close();
   return data;
 };
