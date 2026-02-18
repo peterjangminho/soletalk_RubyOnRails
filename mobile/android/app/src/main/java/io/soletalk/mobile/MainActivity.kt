@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    requestRuntimePermissionsIfNeeded()
-
     webView = findViewById(R.id.webview)
     webView.settings.javaScriptEnabled = true
     webView.settings.domStorageEnabled = true

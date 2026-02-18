@@ -23,16 +23,17 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.util.Locale
 
-class VoiceBridge(context: Context) {
+class VoiceBridge(private val activity: android.app.Activity) {
   companion object {
     private const val TAG = "VoiceBridge"
     private val JSON = "application/json; charset=utf-8".toMediaType()
     private const val API_URL = "https://soletalk-rails-production.up.railway.app/api/voice/events"
     private const val WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=weather_code"
+    private const val RUNTIME_PERMISSION_REQUEST_CODE = 2001
   }
 
   private val client = OkHttpClient()
-  private val appContext = context.applicationContext
+  private val appContext = activity.applicationContext
   private val mainHandler = Handler(Looper.getMainLooper())
   private val recognitionIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
     putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -49,7 +50,7 @@ class VoiceBridge(context: Context) {
 
   init {
     Log.i(TAG, "initializing VoiceBridge")
-    textToSpeech = TextToSpeech(context) { status ->
+    textToSpeech = TextToSpeech(appContext) { status ->
       if (status == TextToSpeech.SUCCESS) {
         ttsReady = true
         textToSpeech?.language = Locale.KOREAN
@@ -145,6 +146,29 @@ class VoiceBridge(context: Context) {
     if (text.isBlank() || !ttsReady) return
     Log.d(TAG, "playAudio length=${text.length}")
     textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "soletalk_tts")
+  }
+
+  @JavascriptInterface
+  fun requestPermissions() {
+    val requiredPermissions = listOf(
+      Manifest.permission.RECORD_AUDIO,
+      Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    val missingPermissions = requiredPermissions.filter {
+      ContextCompat.checkSelfPermission(appContext, it) != PackageManager.PERMISSION_GRANTED
+    }
+    if (missingPermissions.isNotEmpty()) {
+      Log.i(TAG, "requesting runtime permissions: ${missingPermissions.joinToString()}")
+      activity.runOnUiThread {
+        androidx.core.app.ActivityCompat.requestPermissions(
+          activity,
+          missingPermissions.toTypedArray(),
+          RUNTIME_PERMISSION_REQUEST_CODE
+        )
+      }
+    } else {
+      Log.i(TAG, "runtime permissions already granted")
+    }
   }
 
   fun release() {

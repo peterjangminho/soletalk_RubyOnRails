@@ -6,6 +6,8 @@ plugins {
 android {
   namespace = "io.soletalk.mobile"
   compileSdk = 35
+  val productionBaseUrl = "https://soletalk-rails-production.up.railway.app/"
+  val debugBaseUrl = (project.findProperty("SOLETALK_DEBUG_BASE_URL") as String?) ?: "http://127.0.0.1:3000/"
 
   defaultConfig {
     applicationId = "io.soletalk.mobile"
@@ -16,7 +18,12 @@ android {
   }
 
   buildTypes {
+    debug {
+      buildConfigField("String", "WEB_BASE_URL", "\"${normalizeBaseUrl(debugBaseUrl)}\"")
+    }
+
     release {
+      buildConfigField("String", "WEB_BASE_URL", "\"${normalizeBaseUrl(productionBaseUrl)}\"")
       isMinifyEnabled = false
       proguardFiles(
         getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -35,6 +42,7 @@ android {
   }
 
   buildFeatures {
+    buildConfig = true
     viewBinding = true
   }
 }
@@ -47,4 +55,8 @@ dependencies {
   implementation("androidx.webkit:webkit:1.11.0")
   implementation("com.google.android.material:material:1.12.0")
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
+}
+
+fun normalizeBaseUrl(baseUrl: String): String {
+  return if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
 }

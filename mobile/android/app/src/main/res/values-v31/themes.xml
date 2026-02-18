@@ -12,9 +12,8 @@
         <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowBackground">@color/background</item>
 
-        <!-- Splash Screen: dark background with white foreground icon, no white border -->
+        <!-- Splash Screen: theme-matched background, icon filled with same color to be invisible -->
         <item name="android:windowSplashScreenBackground">@color/splash_background</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_icon_blank</item>
     </style>
 </resources>
