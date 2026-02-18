@@ -5,6 +5,7 @@ module Auth
 
     def google_oauth2
       session.delete(MOBILE_RETURN_SESSION_KEY)
+      accept_inline_consent
       normalized_mobile_return = ::Auth::MobileOauthReturnUri.normalize(params[MOBILE_RETURN_PARAM])
       if normalized_mobile_return.present?
         session[MOBILE_RETURN_SESSION_KEY] = normalized_mobile_return
@@ -18,6 +19,12 @@ module Auth
       end
 
       redirect_to "/auth/google_oauth2"
+    end
+
+    private
+
+    def accept_inline_consent
+      session[:policy_agreed] = true if params[:consent_accepted] == "1"
     end
   end
 end
