@@ -41,8 +41,12 @@ module Api
       end
 
       test "P38-T3 POST /api/voice_chat/insight creates insight from depth answers" do
+        user = User.create!(google_sub: "g-layer-insight")
+        session_record = Session.create!(user: user, status: "active")
+
         assert_difference("Insight.count", 1) do
           post "/api/voice_chat/insight", params: {
+            session_id: session_record.id,
             q1_answer: "situation",
             q2_answer: "decision",
             q3_answer: "action",
