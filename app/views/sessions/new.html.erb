@@ -1,5 +1,8 @@
-<h1>New Session</h1>
+<main class="page-shell">
+  <h1><%= t("sessions.new.title") %></h1>
+  <p><%= t("sessions.new.subtitle") %></p>
 
-<%= form_with url: sessions_path, method: :post, local: true do |form| %>
-  <%= form.submit "Start Session" %>
-<% end %>
+  <%= form_with url: sessions_path, method: :post, local: true do |form| %>
+    <%= form.submit t("sessions.new.submit") %>
+  <% end %>
+</main>
