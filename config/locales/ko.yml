@@ -28,7 +28,12 @@ ko:
       description: "Google OAuth로 로그인하면 음성 세션과 인사이트 기능을 사용할 수 있습니다."
       privacy: "개인정보 보호를 위해 인증은 Google에서 처리되며, 세션은 본인 계정 범위에서만 유지됩니다."
       cta: "Google로 계속하기"
+      guest_cta: "게스트로 계속하기"
       dev_cta: "개발용 빠른 로그인"
+      consent_label: "개인정보 처리방침 및 이용약관에 동의합니다"
+      consent_agreed: "약관에 동의하셨습니다. 계속하세요."
+      consent_required: "동의가 필요합니다:"
+      consent_open: "동의 화면 열기"
 
   sessions:
     record_label: "세션 #%{id}"
@@ -102,6 +107,14 @@ ko:
       uploaded_files:
         title: "업로드된 참고 파일"
         empty: "아직 업로드된 파일이 없습니다."
+      policy:
+        title: "약관 정보"
+        privacy_link: "개인정보 처리방침"
+        terms_link: "이용약관"
+      account:
+        title: "계정"
+        sign_out: "로그아웃"
+        sign_out_description: "현재 세션에서 로그아웃합니다."
 
   subscription:
     show:
@@ -123,6 +136,12 @@ ko:
         submit: "구독 검증"
         restore_submit: "구독 복원"
 
+  policy_modal:
+    privacy_title: "개인정보 처리방침"
+    privacy_body: "귀하의 데이터는 개인정보 처리방침에 따라 관리됩니다."
+    terms_title: "이용약관"
+    terms_body: "SoleTalk을 사용함으로써 이용약관에 동의하게 됩니다."
+
   flash:
     sessions:
       create:
@@ -143,6 +162,8 @@ ko:
           revenue_cat_id_missing: "RevenueCat 고객 ID가 필요합니다."
           default: "구독 상태 새로고침에 실패했습니다."
     auth:
+      sign_out:
+        notice: "로그아웃되었습니다."
       failure: "Google 로그인에 실패했습니다. 다시 시도해 주세요."
     dev:
       sign_in:

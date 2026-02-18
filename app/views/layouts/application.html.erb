@@ -30,7 +30,7 @@
     <div class="incar-aurora" aria-hidden="true"></div>
     <div class="incar-noise" aria-hidden="true"></div>
     <div class="app-shell">
-      <% if current_user %>
+      <% if current_user && !content_for?(:hide_top_nav) %>
         <%= render "shared/top_nav" %>
       <% end %>
       <%= render "shared/flash" %>

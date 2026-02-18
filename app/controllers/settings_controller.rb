@@ -7,17 +7,21 @@ class SettingsController < ApplicationController
 
   def update
     setting = current_setting
-    preferences = parsed_preferences(setting_params[:preferences_json])
-    if preferences == :invalid
-      redirect_to setting_path, alert: t("flash.settings.update.invalid_json")
-      return
+    attrs = {}
+
+    attrs[:language] = setting_params[:language] if setting_params.key?(:language)
+    attrs[:voice_speed] = setting_params[:voice_speed] if setting_params.key?(:voice_speed)
+
+    if setting_params.key?(:preferences_json)
+      preferences = parsed_preferences(setting_params[:preferences_json])
+      if preferences == :invalid
+        redirect_to setting_path, alert: t("flash.settings.update.invalid_json")
+        return
+      end
+      attrs[:preferences] = preferences
     end
 
-    setting.update!(
-      language: setting_params[:language],
-      voice_speed: setting_params[:voice_speed],
-      preferences: preferences
-    )
+    setting.update!(attrs) if attrs.any?
     attach_uploaded_file!
 
     redirect_to setting_path, notice: t("flash.settings.update.notice")

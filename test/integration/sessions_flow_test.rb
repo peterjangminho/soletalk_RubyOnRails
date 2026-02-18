@@ -15,19 +15,12 @@ class SessionsFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
   end
 
-  test "P22-T1 GET /sessions renders current user's sessions list" do
+  test "P22-T1 GET /sessions redirects to root (voice-only IA)" do
     sign_in(google_sub: "sessions-index-user")
-    me = User.find_by!(google_sub: "sessions-index-user")
-    mine = Session.create!(user: me, status: "active")
-
-    other_user = User.create!(google_sub: "sessions-other-user")
-    other = Session.create!(user: other_user, status: "active")
 
     get "/sessions"
 
-    assert_response :ok
-    assert_includes response.body, "/sessions/#{mine.id}"
-    assert_not_includes response.body, "/sessions/#{other.id}"
+    assert_redirected_to "/"
   end
 
   test "P22-T2 GET /sessions/:id renders voice chat page with turbo_stream_from session" do

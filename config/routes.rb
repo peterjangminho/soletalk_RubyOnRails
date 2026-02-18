@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get "/healthz", to: "ops/health#show"
 
   root "home#index"
+  delete "/sign_out", to: "auth/sessions#destroy", as: :sign_out
   get "/sign_up", to: "onboarding#signup"
   post "/sign_up", to: "onboarding#create_signup"
   get "/consent", to: "onboarding#consent"
@@ -11,6 +12,10 @@ Rails.application.routes.draw do
   if Rails.env.development? || Rails.env.test?
     post "/dev/sign_in", to: "dev/sessions#create", as: :dev_sign_in
     delete "/dev/sign_out", to: "dev/sessions#destroy", as: :dev_sign_out
+  end
+
+  namespace :voice do
+    resources :context_files, only: :create
   end
 
   resources :insights, only: [ :index, :show ]

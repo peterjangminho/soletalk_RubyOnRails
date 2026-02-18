@@ -52,16 +52,13 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_equal({ "theme" => "focus" }, setting.preferences)
   end
 
-  test "P26-T3 sessions and setting screens cross-link navigation" do
+  test "P26-T3 settings back button links to home (voice-only IA)" do
     sign_in(google_sub: "setting-nav-user")
-
-    get "/sessions"
-    assert_response :ok
-    assert_includes response.body, "/setting"
 
     get "/setting"
     assert_response :ok
-    assert_includes response.body, "/sessions"
+    # Settings back button links to home, not sessions
+    assert_includes response.body, "href=\"/\""
   end
 
   test "P28-T3 importmap and stimulus bootstrap are wired in layout" do
@@ -148,18 +145,19 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_response :ok
     # Page content renders in English after locale change
     assert_includes response.body, "<h1>Settings</h1>"
-    # Language dropdown shows English as selected
-    assert_includes response.body, "selected=\"selected\" value=\"en\""
+    # Language radio button shows English as active
+    assert_includes response.body, "class=\"settings-lang-option active\""
   end
 
-  test "P82-T1 GET /setting renders particle hero stage for unified UI language" do
+  test "P82-T1 GET /setting renders settings header with back button" do
     sign_in(google_sub: "setting-particle-hero-user")
 
     get "/setting"
 
     assert_response :ok
-    assert_includes response.body, "settings-hero-stage"
-    assert_includes response.body, "data-controller=\"particle-sphere\""
+    assert_includes response.body, "settings-header"
+    assert_includes response.body, "settings-back-btn"
+    assert_includes response.body, "icon-arrow-left"
   end
 
   test "UI-T6 GET /setting page has scrollable settings shell" do
@@ -172,12 +170,13 @@ class SettingsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "settings-scroll"
   end
 
-  test "UI-T7 GET /setting cards use premium glassmorphism styling" do
+  test "UI-T7 GET /setting sections use Project_B data section styling" do
     sign_in(google_sub: "settings-glass-user")
 
     get "/setting"
 
     assert_response :ok
-    assert_includes response.body, "settings-card-glass"
+    assert_includes response.body, "settings-data-section"
+    assert_includes response.body, "settings-lang-option"
   end
 end

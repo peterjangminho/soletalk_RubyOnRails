@@ -21,21 +21,15 @@ class InsightAccessFlowTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "P33-T3 blocks free users and allows premium users for insights" do
-    insight = Insight.create!(
-      situation: "gate situation",
-      decision: "gate decision",
-      action_guide: "gate action",
-      data_info: "gate data"
-    )
+  test "P33-T3 all users redirected from insights to root (voice-only IA)" do
+    premium_google_sub = "insight-premium-user"
+    sign_in(google_sub: premium_google_sub, status: "premium")
+
+    get "/insights"
+    assert_redirected_to "/"
 
     sign_in(google_sub: "insight-free-user", status: "free")
     get "/insights"
-    assert_response :redirect
-    assert_redirected_to "/sessions"
-
-    sign_in(google_sub: "insight-premium-user", status: "premium")
-    get "/insights/#{insight.id}"
-    assert_response :ok
+    assert_redirected_to "/"
   end
 end

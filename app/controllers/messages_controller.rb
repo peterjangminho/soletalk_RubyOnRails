@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
       content: message_params[:content]
     )
 
-    redirect_to session_path(@session)
+    redirect_to session_path(@session), notice: t("flash.messages.create.notice")
   end
 
   private

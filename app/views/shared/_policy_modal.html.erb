@@ -1,0 +1,21 @@
+<div class="policy-modal" data-controller="policy-modal"
+  data-action="keydown.esc@window->policy-modal#close">
+  <div class="policy-modal-overlay" data-policy-modal-target="overlay" hidden></div>
+  <div class="policy-modal-dialog" data-policy-modal-target="dialog" hidden>
+    <button type="button" class="policy-modal-close"
+      data-action="click->policy-modal#close"
+      aria-label="Close">
+      &times;
+    </button>
+
+    <section class="policy-modal-section">
+      <h2><%= t("policy_modal.privacy_title") %></h2>
+      <p><%= t("policy_modal.privacy_body", default: "Your data is handled according to our privacy policy.") %></p>
+    </section>
+
+    <section class="policy-modal-section">
+      <h2><%= t("policy_modal.terms_title") %></h2>
+      <p><%= t("policy_modal.terms_body", default: "By using SoleTalk you agree to the terms of service.") %></p>
+    </section>
+  </div>
+</div>

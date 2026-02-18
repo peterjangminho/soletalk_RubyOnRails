@@ -22,40 +22,22 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "SoleTalk"
     assert_includes response.body, "Continue with Google"
     assert_includes response.body, "/auth/google_oauth2"
-    assert_includes response.body, "href=\"/auth/google_oauth2/start\""
+    assert_includes response.body, "href=\"/auth/google_oauth2/start?consent_accepted=1\""
   end
 
-  test "P54-T2 signed-in root page shows navigation and recent lists" do
+  test "P54-T2 signed-in root page shows main screen with particle sphere and mic" do
     sign_in(google_sub: "home-signed-user")
-    user = User.find_by!(google_sub: "home-signed-user")
-    session_record = Session.create!(user: user, status: "active")
-    Insight.create!(
-      user: user,
-      situation: "home insight situation",
-      decision: "home insight decision",
-      action_guide: "home insight action",
-      data_info: "home insight data"
-    )
-    Insight.create!(
-      user: User.create!(google_sub: "home-signed-other-user"),
-      situation: "other user home insight",
-      decision: "other user decision",
-      action_guide: "other user action",
-      data_info: "other user data"
-    )
 
     get "/"
 
     assert_response :ok
-    assert_includes response.body, "Welcome"
-    assert_includes response.body, "/sessions/new"
-    assert_includes response.body, "/sessions/#{session_record.id}"
-    assert_includes response.body, "home insight situation"
-    assert_not_includes response.body, "other user home insight"
-    assert_includes response.body, "href=\"/setting#uploads\""
     assert_includes response.body, "main-orb-stage"
     assert_includes response.body, "home-main-mic"
     assert_includes response.body, "action=\"/sessions\""
+    assert_includes response.body, "click->quick-upload#openFilePicker"
+    assert_includes response.body, "particle-sphere"
+    # Main screen has no text content - only icons and mic
+    assert_not_includes response.body, "Welcome"
   end
 
   test "UX-T1 signed-in root page does not expose raw google_sub identifier text" do
@@ -84,12 +66,17 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "top-nav-shell"
   end
 
-  test "UI-T2 signed-in pages show top nav bar" do
+  test "UI-T2 signed-in sessions page redirects to root (voice-only IA)" do
     sign_in(google_sub: "nav-test-user")
 
+    # Home hides top nav
     get "/"
     assert_response :ok
-    assert_includes response.body, "top-nav-shell"
+    assert_not_includes response.body, "top-nav-shell"
+
+    # Sessions page redirects to root in voice-only mode
+    get "/sessions"
+    assert_redirected_to "/"
   end
 
   test "P72-T2 guest root page renders login screen with opening animation" do
@@ -111,10 +98,12 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "href=\"/subscription\""
   end
 
-  test "P80-T1 signed-in home uses Project_B brand assets (logo in nav)" do
+  test "P80-T1 signed-in session show uses Project_B brand assets (logo)" do
     sign_in(google_sub: "brand-logo-user")
+    user = User.find_by!(google_sub: "brand-logo-user")
+    session_record = Session.create!(user: user, status: "active")
 
-    get "/"
+    get "/sessions/#{session_record.id}"
 
     assert_response :ok
     assert_includes response.body, "/brand/soletalk-logo-v2.png"

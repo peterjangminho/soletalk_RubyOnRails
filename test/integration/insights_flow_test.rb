@@ -13,86 +13,74 @@ class InsightsFlowTest < ActionDispatch::IntegrationTest
 
     get "/auth/google_oauth2/callback"
     follow_redirect!
-    User.find_by!(google_sub: google_sub).update!(
+    user = User.find_by!(google_sub: google_sub)
+    user.update!(
       subscription_status: "premium",
       subscription_tier: "premium",
       subscription_expires_at: 2.days.from_now
     )
+    user
   end
 
-  test "P18-T1 GET /insights returns ordered insight list" do
-    older = Insight.create!(
-      situation: "older situation",
-      decision: "older decision",
-      action_guide: "older action",
-      data_info: "older data",
-      created_at: 2.days.ago
-    )
-    newer = Insight.create!(
-      situation: "newer situation",
-      decision: "newer decision",
-      action_guide: "newer action",
-      data_info: "newer data",
-      created_at: 1.day.ago
-    )
-
+  test "P18-T1 GET /insights redirects to root (voice-only IA)" do
     sign_in(google_sub: "insight-index-user")
+
     get "/insights"
 
-    assert_response :ok
-    assert_operator response.body.index(newer.situation), :<, response.body.index(older.situation)
+    assert_redirected_to "/"
   end
 
-  test "P25-T1 GET /insights renders card-based timeline list" do
-    Insight.create!(
-      situation: "timeline situation",
-      decision: "timeline decision",
-      action_guide: "timeline action",
-      data_info: "timeline data"
-    )
-
+  test "P25-T1 GET /insights redirects to root (voice-only IA)" do
     sign_in(google_sub: "insight-timeline-user")
+
     get "/insights"
 
-    assert_response :ok
-    assert_includes response.body, "insight-timeline"
-    assert_includes response.body, "insight-card"
+    assert_redirected_to "/"
   end
 
-  test "P18-T2 GET /insights/:id renders selected insight" do
+  test "P18-T2 GET /insights/:id redirects to root (voice-only IA)" do
+    user = sign_in(google_sub: "insight-show-user")
     insight = Insight.create!(
+      user: user,
       situation: "selected situation",
       decision: "selected decision",
       action_guide: "selected action",
       data_info: "selected data"
     )
 
-    sign_in(google_sub: "insight-show-user")
     get "/insights/#{insight.id}"
 
-    assert_response :ok
-    assert_includes response.body, insight.situation
-    assert_includes response.body, insight.decision
-    assert_includes response.body, insight.action_guide
-    assert_includes response.body, insight.data_info
+    assert_redirected_to "/"
   end
 
-  test "P25-T2 GET /insights/:id renders Q1~Q4 detail cards" do
+  test "P25-T2 GET /insights/:id redirects to root (voice-only IA)" do
+    user = sign_in(google_sub: "insight-q-user")
     insight = Insight.create!(
+      user: user,
       situation: "q1 detail",
       decision: "q2 detail",
       action_guide: "q3 detail",
       data_info: "q4 detail"
     )
 
-    sign_in(google_sub: "insight-q-user")
     get "/insights/#{insight.id}"
 
-    assert_response :ok
-    assert_includes response.body, "Q1. WHY"
-    assert_includes response.body, "Q2. DECISION"
-    assert_includes response.body, "Q3. IMPACT"
-    assert_includes response.body, "Q4. DATA"
-    assert_includes response.body, "insight-detail-card"
+    assert_redirected_to "/"
+  end
+
+  test "P64-T1 GET /insights/:id redirects to root regardless of ownership (voice-only IA)" do
+    owner = sign_in(google_sub: "insight-owner-user")
+    insight = Insight.create!(
+      user: owner,
+      situation: "private situation",
+      decision: "private decision",
+      action_guide: "private action",
+      data_info: "private data"
+    )
+
+    sign_in(google_sub: "insight-other-user")
+    get "/insights/#{insight.id}"
+
+    assert_redirected_to "/"
   end
 end

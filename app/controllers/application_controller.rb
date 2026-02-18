@@ -22,7 +22,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    requested_locale = params[:locale].presence || user_locale_preference
+    session[:guest_locale] = params[:locale] if params[:locale].present?
+    requested_locale = params[:locale].presence || user_locale_preference || session[:guest_locale]
     I18n.locale = normalize_locale(requested_locale)
   end
 
