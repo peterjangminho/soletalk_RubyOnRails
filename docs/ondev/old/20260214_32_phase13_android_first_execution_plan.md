@@ -74,11 +74,14 @@
     - `startRecording`, `stopRecording`, `onTranscription`, `playAudio` 브리지 메서드 연결
     - 세션 화면 Native Bridge 테스트 패널(Stimulus) 추가
     - `SpeechRecognizer` baseline(start/stop 연동) + `requestCurrentLocation`(Open-Meteo weather 포함) baseline 추가
+  - Rails token-auth Android Bridge 계약 E2E(`P57-T3`) 테스트 추가/통과:
+    - `test/integration/e2e_voicechat_flow_test.rb`
+    - `start_recording` → `transcription` → `stop_recording` → `location_update` 4종 이벤트 200 + persistence 검증
 - Pending:
-  - Android 실기기에서 브리지 이벤트 4종(`start_recording`, `transcription`, `stop_recording`, `location_update`) end-to-end 증적 확보
+  - Android 실기기 로그 증적 보강(외부 게이트): 브리지 이벤트 4종 2xx `adb logcat` 캡처
   - Gemini Live STT 연동
   - TTS 품질/언어설정 튜닝(현재 Android TTS baseline)
 - Mismatch:
   - 없음
 - Next Test:
-  - P57-T3 Android Bridge 계약 검증 E2E
+  - External Gate: Android 실기기 4종 이벤트 2xx 로그 증적 보강

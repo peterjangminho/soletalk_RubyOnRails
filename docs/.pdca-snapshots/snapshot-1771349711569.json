@@ -1,0 +1,415 @@
+{
+  "timestamp": "2026-02-17T17:35:11.568Z",
+  "reason": "compaction",
+  "status": {
+    "version": "2.0",
+    "lastUpdated": "2026-02-17T17:09:54.370Z",
+    "activeFeatures": [
+      "javascript",
+      "integration",
+      "config",
+      "mobile",
+      "Project_A",
+      "auth"
+    ],
+    "primaryFeature": "javascript",
+    "features": {
+      "javascript": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-16T10:48:42.232Z",
+          "lastUpdated": "2026-02-17T17:06:29.954Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/app/javascript/controllers/consent_gate_controller.js"
+      },
+      "integration": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-16T10:54:20.678Z",
+          "lastUpdated": "2026-02-17T17:09:54.370Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/test/integration/home_flow_test.rb"
+      },
+      "config": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-16T12:14:23.985Z",
+          "lastUpdated": "2026-02-16T12:14:23.985Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/config/importmap.rb"
+      },
+      "mobile": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-16T19:15:45.087Z",
+          "lastUpdated": "2026-02-17T13:43:36.403Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/mobile/android/app/src/main/java/io/soletalk/mobile/VoiceBridge.kt"
+      },
+      "Project_A": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-16T19:18:50.928Z",
+          "lastUpdated": "2026-02-17T13:32:40.589Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/app/controllers/application_controller.rb"
+      },
+      "auth": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-17T17:06:38.928Z",
+          "lastUpdated": "2026-02-17T17:06:53.607Z"
+        },
+        "lastFile": "/Users/peter/Project/Project_A/app/controllers/auth/guest_sessions_controller.rb"
+      }
+    },
+    "pipeline": {
+      "currentPhase": 1,
+      "level": "Dynamic",
+      "phaseHistory": []
+    },
+    "session": {
+      "startedAt": "2026-02-12T10:56:05.148Z",
+      "onboardingCompleted": false,
+      "lastActivity": "2026-02-17T17:09:54.370Z"
+    },
+    "history": [
+      {
+        "timestamp": "2026-02-16T10:48:42.232Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T10:49:31.398Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T10:54:20.678Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T10:54:22.030Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T10:54:33.138Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T11:02:41.622Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T11:03:09.578Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T12:14:23.985Z",
+        "feature": "config",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T12:14:34.204Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T12:14:35.453Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T12:24:53.544Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T13:09:41.629Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T13:09:57.832Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T13:10:05.510Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T18:49:09.328Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T18:49:12.200Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:12:35.821Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:12:57.194Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:13:11.990Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:14:26.408Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:14:59.238Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:15:45.087Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:15:50.588Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:18:03.565Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:18:50.928Z",
+        "feature": "Project_A",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:19:10.054Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:23:49.796Z",
+        "feature": "Project_A",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:23:55.824Z",
+        "feature": "Project_A",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:24:46.971Z",
+        "feature": "Project_A",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:24:54.923Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:29:53.880Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:32:45.309Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-16T19:34:26.105Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T03:29:45.216Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T03:29:48.110Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T03:29:51.340Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T03:30:30.367Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T03:30:31.444Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:32:40.589Z",
+        "feature": "Project_A",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:39:59.488Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:40:08.517Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:40:14.556Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:40:19.840Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:40:21.833Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:40:23.199Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T13:43:36.403Z",
+        "feature": "mobile",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T17:06:29.954Z",
+        "feature": "javascript",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T17:06:38.928Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T17:06:47.782Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T17:06:53.607Z",
+        "feature": "auth",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-17T17:09:54.370Z",
+        "feature": "integration",
+        "phase": "do",
+        "action": "updated"
+      }
+    ]
+  }
+}

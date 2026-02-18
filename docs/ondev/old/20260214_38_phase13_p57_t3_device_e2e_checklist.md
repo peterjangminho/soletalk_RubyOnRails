@@ -16,6 +16,14 @@
 adb logcat -s VoiceBridge
 ```
 
+자동 집계 스크립트(권장):
+```bash
+script/mobile/collect_voicebridge_evidence.sh
+```
+- 기본 timeout: 180초 (`TIMEOUT_SECONDS=300 script/mobile/collect_voicebridge_evidence.sh`로 조정 가능)
+- 성공 조건: 4개 액션 모두 `code=2xx`
+- 결과: action/code 요약표 + 실패/skip 로그 + raw log 파일 경로 출력
+
 2. 세션 화면 Native Bridge 패널에서 순서대로 실행
 - `Start Recording`
 - 말하기(또는 `Send Transcription`)
@@ -55,3 +63,45 @@ adb logcat -s VoiceBridge
 - 조치:
   - `MainActivity`에서 `/auth/google_oauth2` 및 `accounts.google.com` 요청을 감지해 Custom Tab(외부 브라우저)로 전환
   - 검증 로그: `open external browser for oauth url=https://soletalk-rails-production.up.railway.app/auth/google_oauth2`
+
+## Contract E2E Snapshot (2026-02-15)
+- Rails 통합 테스트로 Android bridge token 경로 계약 고정:
+  - 테스트: `test/integration/e2e_voicechat_flow_test.rb`
+  - 케이스: `P57-T3 E2E android bridge contract accepts token-authenticated start stop transcription location flow`
+  - 검증 포인트:
+    - `start_recording`/`transcription`/`stop_recording`/`location_update` 순차 200 응답
+    - transcription 메시지 저장
+    - recording 상태/last_location metadata 저장
+- 실행 명령:
+```bash
+bundle exec rails test test/controllers/api/voice/events_controller_test.rb test/services/voice/event_processor_test.rb test/integration/e2e_voicechat_flow_test.rb
+```
+- 결과: `13 runs, 54 assertions, 0 failures`
+
+## Device Snapshot (2026-02-15)
+- 확인됨:
+  - USB 연결 시 디바이스 식별: `SM-S936B (Android 16)`
+  - 앱 부팅 로그 확인:
+    - `MainActivity: runtime permissions already granted`
+    - `VoiceBridge: TTS initialized successfully`
+    - `MainActivity: webview page finished: https://soletalk-rails-production.up.railway.app/`
+- 미완:
+  - 세션 상세(디버그 패널) 진입 전 단계로, `postVoiceEvent action=... code=2xx` 4종 증적 미채집
+- 후속:
+  - 세션 상세 화면에서 4개 액션 수행 후 `script/mobile/collect_voicebridge_evidence.sh` 결과를 증적으로 보강
+
+## Evidence Snapshot (2026-02-15 18:10)
+- 실행 명령:
+```bash
+TIMEOUT_SECONDS=45 script/mobile/collect_voicebridge_evidence.sh
+```
+- 디바이스: `SM-S936B`
+- 결과 요약:
+  - `start_recording` -> `200`
+  - `transcription` -> `200`
+  - `stop_recording` -> `200`
+  - `location_update` -> `200`
+- 스크립트 판정:
+  - `PASS: all 4 actions returned 2xx`
+- raw log:
+  - `/tmp/voicebridge_evidence_20260215_181046.log`

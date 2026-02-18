@@ -59,6 +59,16 @@
 - 비로그인 상태: Google OAuth 진입 CTA 표시
 - 로그인 상태: 최근 세션/인사이트와 핵심 이동 링크 표시
 
+12. UX hardening pass (2026-02-15)
+- 공통 상단 내비게이션 추가(`shared/_top_nav`) 및 레이아웃 브랜드명 `SoleTalk`로 통일
+- 사용자 피드백 영역 추가(`shared/_flash`) + 주요 액션 redirect notice/alert 연결
+- 홈 로그인 상태에서 내부 식별자(`google_sub`) 직접 노출 문구 제거
+- Session 화면 Android bridge 도구를 `details` 기반 Debug 섹션으로 분리
+- Native bridge status를 `aria-live="polite"` + 상태별 시각 피드백으로 개선
+- 메시지 전송 폼: submit 중 버튼 비활성/라벨 변경(`Sending...`) 후 복구
+- Settings JSON blur 검증 결과를 사용자 문구로 표시
+- 링크/버튼 스타일과 입력 폼 스타일을 공통 CSS로 정리
+
 ## Validation
 - Sessions 통합 테스트 통과 (`P22-T1`, `P22-T2`, `P22-T3`)
 - Session message 통합 테스트 통과 (`P23-T1`, `P23-T2`, `P23-T3`)
@@ -68,8 +78,11 @@
 - Emotion gauge 통합 테스트 통과 (`P27-T1`, `P27-T2`)
 - Stimulus hook/bootstrapping 통합 테스트 통과 (`P28-T1`, `P28-T2`, `P28-T3`)
 - 홈 화면 통합 테스트 통과 (`P54-T1`, `P54-T2`)
+- UX 하드닝 통합 테스트 통과 (`UX-T1`, `UX-T2`)
+- `PARALLEL_WORKERS=1 bundle exec rails test test/integration` 통과 (51 runs, 306 assertions)
+- `RUBOCOP_CACHE_ROOT=/tmp/rubocop_cache bundle exec rubocop ...` 통과 (변경 Ruby 파일 no offenses)
 - 전체 테스트 통과 (81 tests, 350 assertions)
 - 대상 Ruby 파일 RuboCop 통과
 
 ## Next
-- Phase 11 (Background Jobs) 진행
+- UI/UX 갭 잔여 항목(다국어 전체 로컬라이징, 소비자용 구독 결제 UX 분리) 후속 진행

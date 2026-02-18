@@ -31,6 +31,6 @@
   - `adb shell am start -W -n io.soletalk.mobile/.MainActivity` 실행 확인
 
 ## Remaining
-- `P57-T3` 실기기 E2E(브리지 이벤트 4종 전송 후 Rails 저장 증적) 완료 필요
+- 실기기 로그 증적 수집(외부 게이트): 브리지 이벤트 4종 전송 후 `adb logcat` 2xx 캡처
 - Gemini Live STT 스트리밍 연동
 - Gemini Live 양방향 오디오 스트리밍 연동
