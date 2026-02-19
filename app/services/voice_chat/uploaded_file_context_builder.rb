@@ -36,7 +36,8 @@ module VoiceChat
 
     def extract_text_preview(blob)
       blob.download.force_encoding("UTF-8").truncate(MAX_PREVIEW_BYTES)
-    rescue StandardError
+    rescue StandardError => e
+      Rails.logger.warn("[UploadedFileContextBuilder] text preview extraction failed: #{e.message}")
       nil
     end
   end

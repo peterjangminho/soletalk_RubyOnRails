@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from ActionController::InvalidAuthenticityToken, with: :render_invalid_authenticity_token
   rescue_from ActionController::InvalidCrossOriginRequest, with: :render_invalid_authenticity_token
+  rescue_from ActionController::ParameterMissing, with: :render_parameter_missing
 
   private
 
@@ -38,6 +39,14 @@ class ApplicationController < ActionController::Base
     return I18n.default_locale if locale.blank?
 
     I18n.available_locales.map(&:to_s).include?(locale) ? locale : I18n.default_locale
+  end
+
+  def render_parameter_missing(error)
+    if request.format.json?
+      render json: { success: false, error: "parameter_missing", message: error.message }, status: :bad_request
+    else
+      render plain: "bad request", status: :bad_request
+    end
   end
 
   def render_not_found(error)

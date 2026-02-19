@@ -1,6 +1,6 @@
 <% content_for :hide_top_nav, "true" %>
 <% if current_user %>
-  <section class="main-screen"
+  <main class="main-screen"
     data-controller="voice-stage native-bridge quick-upload policy-modal"
     data-native-bridge-auto-permissions-value="true"
     data-quick-upload-url-value="<%= voice_context_files_path %>">
@@ -32,7 +32,8 @@
       <p class="mic-status-text" aria-live="polite"></p>
     </div>
 
-    <div class="upload-bottom-sheet" data-quick-upload-target="sheet" hidden>
+    <div class="upload-bottom-sheet" data-quick-upload-target="sheet" hidden
+      role="dialog" aria-modal="true" aria-label="<%= t("home.upload.confirm_title", default: "Add to conversation?") %>">
       <div class="upload-sheet-content">
         <p class="upload-sheet-title"><%= t("home.upload.confirm_title", default: "Add to conversation?") %></p>
         <p class="upload-sheet-file" data-quick-upload-target="fileInfo"></p>
@@ -50,9 +51,9 @@
     <p class="bridge-fallback" data-voice-stage-target="bridgeFallback" hidden></p>
 
     <%= render "shared/policy_modal" %>
-  </section>
+  </main>
 <% else %>
-  <section class="login-screen">
+  <main class="login-screen">
     <section
       class="home-opening-overlay"
       data-controller="opening-animation"
@@ -127,5 +128,5 @@
         <a href="/?locale=ko" class="lang-option" data-turbo="false">한국어</a>
       <% end %>
     </div>
-  </section>
+  </main>
 <% end %>

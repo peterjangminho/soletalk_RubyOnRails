@@ -33,7 +33,7 @@
         local: true,
         data: { controller: "settings-form" } do |form| %>
         <div class="settings-data-section">
-          <%= form.number_field :voice_speed, step: 0.1, style: "margin-bottom: 0.5rem;" %>
+          <%= form.number_field :voice_speed, step: 0.1, style: "margin-bottom: 0.5rem;", aria: { label: t("settings.show.form.voice_speed") } %>
         </div>
 
         <h2 style="margin-top: 1.5rem;"><%= t("settings.show.form.preferences_json") %></h2>
@@ -41,6 +41,7 @@
           <%= text_area_tag "setting[preferences_json]",
             @setting.preferences.to_json,
             placeholder: t("settings.show.form.preferences_placeholder"),
+            "aria-label": t("settings.show.form.preferences_json"),
             data: { settings_form_target: "preferences", action: "blur->settings-form#normalizeJson" } %>
         </div>
 
@@ -100,7 +101,7 @@
           <h3><%= t("subscription.show.upgrade.restore_title") %></h3>
           <p><%= t("subscription.show.upgrade.helper") %></p>
           <%= form_with url: validate_subscription_path, method: :post, local: true do |form| %>
-            <%= form.text_field :revenue_cat_id, value: current_user.revenue_cat_id, placeholder: "rc_..." %>
+            <%= form.text_field :revenue_cat_id, value: current_user.revenue_cat_id, placeholder: "rc_...", aria: { label: t("subscription.show.upgrade.restore_title") } %>
             <%= form.submit t("subscription.show.upgrade.restore_submit"), style: "margin-top: 0.5rem;" %>
           <% end %>
         </div>

@@ -23,7 +23,8 @@ module Auth
           google_sub: payload[GOOGLE_SUB_CLAIM].to_s,
           exp: payload[EXP_CLAIM].to_i
         }
-      rescue StandardError
+      rescue StandardError => e
+        Rails.logger.warn("[VoiceBridgeToken] verification failed: #{e.message}")
         nil
       end
 

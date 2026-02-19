@@ -1,6 +1,6 @@
 <%= turbo_stream_from @session %>
 
-<section class="page-shell session-stage" data-session-id="<%= @session.id %>" data-native-bridge="voice">
+<main class="page-shell session-stage" data-session-id="<%= @session.id %>" data-native-bridge="voice">
   <section
     class="orb-hero orb-hero-session"
     data-controller="particle-sphere"
@@ -111,7 +111,7 @@
       </div>
     </section>
   </details>
-</section>
+</main>
 
 <script>
   document.addEventListener("turbo:load", function() {
