@@ -1,0 +1,42 @@
+<% content_for :hide_top_nav, "true" %>
+<main class="page-shell settings-shell settings-scroll">
+  <header class="settings-header">
+    <%= link_to root_path, class: "settings-back-btn", aria: { label: t("voice.context_files.back", default: "Back") } do %>
+      <%= render "shared/icon", name: "arrow-left", size: 20 %>
+    <% end %>
+    <h1><%= t("voice.context_files.title", default: "Upload Files") %></h1>
+  </header>
+
+  <div class="settings-body">
+    <section class="settings-section" id="upload">
+      <h2><%= t("voice.context_files.menu_title", default: "Upload Menu") %></h2>
+      <div class="settings-data-section">
+        <p><%= t("voice.context_files.menu_description", default: "Upload a file and include it in your voice conversation context.") %></p>
+        <%= form_with url: voice_context_files_path, method: :post, local: true, multipart: true do |form| %>
+          <label class="upload-drop-zone">
+            <%= render "shared/icon", name: "upload-cloud", size: 28 %>
+            <span class="upload-drop-label"><%= t("voice.context_files.choose_file", default: "Choose File") %></span>
+            <small><%= t("voice.context_files.file_help", default: ".txt, .pdf, .csv, .json, .md") %></small>
+            <%= form.file_field :file, class: "upload-file-input" %>
+          </label>
+          <%= form.submit t("voice.context_files.submit", default: "Add File"), class: "btn-link settings-management-action" %>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="settings-section" id="uploaded-files">
+      <h2><%= t("settings.show.uploaded_files.title") %></h2>
+      <div class="settings-data-section">
+        <% if @uploaded_files.any? %>
+          <ul class="insight-timeline">
+            <% @uploaded_files.each do |file| %>
+              <li><%= link_to file.filename.to_s, url_for(file) %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p><%= t("settings.show.uploaded_files.empty") %></p>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</main>

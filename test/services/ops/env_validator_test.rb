@@ -9,6 +9,8 @@ module Ops
           "ONTOLOGY_RAG_API_KEY" => nil,
           "GOOGLE_CLIENT_ID" => nil,
           "GOOGLE_CLIENT_SECRET" => "secret",
+          "REVENUECAT_BASE_URL" => nil,
+          "REVENUECAT_API_KEY" => nil,
           "SECRET_KEY_BASE" => nil
         }
       )
@@ -18,6 +20,8 @@ module Ops
       assert_equal false, result[:ok]
       assert_includes result[:missing], "ONTOLOGY_RAG_API_KEY"
       assert_includes result[:missing], "GOOGLE_CLIENT_ID"
+      assert_includes result[:missing], "REVENUECAT_BASE_URL"
+      assert_includes result[:missing], "REVENUECAT_API_KEY"
       assert_includes result[:missing], "SECRET_KEY_BASE"
     end
   end

@@ -3,8 +3,10 @@ require "test_helper"
 class InsightGeneratorTest < ActiveSupport::TestCase
   test "P17-T2 creates insight record from depth answers" do
     generator = Insight::Generator.new
+    user = User.create!(google_sub: "insight-generator-user")
 
     insight = generator.call(
+      user: user,
       q1_answer: "회의 일정이 촉박",
       q2_answer: "범위를 줄일지 고민",
       q3_answer: "팀 피로를 줄여야 함",

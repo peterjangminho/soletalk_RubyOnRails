@@ -76,7 +76,7 @@ module Voice
       return nil if value.nil? || value.to_s.strip.empty?
 
       Float(value)
-    rescue ArgumentError, TypeError
+    rescue ArgumentError, TypeError # intentionally returns nil for invalid numeric input
       nil
     end
 

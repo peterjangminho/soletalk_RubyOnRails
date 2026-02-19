@@ -28,7 +28,12 @@ en:
       description: "Use Google OAuth to start voice sessions and view insights."
       privacy: "For your privacy, authentication is delegated to Google and your session stays in your account scope."
       cta: "Continue with Google"
+      guest_cta: "Continue as Guest"
       dev_cta: "Quick Dev Sign In"
+      consent_label: "I agree to the Privacy Policy & Terms of Service"
+      consent_agreed: "Policy agreed. You can continue."
+      consent_required: "Consent required:"
+      consent_open: "Open consent screen"
 
   sessions:
     record_label: "Session #%{id}"
@@ -83,11 +88,25 @@ en:
       title: "Insight Detail"
       back: "Back to Insights"
 
+  voice:
+    context_files:
+      title: "Upload Files"
+      back: "Back"
+      menu_title: "Upload Menu"
+      menu_description: "Upload a file and include it in your voice conversation context."
+      choose_file: "Choose File"
+      file_help: ".txt, .pdf, .csv, .json, .md"
+      submit: "Add File"
+
   settings:
     show:
       title: "Settings"
       subtitle: "Update language, voice speed, and advanced preferences for your next sessions."
       back: "Back to Sessions"
+      data_management_title: "Data Management"
+      data_management:
+        voice_speed_description: "Adjust the playback pace for assistant responses."
+        preferences_description: "Store advanced profile preferences as JSON."
       form:
         language: "Language"
         languages:
@@ -102,6 +121,14 @@ en:
       uploaded_files:
         title: "Uploaded reference files"
         empty: "No uploaded files yet."
+      policy:
+        title: "Policy"
+        privacy_link: "Privacy Policy"
+        terms_link: "Terms of Service"
+      account:
+        title: "Account"
+        sign_out: "Sign Out"
+        sign_out_description: "Sign out of your current session."
 
   subscription:
     show:
@@ -123,6 +150,12 @@ en:
         submit: "Validate Subscription"
         restore_submit: "Restore Subscription"
 
+  policy_modal:
+    privacy_title: "Privacy Policy"
+    privacy_body: "Your data is handled according to our privacy policy."
+    terms_title: "Terms of Service"
+    terms_body: "By using SoleTalk you agree to the terms of service."
+
   flash:
     sessions:
       create:
@@ -131,6 +164,10 @@ en:
     messages:
       create:
         notice: "Message sent."
+    context_files:
+      create:
+        no_file: "Please choose a file to upload."
+        notice: "File uploaded."
     settings:
       update:
         notice: "Settings updated."
@@ -143,6 +180,8 @@ en:
           revenue_cat_id_missing: "RevenueCat Customer ID is required."
           default: "Failed to refresh subscription status."
     auth:
+      sign_out:
+        notice: "You have been signed out."
       failure: "Google sign-in failed. Please try again."
     dev:
       sign_in:

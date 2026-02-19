@@ -12,7 +12,9 @@ class InsightTest < ActiveSupport::TestCase
   end
 
   test "P3-T3 persists engc_profile default safely" do
+    user = User.create!(google_sub: "insight-model-user")
     insight = Insight.create!(
+      user: user,
       situation: "Need to choose route",
       decision: "Take highway",
       action_guide: "Leave 10 minutes early",

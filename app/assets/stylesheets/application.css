@@ -7,7 +7,7 @@
  * depending on specificity.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap");
 
 :root {
   --bg: #21203a;
@@ -40,7 +40,7 @@ body {
 body {
   margin: 0;
   color: var(--text);
-  font-family: "Quicksand", "Noto Serif KR", sans-serif;
+  font-family: "Quicksand", "Noto Sans KR", sans-serif;
   line-height: 1.55;
   background:
     radial-gradient(circle at 20% 16%, rgba(125, 211, 232, 0.25) 0%, rgba(125, 211, 232, 0) 46%),
@@ -128,7 +128,7 @@ h1 {
   position: fixed;
   inset: 0;
   z-index: 50;
-  background: #21203a;
+  background: var(--bg);
   transition: opacity 0.6s ease;
 }
 
@@ -199,9 +199,14 @@ h1 {
 }
 
 .main-orb-stage {
-  display: grid;
-  gap: 0.8rem;
-  justify-items: center;
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 18vh;
 }
 
 .main-orb-top {
@@ -269,6 +274,26 @@ h1 {
   margin: 0;
 }
 
+/* Status indicator text below mic (Project_B parity) */
+.mic-status-text {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+  min-height: 1.3em;
+  letter-spacing: 0.03em;
+  transition: color 0.3s;
+}
+
+.mic-status-text.status-active {
+  color: var(--accent-green);
+}
+
+.mic-status-text.status-muted {
+  color: #eab308;
+}
+
 .login-panel {
   max-width: 560px;
 }
@@ -299,6 +324,7 @@ h1 {
 .btn-link-disabled:hover {
   opacity: 0.52;
   cursor: not-allowed;
+  pointer-events: none;
   transform: none;
   box-shadow: none;
 }
@@ -325,11 +351,11 @@ h1 {
 .auth-brand h1 {
   margin: 0;
   font-size: 2.2rem;
-  color: #7DD3E8;
+  color: var(--accent);
 }
 
 .auth-brand h1 span {
-  color: #5EECC7;
+  color: var(--accent-green);
 }
 
 .auth-brand p {
@@ -378,6 +404,14 @@ h1 {
   gap: 0.5rem;
   margin: 0.8rem 0;
   align-items: flex-start;
+  color: var(--muted);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.consent-checkbox input[type="checkbox"] {
+  margin-top: 0.2rem;
+  accent-color: var(--accent-green);
 }
 
 .top-nav-shell {
@@ -442,6 +476,22 @@ h1 {
 .top-nav-links a:hover {
   transform: translateY(-1px);
   background: var(--accent-soft);
+}
+
+.flash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  gap: 0.42rem;
+  padding: 0.65rem 1rem;
+  pointer-events: none;
+}
+
+.flash-overlay .flash-message {
+  pointer-events: auto;
 }
 
 .flash-stack {
@@ -542,6 +592,16 @@ button:hover {
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
   border-color: var(--border);
+}
+
+.btn-link.btn-link-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-link.btn-link-danger:hover {
+  background: rgba(239, 68, 68, 0.25);
 }
 
 input[type="text"],
@@ -700,14 +760,28 @@ textarea::placeholder {
 }
 
 #messages article[data-role="user"] {
-  border-color: rgba(147, 203, 255, 0.48);
-  background: linear-gradient(135deg, rgba(48, 92, 143, 0.56), rgba(38, 53, 89, 0.56));
+  margin-left: auto;
+  max-width: 85%;
+  border-color: rgba(20, 184, 166, 0.4);
+  background: rgba(20, 184, 166, 0.8);
+  border-radius: 16px 16px 4px 16px;
 }
 
 #messages article[data-role="assistant"] {
-  border-color: rgba(173, 157, 255, 0.46);
-  background: linear-gradient(135deg, rgba(80, 63, 140, 0.52), rgba(33, 33, 70, 0.52));
+  margin-right: auto;
+  max-width: 85%;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(31, 41, 55, 0.8);
+  border-radius: 16px 16px 16px 4px;
 }
+
+/* Message opacity fade: older messages become transparent (Project_B parity) */
+#messages article { opacity: 0.5; }
+#messages article:nth-last-child(1) { opacity: 1; }
+#messages article:nth-last-child(2) { opacity: 0.92; }
+#messages article:nth-last-child(3) { opacity: 0.82; }
+#messages article:nth-last-child(4) { opacity: 0.72; }
+#messages article:nth-last-child(5) { opacity: 0.62; }
 
 .emotion-gauge {
   width: 100%;
@@ -782,8 +856,9 @@ textarea::placeholder {
 }
 
 .settings-shell {
-  display: grid;
-  gap: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .settings-scroll {
@@ -793,51 +868,176 @@ textarea::placeholder {
 }
 
 .settings-card-glass {
-  background: linear-gradient(145deg, rgba(24, 28, 52, 0.6), rgba(14, 18, 38, 0.55));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 8px 32px rgba(6, 10, 24, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
 }
 
-.settings-hero-stage {
-  position: relative;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  overflow: hidden;
-  min-height: 300px;
-  background:
-    radial-gradient(circle at 22% 18%, rgba(95, 176, 255, 0.14), transparent 44%),
-    radial-gradient(circle at 78% 22%, rgba(131, 124, 255, 0.12), transparent 46%),
-    linear-gradient(150deg, rgba(14, 18, 38, 0.9), rgba(12, 16, 33, 0.92));
+/* ── Settings Header (Project_B SettingsView parity) ── */
+
+.settings-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(17, 20, 36, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.settings-hero-stage .orb-hero-home {
-  min-height: 300px;
-}
-
-.settings-hero-stage .orb-hero-home canvas {
-  height: 300px;
-}
-
-.settings-hero-copy {
-  position: absolute;
-  inset: 0 auto auto 0;
-  z-index: 2;
-  max-width: 520px;
-  padding: 1rem;
-}
-
-.settings-grid {
+.settings-back-btn {
   display: grid;
-  gap: 0.85rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-.settings-card-primary {
-  grid-column: 1 / -1;
+.settings-back-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ── Settings Body ── */
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.2rem 1rem;
+}
+
+.settings-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Language Radio Buttons (Project_B parity) ── */
+
+.settings-lang-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings-lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-lang-option:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.settings-lang-option.active {
+  background: rgba(20, 184, 166, 0.15);
+  border-color: rgba(20, 184, 166, 0.5);
+}
+
+.settings-lang-check {
+  display: none;
+  color: var(--accent-green);
+}
+
+.settings-lang-option.active .settings-lang-check {
+  display: inline;
+}
+
+/* ── Settings Card Sections (Project_B data management parity) ── */
+
+.settings-data-section {
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.settings-data-section h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.settings-data-section p {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ── Upload Drop Zone (Project_B parity) ── */
+
+.upload-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.5rem 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  color: var(--muted);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.upload-drop-zone:hover {
+  border-color: var(--accent);
+  background: rgba(125, 211, 232, 0.05);
+}
+
+.upload-drop-label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.upload-drop-zone small {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.upload-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.settings-data-section.danger {
+  background: rgba(127, 29, 29, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.settings-data-section.danger h3 {
+  color: #fca5a5;
 }
 
 .settings-form-grid {
@@ -915,26 +1115,8 @@ textarea::placeholder {
     height: 68px;
   }
 
-  .settings-grid,
   .settings-form-grid {
     grid-template-columns: 1fr;
-  }
-
-  .settings-hero-stage {
-    min-height: 262px;
-  }
-
-  .settings-hero-stage .orb-hero-home {
-    min-height: 262px;
-  }
-
-  .settings-hero-stage .orb-hero-home canvas {
-    height: 262px;
-  }
-
-  .settings-hero-copy {
-    padding: 0.85rem;
-    max-width: 100%;
   }
 }
 
@@ -1038,6 +1220,34 @@ textarea::placeholder {
   margin-top: 0.8rem;
 }
 
+.login-lang-toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.lang-option {
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+a.lang-option:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.lang-active {
+  color: var(--text);
+  background: var(--surface-strong);
+  border-color: var(--border);
+}
+
 .login-card h2 {
   margin-top: 0;
   margin-bottom: 0.25rem;
@@ -1073,9 +1283,25 @@ textarea::placeholder {
   position: relative;
   z-index: 10;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.5rem;
   padding: 0.8rem 1rem;
+}
+
+.main-top-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.main-top-icon:hover {
+  background: rgba(0, 0, 0, 0.35);
 }
 
 .main-mic-center {

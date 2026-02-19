@@ -62,6 +62,7 @@ class E2eVoicechatFlowTest < ActionDispatch::IntegrationTest
     assert DepthExploration.exists?(depth_id)
 
     post "/api/voice_chat/insight", params: {
+      session_id: session_record.id,
       q1_answer: "why",
       q2_answer: "decision",
       q3_answer: "impact",
@@ -83,6 +84,7 @@ class E2eVoicechatFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/sessions/#{session_record.id}"
 
     post "/api/voice_chat/insight", params: {
+      session_id: session_record.id,
       q1_answer: "situation",
       q2_answer: "decision",
       q3_answer: "action",
@@ -99,16 +101,14 @@ class E2eVoicechatFlowTest < ActionDispatch::IntegrationTest
     OntologyRag::ConversationSaveJob.client_class = original_client if original_client
   end
 
-  test "P42-T3 E2E free-tier gating blocks insight access while premium allows" do
-    Insight.create!(situation: "s1", decision: "d1", action_guide: "a1", data_info: "i1")
-
+  test "P42-T3 E2E all users redirected from insights to root (voice-only IA)" do
     sign_in(google_sub: "e2e-free-user", premium: false)
     get "/insights"
-    assert_response :redirect
+    assert_redirected_to "/"
 
     sign_in(google_sub: "e2e-prem-user", premium: true)
     get "/insights"
-    assert_response :ok
+    assert_redirected_to "/"
   end
 
   test "P55-T3 E2E voice event flow start transcription stop location succeeds" do
@@ -147,5 +147,52 @@ class E2eVoicechatFlowTest < ActionDispatch::IntegrationTest
     assert_equal "voice from native bridge", session_record.messages.order(:created_at).last.content
     assert_equal false, session_record.voice_chat_data.metadata["recording_active"]
     assert_equal 37.0, session_record.voice_chat_data.metadata["last_location"]["latitude"]
+  end
+
+  test "P57-T3 E2E android bridge contract accepts token-authenticated start stop transcription location flow" do
+    user = User.create!(google_sub: "e2e-android-bridge-user")
+    session_record = Session.create!(user: user, status: "active")
+    bridge_token = ::Auth::VoiceBridgeToken.generate(
+      session_id: session_record.id.to_s,
+      google_sub: user.google_sub
+    )
+
+    post "/api/voice/events", params: {
+      event_action: "start_recording",
+      session_id: session_record.id,
+      payload: { bridge_token: bridge_token }
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "transcription",
+      session_id: session_record.id,
+      payload: { text: "android bridge voice event", bridge_token: bridge_token }
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "stop_recording",
+      session_id: session_record.id,
+      payload: { bridge_token: bridge_token }
+    }, as: :json
+    assert_response :ok
+
+    post "/api/voice/events", params: {
+      event_action: "location_update",
+      session_id: session_record.id,
+      payload: { latitude: 37.5665, longitude: 126.978, weather: "clear", bridge_token: bridge_token }
+    }, as: :json
+    assert_response :ok
+
+    session_record.reload
+    voice_chat_data = session_record.voice_chat_data
+    metadata = voice_chat_data.metadata
+
+    assert_equal "android bridge voice event", session_record.messages.order(:created_at).last.content
+    assert_equal false, metadata["recording_active"]
+    assert_equal 37.5665, metadata["last_location"]["latitude"]
+    assert_equal 126.978, metadata["last_location"]["longitude"]
+    assert_equal "clear", metadata["last_location"]["weather"]
   end
 end

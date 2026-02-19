@@ -17,7 +17,7 @@ module Ops
     def database_status
       ActiveRecord::Base.connection.execute("SELECT 1")
       "ok"
-    rescue StandardError
+    rescue StandardError # health check: intentionally returns "error" status without raising
       "error"
     end
 

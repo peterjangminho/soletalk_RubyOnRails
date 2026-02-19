@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :redirect_to_voice_home, only: [ :index, :new ]
   before_action :set_session, only: :show
 
   def index
@@ -17,7 +18,7 @@ class SessionsController < ApplicationController
     end
     redirect_to session_redirect_path, notice: t("flash.sessions.create.notice")
   rescue ActiveRecord::RecordInvalid
-    redirect_to new_session_path, alert: t("flash.sessions.create.alert")
+    redirect_to root_path, alert: t("flash.sessions.create.alert")
   end
 
   def show
@@ -39,5 +40,9 @@ class SessionsController < ApplicationController
     return session_path(@session, auto_start_recording: "1") if params[:entrypoint] == "main_mic"
 
     session_path(@session)
+  end
+
+  def redirect_to_voice_home
+    redirect_to root_path
   end
 end

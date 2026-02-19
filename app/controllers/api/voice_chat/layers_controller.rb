@@ -36,7 +36,10 @@ module Api
       end
 
       def insight
+        session_record = Session.find(params.require(:session_id))
+
         insight = insight_generator_class.new.call(
+          user: session_record.user,
           q1_answer: params.require(:q1_answer),
           q2_answer: params.require(:q2_answer),
           q3_answer: params.require(:q3_answer),

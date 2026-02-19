@@ -61,6 +61,37 @@ module Api
       ensure
         ::Api::Auth::GoogleController.id_token_verifier_class = original if original
       end
+
+      test "P68-T3 GET /api/auth/google/mobile_handoff signs in web session with valid handoff token" do
+        user = User.create!(
+          google_sub: "native-handoff-sub-1",
+          email: "handoff1@example.com",
+          name: "Handoff One"
+        )
+        token = ::Auth::MobileSessionHandoffToken.generate(
+          user_id: user.id,
+          google_sub: user.google_sub,
+          expires_in: 10.minutes
+        )
+
+        get "/api/auth/google/mobile_handoff", params: { handoff: token }
+
+        assert_response :redirect
+        assert_redirected_to "/"
+
+        get "/api/protected"
+        assert_response :ok
+      end
+
+      test "P68-T4 GET /api/auth/google/mobile_handoff redirects to root when token invalid" do
+        get "/api/auth/google/mobile_handoff", params: { handoff: "bad-token" }
+
+        assert_response :redirect
+        assert_redirected_to "/"
+
+        get "/api/protected"
+        assert_response :redirect
+      end
     end
   end
 end

@@ -27,14 +27,15 @@
   </head>
 
   <body class="incar-body">
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to content</a>
     <div class="incar-aurora" aria-hidden="true"></div>
     <div class="incar-noise" aria-hidden="true"></div>
     <div class="app-shell">
-      <% if current_user %>
+      <% if current_user && !content_for?(:hide_top_nav) %>
         <%= render "shared/top_nav" %>
       <% end %>
       <%= render "shared/flash" %>
-      <div class="app-content">
+      <div class="app-content" id="main-content">
         <%= yield %>
       </div>
     </div>

@@ -1,0 +1,7 @@
+<% if flash.any? %>
+  <section class="flash-overlay" aria-live="polite">
+    <% flash.each do |level, message| %>
+      <p class="flash-message flash-<%= level %>"><%= message %></p>
+    <% end %>
+  </section>
+<% end %>

@@ -3,10 +3,11 @@ require "securerandom"
 module Auth
   class GuestSessionsController < ApplicationController
     def create
+      session[:policy_agreed] = true if params[:consent_accepted] == "1"
       user = build_guest_user
       session[:user_id] = user.id
 
-      redirect_to root_path, notice: "Signed in as guest."
+      redirect_to root_path
     end
 
     private

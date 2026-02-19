@@ -22,40 +22,25 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "SoleTalk"
     assert_includes response.body, "Continue with Google"
     assert_includes response.body, "/auth/google_oauth2"
-    assert_includes response.body, "href=\"/auth/google_oauth2/start\""
+    assert_includes response.body, "href=\"/auth/google_oauth2/start?consent_accepted=1\""
   end
 
-  test "P54-T2 signed-in root page shows navigation and recent lists" do
+  test "P54-T2 signed-in root page shows main screen with particle sphere and mic" do
     sign_in(google_sub: "home-signed-user")
-    user = User.find_by!(google_sub: "home-signed-user")
-    session_record = Session.create!(user: user, status: "active")
-    Insight.create!(
-      user: user,
-      situation: "home insight situation",
-      decision: "home insight decision",
-      action_guide: "home insight action",
-      data_info: "home insight data"
-    )
-    Insight.create!(
-      user: User.create!(google_sub: "home-signed-other-user"),
-      situation: "other user home insight",
-      decision: "other user decision",
-      action_guide: "other user action",
-      data_info: "other user data"
-    )
 
     get "/"
 
     assert_response :ok
-    assert_includes response.body, "Welcome"
-    assert_includes response.body, "/sessions/new"
-    assert_includes response.body, "/sessions/#{session_record.id}"
-    assert_includes response.body, "home insight situation"
-    assert_not_includes response.body, "other user home insight"
-    assert_includes response.body, "href=\"/setting#uploads\""
+    assert_includes response.body, "home-opening-overlay"
+    assert_includes response.body, "data-controller=\"opening-animation\""
     assert_includes response.body, "main-orb-stage"
     assert_includes response.body, "home-main-mic"
-    assert_includes response.body, "action=\"/sessions\""
+    assert_not_includes response.body, "action=\"/sessions\""
+    assert_includes response.body, "href=\"/voice/context_files\""
+    assert_includes response.body, "mic-button:state-changed->native-bridge#micStateChanged"
+    assert_includes response.body, "particle-sphere"
+    # Main screen has no text content - only icons and mic
+    assert_not_includes response.body, "Welcome"
   end
 
   test "UX-T1 signed-in root page does not expose raw google_sub identifier text" do
@@ -84,21 +69,26 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "top-nav-shell"
   end
 
-  test "UI-T2 signed-in pages show top nav bar" do
+  test "UI-T2 signed-in sessions page redirects to root (voice-only IA)" do
     sign_in(google_sub: "nav-test-user")
 
+    # Home hides top nav
     get "/"
     assert_response :ok
-    assert_includes response.body, "top-nav-shell"
+    assert_not_includes response.body, "top-nav-shell"
+
+    # Sessions page redirects to root in voice-only mode
+    get "/sessions"
+    assert_redirected_to "/"
   end
 
-  test "P72-T2 guest root page renders login screen with opening animation" do
+  test "P72-T2 guest root page renders login screen without opening animation" do
     get "/"
 
     assert_response :ok
     assert_includes response.body, "login-screen"
     assert_includes response.body, "login-card"
-    assert_includes response.body, "data-controller=\"opening-animation\""
+    assert_not_includes response.body, "data-controller=\"opening-animation\""
   end
 
   test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do
@@ -111,13 +101,15 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "href=\"/subscription\""
   end
 
-  test "P80-T1 signed-in home uses Project_B brand assets (logo in nav)" do
+  test "P80-T1 signed-in session show does not expose top text-box navigation chips" do
     sign_in(google_sub: "brand-logo-user")
+    user = User.find_by!(google_sub: "brand-logo-user")
+    session_record = Session.create!(user: user, status: "active")
 
-    get "/"
+    get "/sessions/#{session_record.id}"
 
     assert_response :ok
-    assert_includes response.body, "/brand/soletalk-logo-v2.png"
+    assert_not_includes response.body, "top-nav-shell"
   end
 
   test "P85-T3 guest home shows actionable guest entry after policy consent" do
@@ -152,13 +144,14 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "mic-button#toggle"
   end
 
-  test "P87-T2 signed-in home main mic form includes main_mic entrypoint hidden field" do
+  test "P87-T2 signed-in home binds native bridge session payload on main screen" do
     sign_in(google_sub: "home-main-mic-entrypoint-user")
 
     get "/"
 
     assert_response :ok
-    assert_includes response.body, "name=\"entrypoint\""
-    assert_includes response.body, "value=\"main_mic\""
+    assert_includes response.body, "data-native-bridge-session-id-value="
+    assert_includes response.body, "data-native-bridge-google-sub-value=\"home-main-mic-entrypoint-user\""
+    assert_includes response.body, "data-native-bridge-bridge-token-value="
   end
 end

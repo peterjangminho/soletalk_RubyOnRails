@@ -27,6 +27,6 @@
     <!-- Launcher Icon Background (SoleTalk dark blue) -->
     <color name="ic_launcher_background">#1A1A2E</color>
 
-    <!-- Splash Screen Background -->
-    <color name="splash_background">#1A1A2E</color>
+    <!-- Splash Screen Background (matches app theme) -->
+    <color name="splash_background">#21203A</color>
 </resources>

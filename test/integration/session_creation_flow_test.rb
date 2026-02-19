@@ -15,14 +15,12 @@ class SessionCreationFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
   end
 
-  test "P24-T1 GET /sessions/new renders new session form" do
+  test "P24-T1 GET /sessions/new redirects to root (voice-only IA)" do
     sign_in(google_sub: "session-new-user")
 
     get "/sessions/new"
 
-    assert_response :ok
-    assert_includes response.body, "<form"
-    assert_includes response.body, "Start Session"
+    assert_redirected_to "/"
   end
 
   test "P24-T2 POST /sessions creates active session and initializes voice_chat_data" do
@@ -40,13 +38,12 @@ class SessionCreationFlowTest < ActionDispatch::IntegrationTest
     assert_equal "opener", created.voice_chat_data.current_phase
   end
 
-  test "P24-T3 sessions index exposes new session entry point" do
+  test "P24-T3 GET /sessions redirects to root (voice-only IA)" do
     sign_in(google_sub: "session-entry-user")
 
     get "/sessions"
 
-    assert_response :ok
-    assert_includes response.body, "/sessions/new"
+    assert_redirected_to "/"
   end
 
   test "P63-T1 POST /sessions rolls back session when voice_chat_data initialization fails" do
@@ -67,7 +64,7 @@ class SessionCreationFlowTest < ActionDispatch::IntegrationTest
       VoiceChatData.singleton_class.define_method(:create!, original_create)
     end
 
-    assert_redirected_to "/sessions/new"
+    assert_redirected_to "/"
     follow_redirect!
     assert_includes response.body, "Failed to start session."
   end

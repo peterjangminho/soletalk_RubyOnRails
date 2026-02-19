@@ -1,12 +1,19 @@
-<h1>Sessions</h1>
+<main class="page-shell">
+  <header class="page-header">
+    <h1><%= t("sessions.index.title") %></h1>
+    <p><%= t("sessions.index.subtitle") %></p>
+  </header>
 
-<p><%= link_to "New Session", new_session_path %></p>
-<p><%= link_to "Settings", setting_path %></p>
+  <p class="action-row">
+    <%= link_to t("sessions.index.actions.new_session"), new_session_path, class: "btn-link" %>
+    <%= link_to t("sessions.index.actions.settings"), setting_path, class: "btn-link btn-link-secondary" %>
+  </p>
 
-<ul>
-  <% @sessions.each do |session_record| %>
-    <li>
-      <%= link_to "Session ##{session_record.id}", session_path(session_record) %>
-    </li>
-  <% end %>
-</ul>
+  <ul class="insight-timeline">
+    <% @sessions.each do |session_record| %>
+      <li class="insight-card">
+        <%= link_to t("sessions.record_label", id: session_record.id), session_path(session_record) %>
+      </li>
+    <% end %>
+  </ul>
+</main>

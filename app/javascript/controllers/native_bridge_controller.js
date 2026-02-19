@@ -2,13 +2,15 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = {
-    autoStart: Boolean
+    autoStart: Boolean,
+    autoPermissions: Boolean
   }
 
   static targets = ["status", "transcription", "tts", "latitude", "longitude", "weather"]
 
   connect() {
     this.updateStatus(this.bridge ? "bridge-connected" : "bridge-unavailable")
+    this.requestPermissionsIfNeeded()
     this.startRecordingIfRequested()
   }
 
@@ -90,6 +92,13 @@ export default class extends Controller {
 
   get bridge() {
     return window.SoleTalkBridge
+  }
+
+  requestPermissionsIfNeeded() {
+    if (!this.autoPermissionsValue) return
+    if (!this.bridge || typeof this.bridge.requestPermissions !== "function") return
+
+    this.bridge.requestPermissions()
   }
 
   startRecordingIfRequested() {

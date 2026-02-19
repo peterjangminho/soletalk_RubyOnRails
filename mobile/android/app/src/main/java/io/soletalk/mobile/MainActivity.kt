@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    requestRuntimePermissionsIfNeeded()
-
     webView = findViewById(R.id.webview)
     webView.settings.javaScriptEnabled = true
     webView.settings.domStorageEnabled = true
@@ -104,7 +102,9 @@ class MainActivity : AppCompatActivity() {
       }
     })
 
-    webView.loadUrl(resolveInitialUrl(intent))
+    val initialUrl = resolveInitialUrl(intent)
+    Log.i(TAG, "loading initial url: $initialUrl (base=$baseUrl)")
+    webView.loadUrl(initialUrl)
   }
 
   override fun onResume() {

@@ -20,12 +20,23 @@ const ARIA_LABELS = Object.freeze({
   disabled: "Processing..."
 })
 
+const STATUS_LABELS = Object.freeze({
+  idle: "",
+  active: "Listening...",
+  muted: "Paused",
+  disabled: "Processing..."
+})
+
 export function stateStyle(state) {
   return STATE_STYLES[state] || STATE_STYLES.idle
 }
 
 export function ariaLabelForState(state) {
   return ARIA_LABELS[state] || ARIA_LABELS.idle
+}
+
+export function statusLabelForState(state) {
+  return STATUS_LABELS[state] || STATUS_LABELS.idle
 }
 
 export default class extends Controller {
@@ -64,6 +75,14 @@ export default class extends Controller {
 
     if (this.hasIconTarget) {
       this.iconTarget.setAttribute("data-icon", style.icon)
+    }
+
+    const statusEl = this.element.parentElement?.parentElement?.querySelector(".mic-status-text")
+    if (statusEl) {
+      statusEl.textContent = statusLabelForState(this.stateValue)
+      statusEl.className = "mic-status-text"
+      if (this.stateValue === "active") statusEl.classList.add("status-active")
+      if (this.stateValue === "muted") statusEl.classList.add("status-muted")
     }
   }
 

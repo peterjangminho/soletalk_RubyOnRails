@@ -1,67 +1,18 @@
+<% content_for :hide_top_nav, "true" %>
 <% if current_user %>
-  <section class="main-screen">
-    <div class="main-orb-bg"
-      data-controller="particle-sphere">
-      <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
-    </div>
-
-    <header class="main-top-bar">
-      <a href="<%= setting_path %>#uploads" class="main-top-icon" aria-label="File Upload">
-        <%= render "shared/icon", name: "upload-cloud" %>
-      </a>
-      <a href="<%= setting_path %>" class="main-top-icon" aria-label="Settings">
-        <%= render "shared/icon", name: "cog" %>
-      </a>
-    </header>
-
-    <div class="main-mic-center main-orb-stage">
-      <%= form_with url: sessions_path, method: :post, local: true, class: "home-main-mic-form" do |form| %>
-        <%= form.hidden_field :entrypoint, value: "main_mic" %>
-        <%= render "shared/mic_button", state: "idle" %>
-      <% end %>
-    </div>
-
-    <footer class="main-bottom-bar">
-      <h2><%= t("home.welcome", name: current_user.name.presence || current_user.google_sub) %></h2>
-      <p><%= t("home.connected") %></p>
-      <p class="action-row">
-        <%= link_to t("home.actions.start_session"), new_session_path, class: "btn-link" %>
-        <%= link_to t("home.actions.open_sessions"), sessions_path, class: "btn-link btn-link-secondary" %>
-        <%= link_to t("home.actions.open_insights"), insights_path, class: "btn-link btn-link-secondary" %>
-      </p>
-
-      <% if @recent_sessions.present? %>
-        <h3><%= t("home.recent_sessions.title") %></h3>
-        <ul class="insight-timeline">
-          <% @recent_sessions.each do |session_record| %>
-            <li>
-              <%= link_to t("sessions.record_label", id: session_record.id), session_path(session_record) %>
-              <small>(<%= session_record.status %>)</small>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-
-      <% if @recent_insights.present? %>
-        <h3><%= t("home.recent_insights.title") %></h3>
-        <ul class="insight-timeline">
-          <% @recent_insights.each do |insight| %>
-            <li><%= link_to insight.situation, insight_path(insight) %></li>
-          <% end %>
-        </ul>
-      <% end %>
-    </footer>
-  </section>
-<% else %>
-  <% policy_agreed = session[:policy_agreed] == true %>
-  <section class="login-screen">
+  <main class="main-screen"
+    data-controller="voice-stage native-bridge policy-modal"
+    data-action="mic-button:state-changed->voice-stage#micStateChanged mic-button:state-changed->native-bridge#micStateChanged"
+    data-native-bridge-auto-permissions-value="true"
+    data-native-bridge-session-id-value="<%= @active_session.id %>"
+    data-native-bridge-google-sub-value="<%= current_user.google_sub %>"
+    data-native-bridge-bridge-token-value="<%= @bridge_token %>">
     <section
       class="home-opening-overlay"
       data-controller="opening-animation"
       data-opening-animation-target="overlay"
       aria-hidden="true">
       <canvas class="home-opening-canvas" data-opening-animation-target="canvas"></canvas>
-      <div class="home-opening-logo">SoleTalk</div>
       <button
         class="home-opening-skip"
         data-action="opening-animation#skip"
@@ -70,51 +21,72 @@
       </button>
     </section>
 
+    <div class="main-orb-bg"
+      data-controller="particle-sphere"
+      data-voice-stage-target="sphere">
+      <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <header class="main-top-bar">
+      <div class="main-top-slot main-top-slot-left">
+        <a href="<%= voice_context_files_path %>" class="main-top-icon" aria-label="File Upload">
+          <%= render "shared/icon", name: "upload-cloud" %>
+        </a>
+      </div>
+      <div class="main-top-slot main-top-slot-right">
+        <a href="<%= setting_path %>" class="main-top-icon" aria-label="Settings">
+          <%= render "shared/icon", name: "cog" %>
+        </a>
+      </div>
+    </header>
+
+    <div class="main-orb-stage">
+      <div class="home-main-mic-form">
+        <%= render "shared/mic_button", state: "idle" %>
+      </div>
+      <p class="mic-status-text" aria-live="polite"></p>
+    </div>
+
+    <p class="bridge-fallback" data-voice-stage-target="bridgeFallback" hidden></p>
+
+    <%= render "shared/policy_modal" %>
+  </main>
+<% else %>
+  <main class="login-screen">
     <h1 class="login-brand">Sole<span>Talk</span></h1>
     <div class="login-brand-divider"></div>
     <p class="login-tagline"><%= t("home.subtitle") %></p>
 
-    <div class="login-card" id="sign-in">
+    <div class="login-card" id="sign-in" data-controller="consent-gate">
       <h2><%= t("home.sign_in.title") %></h2>
       <p><%= t("home.sign_in.description") %></p>
 
-      <p class="consent-inline">
-        <% if policy_agreed %>
-          Policy agreed. You can continue.
-        <% else %>
-          Consent required:
-          <%= link_to "Open consent screen", consent_path %>
-        <% end %>
-        &middot;
-        <a href="/legal/en/privacy-policy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-        &middot;
-        <a href="/legal/en/terms-of-service.html" target="_blank" rel="noopener noreferrer">Terms</a>
-      </p>
+      <label class="consent-checkbox">
+        <input type="checkbox"
+          data-consent-gate-target="checkbox"
+          data-action="change->consent-gate#toggle">
+        <%= t("home.sign_in.consent_label") %>
+      </label>
 
       <p class="action-row">
-        <% google_cta_classes = policy_agreed ? "btn-link" : "btn-link btn-link-disabled" %>
-        <% if policy_agreed %>
-          <%= link_to "/auth/google_oauth2/start", class: "#{google_cta_classes} btn-google", data: { turbo: false } do %>
-            <%= render "shared/google_icon" %>
-            <%= t("home.sign_in.cta") %>
-          <% end %>
-        <% else %>
-          <%= link_to "/auth/google_oauth2/start", class: "#{google_cta_classes} btn-google", data: { turbo: false, policy_required: true }, aria: { disabled: true } do %>
-            <%= render "shared/google_icon" %>
-            <%= t("home.sign_in.cta") %>
-          <% end %>
+        <%= link_to "/auth/google_oauth2/start?consent_accepted=1",
+              class: "btn-link btn-link-disabled btn-google",
+              data: { turbo: false, consent_gate_target: "gated" },
+              aria: { disabled: true } do %>
+          <%= render "shared/google_icon" %>
+          <%= t("home.sign_in.cta") %>
         <% end %>
       </p>
 
       <div class="login-divider"><span>or</span></div>
 
       <p class="action-row">
-        <% if policy_agreed %>
-          <%= form_with url: guest_sign_in_path, method: :post, local: true, class: "inline-auth-action" do |form| %>
-            <%= form.submit "Continue as Guest", class: "btn-link btn-link-secondary" %>
-          <% end %>
-        <% else %>
-          <button type="button" class="btn-link btn-link-secondary btn-link-disabled" disabled>Continue as Guest</button>
+        <%= form_with url: guest_sign_in_path, method: :post, local: true, class: "inline-auth-action" do |form| %>
+          <%= form.hidden_field :consent_accepted, value: "1" %>
+          <%= form.submit t("home.sign_in.guest_cta"),
+                class: "btn-link btn-link-secondary btn-link-disabled",
+                disabled: true,
+                data: { consent_gate_target: "gated" } %>
         <% end %>
       </p>
 
@@ -122,10 +94,23 @@
         <p class="action-row">
           <%= form_with url: dev_sign_in_path, method: :post, local: true, class: "dev-sign-in-form" do |form| %>
             <%= form.hidden_field :google_sub, value: "dev-mobile-user" %>
-            <%= form.submit t("home.sign_in.dev_cta"), class: "btn-link btn-link-secondary" %>
+            <%= form.submit t("home.sign_in.dev_cta"),
+                  class: "btn-link btn-link-secondary btn-link-disabled",
+                  disabled: true,
+                  data: { consent_gate_target: "gated" } %>
           <% end %>
         </p>
       <% end %>
     </div>
-  </section>
+
+    <div class="login-lang-toggle">
+      <% if I18n.locale == :ko %>
+        <a href="/?locale=en" class="lang-option" data-turbo="false">English</a>
+        <span class="lang-option lang-active">한국어</span>
+      <% else %>
+        <span class="lang-option lang-active">English</span>
+        <a href="/?locale=ko" class="lang-option" data-turbo="false">한국어</a>
+      <% end %>
+    </div>
+  </main>
 <% end %>
