@@ -102,7 +102,9 @@ class MainActivity : AppCompatActivity() {
       }
     })
 
-    webView.loadUrl(resolveInitialUrl(intent))
+    val initialUrl = resolveInitialUrl(intent)
+    Log.i(TAG, "loading initial url: $initialUrl (base=$baseUrl)")
+    webView.loadUrl(initialUrl)
   }
 
   override fun onResume() {

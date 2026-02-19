@@ -7,7 +7,10 @@ android {
   namespace = "io.soletalk.mobile"
   compileSdk = 35
   val productionBaseUrl = "https://soletalk-rails-production.up.railway.app/"
-  val debugBaseUrl = (project.findProperty("SOLETALK_DEBUG_BASE_URL") as String?) ?: "http://127.0.0.1:3000/"
+  // Debug builds default to production Railway URL so real-device testing works out of the box.
+  // Override with gradle property for local Rails development:
+  //   ./gradlew assembleDebug -PSOLETALK_DEBUG_BASE_URL=http://127.0.0.1:3000/
+  val debugBaseUrl = (project.findProperty("SOLETALK_DEBUG_BASE_URL") as String?) ?: productionBaseUrl
 
   defaultConfig {
     applicationId = "io.soletalk.mobile"

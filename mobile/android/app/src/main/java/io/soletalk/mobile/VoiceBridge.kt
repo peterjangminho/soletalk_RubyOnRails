@@ -27,7 +27,7 @@ class VoiceBridge(private val activity: android.app.Activity) {
   companion object {
     private const val TAG = "VoiceBridge"
     private val JSON = "application/json; charset=utf-8".toMediaType()
-    private const val API_URL = "https://soletalk-rails-production.up.railway.app/api/voice/events"
+    private val API_URL = BuildConfig.WEB_BASE_URL.trimEnd('/') + "/api/voice/events"
     private const val WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=weather_code"
     private const val RUNTIME_PERMISSION_REQUEST_CODE = 2001
   }
