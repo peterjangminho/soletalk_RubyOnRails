@@ -116,31 +116,26 @@ class VoiceOnlyIaTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "href=\"/insights\""
   end
 
-  # --- Phase 3: Quick Upload + Bottom Sheet ---
+  # --- Phase 3: Dedicated Upload Screen ---
 
-  test "VO-P3-T1 upload icon triggers quick-upload controller not settings navigation" do
-    sign_in(google_sub: "vo-quick-upload-icon")
+  test "VO-P3-T1 upload icon links to dedicated upload screen" do
+    sign_in(google_sub: "vo-upload-icon-link")
 
     get "/"
 
     assert_response :ok
-    # Upload icon should trigger quick-upload, not navigate to settings#uploads
-    assert_not_includes response.body, "href=\"/setting#uploads\""
-    assert_match(/data-controller="[^"]*quick-upload/, response.body)
-    assert_includes response.body, "data-action=\"click->quick-upload#openFilePicker\""
+    assert_includes response.body, "href=\"/voice/context_files\""
+    assert_not_includes response.body, "upload-bottom-sheet"
   end
 
-  test "VO-P3-T2 home has bottom sheet markup for upload confirmation" do
-    sign_in(google_sub: "vo-bottom-sheet")
+  test "VO-P3-T2 GET /voice/context_files shows upload screen and uploaded files section" do
+    sign_in(google_sub: "vo-upload-screen")
 
-    get "/"
+    get "/voice/context_files"
 
     assert_response :ok
-    assert_includes response.body, "upload-bottom-sheet"
-    assert_includes response.body, "data-quick-upload-target=\"sheet\""
-    assert_includes response.body, "data-quick-upload-target=\"fileInfo\""
-    assert_includes response.body, "data-action=\"click->quick-upload#confirm\""
-    assert_includes response.body, "data-action=\"click->quick-upload#cancel\""
+    assert_includes response.body, "id=\"upload\""
+    assert_includes response.body, "id=\"uploaded-files\""
   end
 
   test "VO-P3-T3 POST /voice/context_files uploads file and returns success" do
@@ -149,7 +144,9 @@ class VoiceOnlyIaTest < ActionDispatch::IntegrationTest
     file = fixture_file_upload("sample_upload.txt", "text/plain")
 
     assert_difference -> { user.uploaded_files.count }, 1 do
-      post "/voice/context_files", params: { file: file }
+      post "/voice/context_files",
+        params: { file: file },
+        headers: { "Accept" => "application/json" }
     end
 
     assert_response :success
@@ -161,7 +158,7 @@ class VoiceOnlyIaTest < ActionDispatch::IntegrationTest
   test "VO-P3-T4 POST /voice/context_files without file returns error" do
     sign_in(google_sub: "vo-upload-no-file")
 
-    post "/voice/context_files", params: {}
+    post "/voice/context_files", params: {}, as: :json
 
     assert_response :unprocessable_entity
     parsed = JSON.parse(response.body)
@@ -245,6 +242,16 @@ class VoiceOnlyIaTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_includes response.body, 'id="subscription"'
     assert_includes response.body, t("subscription.show.title")
+  end
+
+  test "VO-P6-T4 settings page does not duplicate upload menu or uploaded files sections" do
+    sign_in(google_sub: "vo-p6-no-upload-dup")
+
+    get "/setting"
+
+    assert_response :ok
+    assert_not_includes response.body, 'id="upload"'
+    assert_not_includes response.body, 'id="uploaded-files"'
   end
 
   private

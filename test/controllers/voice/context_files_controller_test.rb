@@ -18,6 +18,31 @@ module Voice
       assert_redirected_to "/"
     end
 
+    test "GET /voice/context_files redirects unauthenticated" do
+      get "/voice/context_files"
+
+      assert_response :redirect
+      assert_redirected_to "/"
+    end
+
+    test "GET /voice/context_files renders upload screen for signed-in user" do
+      sign_in(google_sub: "ctx-index-user")
+
+      get "/voice/context_files"
+
+      assert_response :ok
+      assert_includes response.body, 'id="upload"'
+      assert_includes response.body, 'id="uploaded-files"'
+    end
+
+    test "POST /voice/context_files without file redirects with alert in html" do
+      sign_in(google_sub: "ctx-no-file-html-user")
+
+      post "/voice/context_files", params: {}
+
+      assert_redirected_to "/voice/context_files"
+    end
+
     test "POST /voice/context_files without file returns 422" do
       sign_in(google_sub: "ctx-no-file-user")
 
@@ -40,13 +65,35 @@ module Voice
       file = Rack::Test::UploadedFile.new(tempfile.path, "text/plain", false, original_filename: "test.txt")
 
       assert_difference -> { user.uploaded_files.count }, 1 do
-        post "/voice/context_files", params: { file: file }
+        post "/voice/context_files",
+          params: { file: file },
+          headers: { "Accept" => "application/json" }
       end
 
       assert_response :ok
       body = JSON.parse(response.body)
       assert_equal "ok", body["status"]
       assert_equal "test.txt", body["filename"]
+    ensure
+      tempfile&.close
+      tempfile&.unlink
+    end
+
+    test "POST /voice/context_files with file redirects in html" do
+      sign_in(google_sub: "ctx-upload-html-user")
+      user = User.find_by!(google_sub: "ctx-upload-html-user")
+
+      tempfile = Tempfile.new(["test", ".txt"])
+      tempfile.write("test content")
+      tempfile.rewind
+
+      file = Rack::Test::UploadedFile.new(tempfile.path, "text/plain", false, original_filename: "test.txt")
+
+      assert_difference -> { user.uploaded_files.count }, 1 do
+        post "/voice/context_files", params: { file: file }
+      end
+
+      assert_redirected_to "/voice/context_files"
     ensure
       tempfile&.close
       tempfile&.unlink

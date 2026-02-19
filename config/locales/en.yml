@@ -88,11 +88,25 @@ en:
       title: "Insight Detail"
       back: "Back to Insights"
 
+  voice:
+    context_files:
+      title: "Upload Files"
+      back: "Back"
+      menu_title: "Upload Menu"
+      menu_description: "Upload a file and include it in your voice conversation context."
+      choose_file: "Choose File"
+      file_help: ".txt, .pdf, .csv, .json, .md"
+      submit: "Add File"
+
   settings:
     show:
       title: "Settings"
       subtitle: "Update language, voice speed, and advanced preferences for your next sessions."
       back: "Back to Sessions"
+      data_management_title: "Data Management"
+      data_management:
+        voice_speed_description: "Adjust the playback pace for assistant responses."
+        preferences_description: "Store advanced profile preferences as JSON."
       form:
         language: "Language"
         languages:
@@ -150,6 +164,10 @@ en:
     messages:
       create:
         notice: "Message sent."
+    context_files:
+      create:
+        no_file: "Please choose a file to upload."
+        notice: "File uploaded."
     settings:
       update:
         notice: "Settings updated."

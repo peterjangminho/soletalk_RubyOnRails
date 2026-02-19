@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   end
 
   namespace :voice do
-    resources :context_files, only: :create
+    resources :context_files, only: [ :index, :create ]
   end
 
   resources :insights, only: [ :index, :show ]

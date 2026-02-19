@@ -1,66 +1,18 @@
 <% content_for :hide_top_nav, "true" %>
 <% if current_user %>
   <main class="main-screen"
-    data-controller="voice-stage native-bridge quick-upload policy-modal"
+    data-controller="voice-stage native-bridge policy-modal"
+    data-action="mic-button:state-changed->voice-stage#micStateChanged mic-button:state-changed->native-bridge#micStateChanged"
     data-native-bridge-auto-permissions-value="true"
-    data-quick-upload-url-value="<%= voice_context_files_path %>">
-    <div class="main-orb-bg"
-      data-controller="particle-sphere"
-      data-voice-stage-target="sphere">
-      <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
-    </div>
-
-    <header class="main-top-bar">
-      <button type="button" class="main-top-icon" aria-label="File Upload"
-        data-action="click->quick-upload#openFilePicker">
-        <%= render "shared/icon", name: "upload-cloud" %>
-      </button>
-      <a href="<%= setting_path %>" class="main-top-icon" aria-label="Settings">
-        <%= render "shared/icon", name: "cog" %>
-      </a>
-    </header>
-
-    <input type="file" class="sr-only" data-quick-upload-target="fileInput"
-      data-action="change->quick-upload#fileSelected"
-      accept=".txt,.pdf,.csv,.json,.md">
-
-    <div class="main-orb-stage">
-      <%= form_with url: sessions_path, method: :post, local: true, class: "home-main-mic-form" do |form| %>
-        <%= form.hidden_field :entrypoint, value: "main_mic" %>
-        <%= render "shared/mic_button", state: "idle" %>
-      <% end %>
-      <p class="mic-status-text" aria-live="polite"></p>
-    </div>
-
-    <div class="upload-bottom-sheet" data-quick-upload-target="sheet" hidden
-      role="dialog" aria-modal="true" aria-label="<%= t("home.upload.confirm_title", default: "Add to conversation?") %>">
-      <div class="upload-sheet-content">
-        <p class="upload-sheet-title"><%= t("home.upload.confirm_title", default: "Add to conversation?") %></p>
-        <p class="upload-sheet-file" data-quick-upload-target="fileInfo"></p>
-        <div class="upload-sheet-actions">
-          <button type="button" class="btn-link" data-action="click->quick-upload#confirm">
-            <%= t("home.upload.confirm", default: "Add File") %>
-          </button>
-          <button type="button" class="btn-link btn-link-secondary" data-action="click->quick-upload#cancel">
-            <%= t("home.upload.cancel", default: "Cancel") %>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <p class="bridge-fallback" data-voice-stage-target="bridgeFallback" hidden></p>
-
-    <%= render "shared/policy_modal" %>
-  </main>
-<% else %>
-  <main class="login-screen">
+    data-native-bridge-session-id-value="<%= @active_session.id %>"
+    data-native-bridge-google-sub-value="<%= current_user.google_sub %>"
+    data-native-bridge-bridge-token-value="<%= @bridge_token %>">
     <section
       class="home-opening-overlay"
       data-controller="opening-animation"
       data-opening-animation-target="overlay"
       aria-hidden="true">
       <canvas class="home-opening-canvas" data-opening-animation-target="canvas"></canvas>
-      <div class="home-opening-logo">SoleTalk</div>
       <button
         class="home-opening-skip"
         data-action="opening-animation#skip"
@@ -69,6 +21,38 @@
       </button>
     </section>
 
+    <div class="main-orb-bg"
+      data-controller="particle-sphere"
+      data-voice-stage-target="sphere">
+      <canvas data-particle-sphere-target="canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <header class="main-top-bar">
+      <div class="main-top-slot main-top-slot-left">
+        <a href="<%= voice_context_files_path %>" class="main-top-icon" aria-label="File Upload">
+          <%= render "shared/icon", name: "upload-cloud" %>
+        </a>
+      </div>
+      <div class="main-top-slot main-top-slot-right">
+        <a href="<%= setting_path %>" class="main-top-icon" aria-label="Settings">
+          <%= render "shared/icon", name: "cog" %>
+        </a>
+      </div>
+    </header>
+
+    <div class="main-orb-stage">
+      <div class="home-main-mic-form">
+        <%= render "shared/mic_button", state: "idle" %>
+      </div>
+      <p class="mic-status-text" aria-live="polite"></p>
+    </div>
+
+    <p class="bridge-fallback" data-voice-stage-target="bridgeFallback" hidden></p>
+
+    <%= render "shared/policy_modal" %>
+  </main>
+<% else %>
+  <main class="login-screen">
     <h1 class="login-brand">Sole<span>Talk</span></h1>
     <div class="login-brand-divider"></div>
     <p class="login-tagline"><%= t("home.subtitle") %></p>

@@ -31,10 +31,13 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     get "/"
 
     assert_response :ok
+    assert_includes response.body, "home-opening-overlay"
+    assert_includes response.body, "data-controller=\"opening-animation\""
     assert_includes response.body, "main-orb-stage"
     assert_includes response.body, "home-main-mic"
-    assert_includes response.body, "action=\"/sessions\""
-    assert_includes response.body, "click->quick-upload#openFilePicker"
+    assert_not_includes response.body, "action=\"/sessions\""
+    assert_includes response.body, "href=\"/voice/context_files\""
+    assert_includes response.body, "mic-button:state-changed->native-bridge#micStateChanged"
     assert_includes response.body, "particle-sphere"
     # Main screen has no text content - only icons and mic
     assert_not_includes response.body, "Welcome"
@@ -79,13 +82,13 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/"
   end
 
-  test "P72-T2 guest root page renders login screen with opening animation" do
+  test "P72-T2 guest root page renders login screen without opening animation" do
     get "/"
 
     assert_response :ok
     assert_includes response.body, "login-screen"
     assert_includes response.body, "login-card"
-    assert_includes response.body, "data-controller=\"opening-animation\""
+    assert_not_includes response.body, "data-controller=\"opening-animation\""
   end
 
   test "P79-T3 signed-in navigation removes standalone subscription tab and uses settings" do
@@ -98,7 +101,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "href=\"/subscription\""
   end
 
-  test "P80-T1 signed-in session show uses Project_B brand assets (logo)" do
+  test "P80-T1 signed-in session show does not expose top text-box navigation chips" do
     sign_in(google_sub: "brand-logo-user")
     user = User.find_by!(google_sub: "brand-logo-user")
     session_record = Session.create!(user: user, status: "active")
@@ -106,7 +109,7 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     get "/sessions/#{session_record.id}"
 
     assert_response :ok
-    assert_includes response.body, "/brand/soletalk-logo-v2.png"
+    assert_not_includes response.body, "top-nav-shell"
   end
 
   test "P85-T3 guest home shows actionable guest entry after policy consent" do
@@ -141,13 +144,14 @@ class HomeFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "mic-button#toggle"
   end
 
-  test "P87-T2 signed-in home main mic form includes main_mic entrypoint hidden field" do
+  test "P87-T2 signed-in home binds native bridge session payload on main screen" do
     sign_in(google_sub: "home-main-mic-entrypoint-user")
 
     get "/"
 
     assert_response :ok
-    assert_includes response.body, "name=\"entrypoint\""
-    assert_includes response.body, "value=\"main_mic\""
+    assert_includes response.body, "data-native-bridge-session-id-value="
+    assert_includes response.body, "data-native-bridge-google-sub-value=\"home-main-mic-entrypoint-user\""
+    assert_includes response.body, "data-native-bridge-bridge-token-value="
   end
 end
