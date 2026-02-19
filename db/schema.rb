@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_065533) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_203000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_065533) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "context_documents", force: :cascade do |t|
+    t.integer "byte_size", limit: 8, null: false
+    t.integer "chunk_count", default: 0, null: false
+    t.string "content_type", null: false
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "ingestion_status", default: "ingested", null: false
+    t.json "metadata", default: {}, null: false
+    t.string "ontology_object_id"
+    t.string "source_checksum", null: false
+    t.string "storage_mode", default: "embedding_metadata_vector", null: false
+    t.text "text_content", default: "", null: false
+    t.string "text_format", default: "plain", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.integer "vector_count", default: 0, null: false
+    t.index ["ingestion_status"], name: "index_context_documents_on_ingestion_status"
+    t.index ["source_checksum"], name: "index_context_documents_on_source_checksum"
+    t.index ["text_format"], name: "index_context_documents_on_text_format"
+    t.index ["user_id"], name: "index_context_documents_on_user_id"
   end
 
   create_table "depth_explorations", force: :cascade do |t|
@@ -131,6 +153,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_065533) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "context_documents", "users"
   add_foreign_key "insights", "users"
   add_foreign_key "messages", "sessions"
   add_foreign_key "sessions", "users"

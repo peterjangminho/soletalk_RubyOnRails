@@ -226,4 +226,57 @@ class OntologyRagClientTest < ActiveSupport::TestCase
     assert_equal "free_speech", capture.dig(:request, :body, :metadata, :phase)
     assert_equal true, response["success"]
   end
+
+  test "P90-T1 create_object posts metadata to /engine/objects" do
+    capture = {}
+    adapter = lambda do |request|
+      capture[:request] = request
+      { "id" => "obj-1" }
+    end
+
+    client = OntologyRag::Client.new(http_adapter: adapter)
+    response = client.create_object(
+      domain: "context_file",
+      type: "uploaded_reference",
+      properties: { filename: "notes.txt" },
+      google_sub: "g-1"
+    )
+
+    assert_equal :post, capture.dig(:request, :method)
+    assert_equal "/engine/objects", capture.dig(:request, :path)
+    assert_equal "context_file", capture.dig(:request, :body, :domain)
+    assert_equal "uploaded_reference", capture.dig(:request, :body, :type)
+    assert_equal "g-1", capture.dig(:request, :body, :google_sub)
+    assert_equal "obj-1", response["id"]
+  end
+
+  test "P91-T2 create_document posts text payload to /engine/documents" do
+    capture = {}
+    adapter = lambda do |request|
+      capture[:request] = request
+      {
+        "documents" => [ { "id" => "doc-1" } ],
+        "vectors" => [ { "id" => "vec-1" } ],
+        "total_chunks" => 1
+      }
+    end
+
+    client = OntologyRag::Client.new(http_adapter: adapter)
+    response = client.create_document(
+      object_id: "obj-1",
+      content: "row1,row2",
+      metadata: { filename: "notes.xlsx", text_format: "csv", google_sub: "g-1" },
+      auto_chunk: true
+    )
+
+    assert_equal :post, capture.dig(:request, :method)
+    assert_equal "/engine/documents", capture.dig(:request, :path)
+    assert_equal "obj-1", capture.dig(:request, :body, :object_id)
+    assert_equal "row1,row2", capture.dig(:request, :body, :content)
+    assert_equal true, capture.dig(:request, :body, :auto_chunk)
+    assert_equal "notes.xlsx", capture.dig(:request, :body, :metadata, :filename)
+    assert_equal "csv", capture.dig(:request, :body, :metadata, :text_format)
+    assert_equal "g-1", capture.dig(:request, :body, :metadata, :google_sub)
+    assert_equal 1, response["total_chunks"]
+  end
 end

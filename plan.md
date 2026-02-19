@@ -218,8 +218,13 @@
 - [x] P76-T3b 로그인 사용자 기준 `/subscription/validate` 실운영 end-to-end(restore/validate) smoke 증적 확보 (request_id `80aca412-77e5-4e1f-bba6-440e3023c2cb`, `302`)
 - [x] P77-T1 Project_B 기준 Playwright user journey audit 스크립트 저장소 고정 (`script/playwright/ui_journey_gap_audit.js`)
 - [x] P77-T2 Project_A(가입->세션->설정 업로드->구독 검증)와 Project_B baseline을 Playwright로 실행하고 JSON/스크린샷 증적 수집 (`/tmp/ui-journey-audit`)
+- [x] P88-T1 Root IA 업데이트: 비로그인=로그인 랜딩, 로그인=오프닝 애니메이션 후 메인 진입 (`home#index`, `home/index`)
+- [x] P88-T2 Main voice stage 브릿지 정합화: 홈에서 활성 세션/bridge token 바인딩 + mic state 기반 native bridge start/stop + 오디오 레벨 이벤트 반영
+- [x] P88-T3 Opening/Main particle parity 개선: 오프닝 final blink 단계 추가 + 메인 상단 좌측 업로드/우측 설정 아이콘 분리 + 마이크 단일 버튼화
+- [x] P89-T1 Settings 화면을 Project_B 스타일 데이터 관리 섹션 톤으로 정렬하고 Subscription 섹션 유지
+- [x] P89-T2 세션 화면 상단 텍스트 박스형 전역 nav 제거(`hide_top_nav`)로 post-login 불필요 nav 노출 차단
 - [x] P77-T3 UI journey orchestration phase/sub-plan 문서 동기화 (`docs/ondev/20260216_02`, `docs/ondev/20260216_03`)
-- [x] P78-T1 `PATCH /setting` 파일 업로드 플로우 구현 및 사용자 attachment 유지 (`test/integration/settings_flow_test.rb`)
+- [x] P78-T1 `PATCH /setting` raw 파일 파라미터 비저장 정책으로 전환 (업로드는 전용 `/voice/context_files` ingest 경로로만 처리)
 - [ ] P78-T2 localhost Google OAuth consent 성공 외부 게이트: Google Console redirect URI 허용 후 callback success 증적 확보
 - [x] P78-T3 Settings upload i18n 키(ko/en) 보강 및 Playwright 재검증 `gapCount=0`
 - [x] P79-T1 Subscription UI를 `/setting#subscription`으로 통합하고 `/subscription`은 settings anchor로 리다이렉트
@@ -250,6 +255,14 @@
 - [x] P89-T1 Local OAuth evidence automation: `script/oauth/collect_local_oauth_redirect_evidence.sh`로 localhost/127 redirect URI 자동 수집
 - [x] P89-T2 OAuth gap diagnostics hardening: Playwright audit가 `redirect_uri_mismatch`/`access blocked` 문구를 external gate로 분류
 - [x] P89-T3 Local OAuth gate checklist 문서화 + 증적 리포트 생성 (`docs/ondev/20260216_05_local_oauth_external_gate_checklist.md`)
+- [x] P90-T1 OntologyRag::Client endpoint 확장: `/engine/objects`, `/engine/documents` 업로드 인덱싱 경로 추가
+- [x] P90-T2 `Voice::ContextFileIngestService` 구현: 파일 원본은 앱에 저장하지 않고 텍스트 청크를 OntologyRAG로 인덱싱
+- [x] P90-T3 `/voice/context_files` 업로드 성공 기준을 ActiveStorage 첨부가 아닌 `context_documents` 메타데이터 기록으로 전환
+- [x] P90-T4 Voice/Settings 업로드 정책 회귀: 설정 경로 raw 파일 파라미터 무시 + 관련 통합/컨트롤러/서비스 테스트 green
+- [x] P91-T1 업로드 파이프라인 정책 전환 확정: `Project_E` 무수정 + `POST /engine/documents` 계약 정렬
+- [x] P91-T2 `Voice::ContextFileIngestService` 전환: OCR/파싱 텍스트를 Rails에 저장하고 OntologyRAG `/engine/documents`로 전송
+- [x] P91-T3 엑셀(`.xlsx`) CSV 텍스트 변환 + OCR는 Gemini Vision(`gemini-3-flash-preview`) 경로로 전환 및 테스트 보강
+- [x] P91-T4 전체 테스트 재검증(`bin/rails test`, `npm run test:js`) 완료
 
 ## Queue Note
 - Android-first 외부 게이트(실기기 4종 이벤트 2xx 증적)는 완료했다.
@@ -268,6 +281,10 @@
 - RevenueCat 운영 validate 트랙(`P76`)은 완료했다.
 - 수동 검증 증적: `docs/ondev/20260216_01_subscription_validate_manual_smoke_checklist.md`
 - UI journey 증적: `/tmp/ui-journey-audit/journey_report.json`, `docs/ondev/20260216_02_projectb_playwright_ui_journey_phase_plan.md`
+- 현재 실행 대상: 없음 (`P91` 완료)
+- 활성 서브플랜: `docs/ondev/20260219_22_project_a_ingest_policy_subplan.md`
+- 현재 상태: `Project_E` 변경 없이 `Project_A` 계약 정렬 완료, 외부 승인 블로커 해소
+- 검증 증적: `docs/ondev/20260219_23_project_a_ingest_policy_execution.md`, `docs/ondev/20260219_24_project_a_ingest_policy_verify.md`
 
 ## TDD Rule
 - Always execute next unchecked item first.

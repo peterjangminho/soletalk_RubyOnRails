@@ -4,10 +4,16 @@ export const UPLOAD_CONFIG = Object.freeze({
   MAX_FILE_SIZE: 10 * 1024 * 1024,
   ACCEPTED_TYPES: [
     "text/plain",
-    "application/pdf",
     "text/csv",
     "application/json",
-    "text/markdown"
+    "text/markdown",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/pdf",
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/heic",
+    "image/heif"
   ]
 })
 
@@ -18,10 +24,15 @@ export function formatFileSize(bytes) {
 }
 
 export default class extends Controller {
-  static targets = ["fileInput", "sheet", "fileInfo"]
+  static targets = ["fileInput", "sheet", "fileInfo", "confirmButton"]
   static values = { url: String }
 
   openFilePicker(event) {
+    event.preventDefault()
+    if (this.hasSheetTarget) this.sheetTarget.hidden = false
+  }
+
+  pickFile(event) {
     event.preventDefault()
     if (this.hasFileInputTarget) this.fileInputTarget.click()
   }
@@ -36,6 +47,10 @@ export default class extends Controller {
 
     if (this.hasSheetTarget) {
       this.sheetTarget.hidden = false
+    }
+
+    if (this.hasConfirmButtonTarget) {
+      this.confirmButtonTarget.hidden = false
     }
   }
 
@@ -54,17 +69,19 @@ export default class extends Controller {
       }
     }).then(response => {
       if (response.ok) {
-        this.closeSheet()
+        window.location.reload()
       }
     })
   }
 
   cancel() {
-    this.fileInputTarget.value = ""
+    if (this.hasFileInputTarget) this.fileInputTarget.value = ""
     this.closeSheet()
   }
 
   closeSheet() {
     if (this.hasSheetTarget) this.sheetTarget.hidden = true
+    if (this.hasFileInfoTarget) this.fileInfoTarget.textContent = ""
+    if (this.hasConfirmButtonTarget) this.confirmButtonTarget.hidden = true
   }
 }

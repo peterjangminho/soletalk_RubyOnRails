@@ -109,6 +109,28 @@ module OntologyRag
       post(format(Constants::ENDPOINTS[:save_conversation], session_id: session_id), payload)
     end
 
+    def create_object(domain:, type:, properties:, google_sub:)
+      payload = {
+        domain: domain,
+        type: type,
+        properties: properties,
+        google_sub: google_sub
+      }
+
+      post(Constants::ENDPOINTS[:create_object], payload)
+    end
+
+    def create_document(object_id:, content:, metadata: {}, auto_chunk: true)
+      payload = {
+        object_id: object_id,
+        content: content,
+        metadata: metadata,
+        auto_chunk: auto_chunk
+      }
+
+      post(Constants::ENDPOINTS[:create_document], payload)
+    end
+
     private
 
     def get(path, params: {})

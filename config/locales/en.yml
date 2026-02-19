@@ -93,9 +93,9 @@ en:
       title: "Upload Files"
       back: "Back"
       menu_title: "Upload Menu"
-      menu_description: "Upload a file and include it in your voice conversation context."
+      menu_description: "Upload a file to store parsed text documents locally and index them into OntologyRAG without keeping raw files."
       choose_file: "Choose File"
-      file_help: ".txt, .pdf, .csv, .json, .md"
+      file_help: ".txt, .csv, .json, .md, .xlsx, .pdf, image"
       submit: "Add File"
 
   settings:
@@ -119,8 +119,8 @@ en:
         uploaded_file_help: "Upload notes or context files to keep with your account."
         submit: "Save Settings"
       uploaded_files:
-        title: "Uploaded reference files"
-        empty: "No uploaded files yet."
+        title: "Indexed reference files"
+        empty: "No indexed files yet."
       policy:
         title: "Policy"
         privacy_link: "Privacy Policy"

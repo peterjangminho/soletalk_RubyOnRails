@@ -16,8 +16,8 @@
           <label class="upload-drop-zone">
             <%= render "shared/icon", name: "upload-cloud", size: 28 %>
             <span class="upload-drop-label"><%= t("voice.context_files.choose_file", default: "Choose File") %></span>
-            <small><%= t("voice.context_files.file_help", default: ".txt, .pdf, .csv, .json, .md") %></small>
-            <%= form.file_field :file, class: "upload-file-input" %>
+            <small><%= t("voice.context_files.file_help", default: ".txt, .csv, .json, .md, .xlsx, .pdf, image") %></small>
+            <%= form.file_field :file, class: "upload-file-input", accept: ".txt,.csv,.json,.md,.xlsx,.pdf,.png,.jpg,.jpeg,.webp,.heic,.heif" %>
           </label>
           <%= form.submit t("voice.context_files.submit", default: "Add File"), class: "btn-link settings-management-action" %>
         <% end %>
@@ -27,10 +27,13 @@
     <section class="settings-section" id="uploaded-files">
       <h2><%= t("settings.show.uploaded_files.title") %></h2>
       <div class="settings-data-section">
-        <% if @uploaded_files.any? %>
+        <% if @context_documents.any? %>
           <ul class="insight-timeline">
-            <% @uploaded_files.each do |file| %>
-              <li><%= link_to file.filename.to_s, url_for(file) %></li>
+            <% @context_documents.each do |doc| %>
+              <li>
+                <strong><%= doc.filename %></strong>
+                <small>(<%= number_to_human_size(doc.byte_size) %>, chunks: <%= doc.chunk_count %>, vectors: <%= doc.vector_count %>)</small>
+              </li>
             <% end %>
           </ul>
         <% else %>

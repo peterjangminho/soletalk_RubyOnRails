@@ -8,7 +8,9 @@ module OntologyRag
       get_profile: "/engine/prompts/%{google_sub}",
       get_cached_profile: "/incar/profile/%{google_sub}",
       batch_save_events: "/incar/events/batch",
-      save_conversation: "/incar/conversations/%{session_id}/save"
+      save_conversation: "/incar/conversations/%{session_id}/save",
+      create_object: "/engine/objects",
+      create_document: "/engine/documents"
     }.freeze
 
     TIMEOUTS = {

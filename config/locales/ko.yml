@@ -93,9 +93,9 @@ ko:
       title: "파일 업로드"
       back: "뒤로가기"
       menu_title: "파일 업로드"
-      menu_description: "파일을 업로드해 음성 대화 컨텍스트에 포함합니다."
+      menu_description: "파일을 업로드해 파싱된 텍스트 문서를 앱에 저장하고 OntologyRAG에 인덱싱하며, 원본 파일은 보관하지 않습니다."
       choose_file: "파일 선택"
-      file_help: ".txt, .pdf, .csv, .json, .md"
+      file_help: ".txt, .csv, .json, .md, .xlsx, .pdf, 이미지"
       submit: "파일 추가"
 
   settings:
@@ -119,8 +119,8 @@ ko:
         uploaded_file_help: "계정 맥락에 보관할 메모/참고 파일을 업로드하세요."
         submit: "설정 저장"
       uploaded_files:
-        title: "업로드된 참고 파일"
-        empty: "아직 업로드된 파일이 없습니다."
+        title: "인덱싱된 참고 파일"
+        empty: "아직 인덱싱된 파일이 없습니다."
       policy:
         title: "약관 정보"
         privacy_link: "개인정보 처리방침"
